@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuroVerbs — Panel de Administración</title>
+  <link rel="stylesheet" href="ui.css" />
+  <style>
+    body{min-height:100vh;}
+    .container{max-width:980px;margin:0 auto;padding:20px;}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:16px;}
+    .row{display:flex;gap:12px;flex-wrap:wrap;}
+    .row>*{flex:1;min-width:220px;}
+    input,select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:#fff;outline:none;}
+    table{width:100%;border-collapse:collapse;margin-top:10px;}
+    th,td{border-bottom:1px solid rgba(255,255,255,.12);padding:10px 8px;text-align:left;}
+    th{font-weight:900;opacity:.95;}
+    .actions{display:flex;gap:8px;flex-wrap:wrap;}
+    .miniBtn{cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.25);color:#fff;border-radius:999px;padding:8px 12px;font-weight:900;}
+    .miniBtn:hover{filter:brightness(1.1);}
+    .muted{opacity:.85;}
+    .ok{color:#7CFFB2;font-weight:900;}
+    .bad{color:#FF6B6B;font-weight:900;}
+  </style>
+  <script src="nv-config.js"></script>
+  <script src="nv-auth.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header" style="display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <img src="assets/logo.png" alt="Logo" style="width:64px;height:64px;border-radius:18px;" />
+        <div>
+          <div style="font-size:22px;font-weight:950;">Panel de Administración</div>
+          <div class="muted">Crea cuentas y gestiona roles (sin depender de Workspace)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <a class="lbBtn" href="index.html" style="text-decoration:none;">↩ Volver</a>
+        <a class="lbBtn" href="neuroverbs.html" style="text-decoration:none;">Entrar a la App</a>
+      </div>
+    </div>
+
+    <div id="adminLogin" class="card" style="margin-top:14px;display:none;">
+      <div style="font-size:18px;font-weight:950;margin-bottom:8px;">Iniciar sesión (Admin)</div>
+      <div class="row">
+        <div>
+          <label class="muted">Usuario o correo</label>
+          <input id="loginUser" autocomplete="username" placeholder="admin" />
+        </div>
+        <div>
+          <label class="muted">Contraseña</label>
+          <input id="loginPass" type="password" autocomplete="current-password" placeholder="••••••••" />
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+        <button id="btnLogin" class="lbBtn" type="button">Ingresar</button>
+        <button id="btnCfgApi" class="lbBtn" type="button">Configurar API</button>
+      </div>
+      <div id="loginMsg" style="margin-top:10px;"></div>
+    </div>
+
+    <div id="adminDenied" class="card" style="margin-top:14px;display:none;">
+      <div style="font-size:18px;font-weight:950;">Acceso restringido</div>
+      <p class="muted" style="margin:8px 0 0 0;">Tu cuenta no tiene rol <b>admin</b>.</p>
+    </div>
+
+    <div id="adminPanel" style="display:none;margin-top:14px;">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:18px;font-weight:950;">Crear cuenta</div>
+            <div class="muted">Estas cuentas se autentican con usuario/contraseña.</div>
+          </div>
+          <button id="btnRefresh" class="lbBtn" type="button">↻ Actualizar</button>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <div>
+            <label class="muted">Nombre</label>
+            <input id="newName" placeholder="Juan Pérez" />
+          </div>
+          <div>
+            <label class="muted">Usuario</label>
+            <input id="newUsername" placeholder="juanp" />
+          </div>
+          <div>
+            <label class="muted">Correo (opcional)</label>
+            <input id="newEmail" placeholder="juan@correo.com" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div>
+            <label class="muted">Contraseña</label>
+            <input id="newPass" type="password" placeholder="mínimo 8" />
+          </div>
+          <div>
+            <label class="muted">Rol</label>
+            <select id="newRole">
+              <option value="student">student</option>
+              <option value="admin">admin</option>
+            </select>
+          </div>
+          <div style="display:flex;align-items:flex-end;">
+            <button id="btnCreate" class="lbBtn" type="button" style="width:100%;">Crear</button>
+          </div>
+        </div>
+        <div id="createMsg" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="card" style="margin-top:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:18px;font-weight:950;">Usuarios</div>
+            <div class="muted">Activa/desactiva, cambia rol y restablece contraseñas.</div>
+          </div>
+        </div>
+
+        <div style="overflow:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="usersTbody"></tbody>
+          </table>
+        </div>
+
+        <div id="usersMsg" style="margin-top:10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script src="logout-widget.js"></script>
+</body>
+</html>

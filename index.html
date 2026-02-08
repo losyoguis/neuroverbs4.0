@@ -27,6 +27,7 @@
 <!-- ✅✅✅ CONSOLE GOOGLE -->
 <script async="" defer="" src="https://accounts.google.com/gsi/client"></script>
 <script src="nv-config.js"></script>
+<script src="nv-auth.js"></script>
 
 <!-- AUTH MOVED BELOW -->
 
@@ -61,10 +62,25 @@
 <img src="assets/logo.png" alt="Logo Neuroverbs" style="width:128px;height:128px;display:block;margin:0 auto 14px;filter: drop-shadow(0 10px 30px rgba(0,0,0,.55));" />
 <div class="rankTitle" style="font-size:clamp(22px, 4vw, 40px); font-weight:900; letter-spacing:.6px; color:#ffb24a; text-shadow: 0 2px 10px rgba(0,0,0,.35); margin-top:4px;">Ranking</div>
 <div class="rankTitle" style="font-size:clamp(18px, 3.4vw, 32px); font-weight:900; letter-spacing:.6px; color:#ffb24a; text-shadow: 0 2px 10px rgba(0,0,0,.35); margin-top:2px;">I.E Manuel J. Betancur</div>
-<div class="authDomainLabel" style="margin-top:6px; font-size:clamp(14px, 2.2vw, 20px); font-weight:800; color:#fff;">Acceder con Google</div>
+<div class="authDomainLabel" style="margin-top:6px; font-size:clamp(14px, 2.2vw, 20px); font-weight:800; color:#fff;">Acceder con @iemanueljbetancur.edu.co</div>
 </div>
 <div class="authBar" id="authBar" style="display:flex;flex-direction:column;align-items:center;gap:12px;">
-<div data-help="🔑 Inicia sesión con Google para guardar tus XP y aparecer en el ranking. Solo estudiantes de la I.E Manuel J. Betancur." id="googleBtn"></div>
+<div data-help="🔑 Inicia sesión con Google para guardar tus XP y aparecer en el ranking." id="googleBtn"></div>
+<div class="orDivider" style="opacity:.85;font-weight:900;">o</div>
+
+<!-- ✅ Login alternativo (usuario/contraseña) -->
+<form id="localLoginForm" class="localLogin" style="width:min(520px, 92%); display:flex; flex-direction:column; gap:10px;">
+  <div style="display:flex; gap:10px; width:100%; flex-wrap:wrap; justify-content:center;">
+    <input id="localUser" placeholder="Usuario o correo" autocomplete="username" style="flex:1; min-width:220px; padding:12px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.10); color:#fff; outline:none;" />
+    <input id="localPass" type="password" placeholder="Contraseña" autocomplete="current-password" style="flex:1; min-width:220px; padding:12px 14px; border-radius:999px; border:1px solid rgba(255,255,255,.22); background:rgba(255,255,255,.10); color:#fff; outline:none;" />
+  </div>
+  <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+    <button class="lbBtn" type="submit" style="padding:12px 18px; border-radius:999px; font-weight:900;">Ingresar</button>
+    <button class="lbBtn" id="btnSetAuthApi" type="button" style="padding:12px 18px; border-radius:999px; font-weight:900;">Configurar API</button>
+    <a class="lbBtn" href="admin.html" style="text-decoration:none; padding:12px 18px; border-radius:999px; font-weight:900;">Panel Admin</a>
+  </div>
+  <div id="localLoginMsg" style="text-align:center; font-weight:800; opacity:.95;"></div>
+</form>
 <div class="userChip" id="userChip" style="display:none;">
 <img alt="Foto" id="userPic"/>
 <div class="userMeta">
@@ -79,8 +95,7 @@
 /* ✅ Dominio institucional + auto-login + redirección */
 (function () {
   const cfgDom = (window.NEUROVERBS_CONFIG ? window.NEUROVERBS_CONFIG.allowedDomain : undefined);
-  const storedDom = localStorage.getItem('ALLOWED_DOMAIN_NV');
-  const ALLOWED_DOMAIN = (cfgDom !== undefined ? cfgDom : (storedDom !== null ? storedDom : 'iemanueljbetancur.edu.co'));
+  const ALLOWED_DOMAIN = (cfgDom !== undefined ? cfgDom : (localStorage.getItem('ALLOWED_DOMAIN_NV') || 'iemanueljbetancur.edu.co'));
 const TARGET = 'neuroverbs.html';
 
   function decodeJwtPayload(jwt) {
@@ -123,7 +138,7 @@ const TARGET = 'neuroverbs.html';
       cfg = cfg || {};
 
       // 1) Hint de dominio (Workspace)
-      if (!cfg.hd) cfg.hd = ALLOWED_DOMAIN;
+      if (!cfg.hd && ALLOWED_DOMAIN) cfg.hd = ALLOWED_DOMAIN;
 
       // 2) Auto select si ya hay una sesión válida en Google
       if (!("auto_select" in cfg)) cfg.auto_select = true;
@@ -188,12 +203,65 @@ const TARGET = 'neuroverbs.html';
 <script>
 (function(){
   try{
-    const cfg = (window.NEUROVERBS_CONFIG ? window.NEUROVERBS_CONFIG.allowedDomain : undefined);
-    const stored = localStorage.getItem("ALLOWED_DOMAIN_NV");
-    const d = (cfg !== undefined ? cfg : (stored !== null ? stored : "iemanueljbetancur.edu.co"));
+    const d = (window.NEUROVERBS_CONFIG && window.NEUROVERBS_CONFIG.allowedDomain) !== undefined
+      ? (window.NEUROVERBS_CONFIG.allowedDomain)
+      : (localStorage.getItem("ALLOWED_DOMAIN_NV") || "");
     const el = document.querySelector(".authDomainLabel");
-    if (el) el.textContent = (d ? ("Acceder con @" + d) : "Acceder con cualquier cuenta de Google");
+    if (el) el.textContent = d ? ("Acceder con @" + d) : "Acceder con cualquier cuenta de Google";
   }catch(_){}
+})();
+</script>
+
+<script>
+(function(){
+  // ✅ Login local (usuario/contraseña)
+  const form = document.getElementById("localLoginForm");
+  if (!form || !window.NVAuth) return;
+  const msg = document.getElementById("localLoginMsg");
+  const inU = document.getElementById("localUser");
+  const inP = document.getElementById("localPass");
+  const btnCfg = document.getElementById("btnSetAuthApi");
+
+  function setMsg(t, ok){
+    if(!msg) return;
+    msg.textContent = t || "";
+    msg.style.color = ok ? "#7CFFB2" : "#FF6B6B";
+  }
+
+  // Si ya hay sesión local, entra directo
+  try{
+    if(NVAuth.isLogged()) {
+      location.replace("neuroverbs.html");
+      return;
+    }
+  }catch(_){ }
+
+  if(btnCfg){
+    btnCfg.addEventListener("click", ()=>{
+      const current = NVAuth.getApiBase() || "";
+      const v = prompt("Pega la URL base de tu API de autenticación (Cloudflare Worker).\nEj: https://tu-worker.tudominio.workers.dev", current);
+      if(v !== null){
+        NVAuth.setApiBase(v);
+        setMsg("API guardada ✔", true);
+      }
+    });
+  }
+
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    setMsg("", true);
+    const u = (inU && inU.value || "").trim();
+    const p = (inP && inP.value || "").trim();
+    if(!u || !p){ setMsg("Escribe usuario y contraseña", false); return; }
+    try{
+      setMsg("Ingresando...", true);
+      await NVAuth.login(u, p);
+      try{ await NVAuth.registerZeroXp(); }catch(_){ }
+      location.replace("neuroverbs.html");
+    }catch(err){
+      setMsg(String(err && err.message ? err.message : err), false);
+    }
+  });
 })();
 </script>
 

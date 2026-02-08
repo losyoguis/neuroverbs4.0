@@ -53,6 +53,11 @@
   function isLogged(){
     const token = getSessionToken();
     if(token) return true;
+    try{
+      const lt = localStorage.getItem("nv_local_token") || "";
+      const lu = localStorage.getItem("nv_local_user") || "";
+      if(lt && lu) return true;
+    }catch(_){ }
     const p = getProfile();
     return !!(p && (p.email || p.sub));
   }
@@ -62,6 +67,9 @@
     const keys = [
       "user_profile",
       "google_id_token",
+      "nv_local_token",
+      "nv_local_user",
+      "nv_local_registered_v1",
       "rank_user",
       "mjb_user",
       "google_user",

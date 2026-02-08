@@ -9,25 +9,32 @@
   const cfg = {
     webAppUrl: "https://script.google.com/macros/s/AKfycbwFYYMybfaF7ac9yxP7shnIZZaiKxgnO6BvHNaXfcOk-oQ2jSUUGnrBWyinXuhko20/exec",
     oauthClientId: "637468265896-5olh8rhf76setm52743tashi3vq1la67.apps.googleusercontent.com",
-    allowedDomain: ""
+	    allowedDomain: "",
+
+	    // ✅ (Nuevo) API de autenticación propia (recomendado: Cloudflare Worker)
+	    // Ej: https://TU_WORKER.tudominio.workers.dev
+	    authApiBase: ""
   };
 
-  // Overrides opcionales por URL: ?webapp=...&clientid=...&domain=...
+	  // Overrides opcionales por URL: ?webapp=...&clientid=...&domain=...&authapi=...
   try{
     const p = new URLSearchParams(location.search);
     const oWeb = p.get("webapp");
     const oCid = p.get("clientid");
     const oDom = p.get("domain");
+	    const oAuth = p.get("authapi");
     if (oWeb) cfg.webAppUrl = oWeb;
     if (oCid) cfg.oauthClientId = oCid;
     if (oDom !== null) cfg.allowedDomain = oDom; // permite dominio vacío
+	    if (oAuth !== null) cfg.authApiBase = oAuth;  // permite vacío
   }catch(_){}
 
-  // Persistir para que core.js y otras páginas lo lean sin query
+	  // Persistir para que core.js y otras páginas lo lean sin query
   try{
     if (cfg.webAppUrl) localStorage.setItem("WEB_APP_URL_V5", cfg.webAppUrl);
     if (cfg.oauthClientId) localStorage.setItem("OAUTH_CLIENT_ID_NV", cfg.oauthClientId);
     if (cfg.allowedDomain !== undefined) localStorage.setItem("ALLOWED_DOMAIN_NV", cfg.allowedDomain);
+	    if (cfg.authApiBase !== undefined) localStorage.setItem("AUTH_API_BASE_NV", cfg.authApiBase);
   }catch(_){}
 
   window.NEUROVERBS_CONFIG = cfg;

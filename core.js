@@ -15,10 +15,17 @@ const WEB_APP_URL = (
 );
 console.log("[Neuroverbs] WEB_APP_URL =", WEB_APP_URL);
 try{ localStorage.setItem("WEB_APP_URL_V5", WEB_APP_URL); }catch(_){ }
-const _storedDomain = localStorage.getItem("ALLOWED_DOMAIN_NV");
-const ALLOWED_DOMAIN = (NV_CFG.allowedDomain !== undefined ? NV_CFG.allowedDomain : (_storedDomain !== null ? _storedDomain : "iemanueljbetancur.edu.co"));
+const ALLOWED_DOMAIN = (NV_CFG.allowedDomain !== undefined ? NV_CFG.allowedDomain : (localStorage.getItem("ALLOWED_DOMAIN_NV") || "iemanueljbetancur.edu.co"));
 const ALLOWED_EMAIL_SUFFIX = (ALLOWED_DOMAIN ? "@"+ALLOWED_DOMAIN : "");
 const OAUTH_CLIENT_ID = (NV_CFG.oauthClientId || localStorage.getItem("OAUTH_CLIENT_ID_NV") || "637468265896-5olh8rhf76setm52743tashi3vq1la67.apps.googleusercontent.com");
+
+// ✅ (Nuevo) Auth API (para login local). Ej: Cloudflare Worker.
+const AUTH_API_BASE = (()=>{
+  try{
+    const b = (NV_CFG.authApiBase || localStorage.getItem("AUTH_API_BASE_NV") || "");
+    return String(b||"").trim().replace(/\/+$/g, "");
+  }catch(_){ return ""; }
+})();
 
 // Leaderboard paging
 const LB_PAGE_SIZE = 5;
@@ -60,11 +67,82 @@ function hideUserChip() {
 }
 
 function clearSession() {
-  localStorage.removeItem("google_id_token");
-  localStorage.removeItem("user_profile");
+  try{ localStorage.removeItem("google_id_token"); }catch(_){ }
+  try{ localStorage.removeItem("user_profile"); }catch(_){ }
+  // ✅ Nuevo: sesión local
+  try{ localStorage.removeItem("nv_local_token"); }catch(_){ }
+  try{ localStorage.removeItem("nv_local_user"); }catch(_){ }
   hideUserChip();
   const sec = document.getElementById("leaderboardSection");
   if (sec) sec.style.display = "none";
+}
+
+// =========================
+// ✅ Local Auth helpers (API propia)
+// =========================
+function getLocalToken(){
+  try{ return localStorage.getItem("nv_local_token") || ""; }catch(_){ return ""; }
+}
+function getLocalUser(){
+  try{
+    const raw = localStorage.getItem("nv_local_user") || "";
+    return raw ? JSON.parse(raw) : null;
+  }catch(_){ return null; }
+}
+function hasLocalSession(){
+  return !!(getLocalToken() && getLocalUser());
+}
+async function postToAuthApi(path, payload){
+  if(!AUTH_API_BASE) return;
+  const token = getLocalToken();
+  if(!token) return;
+  try{
+    await fetch(AUTH_API_BASE + path, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify(payload || {})
+    });
+  }catch(e){
+    // silencioso
+  }
+}
+function initLocalSessionUI(){
+  if(!hasLocalSession()) return;
+  // Registrar usuario en Sheets (best-effort) una vez por sesión local
+  try{
+    const k = "nv_local_registered_v1";
+    const t = getLocalToken();
+    if(t && localStorage.getItem(k) !== t){
+      localStorage.setItem(k, t);
+      postToAuthApi("/api/xp", { xpDelta: 0 });
+    }
+  }catch(_){ }
+  const u = getLocalUser();
+  if(u){
+    // Sincronizar formato user_profile usado por el resto del sistema
+    try{
+      const sub = u.sub || (u.id ? ("local:" + u.id) : "");
+      localStorage.setItem("user_profile", JSON.stringify({
+        sub,
+        name: u.name || u.username || "Usuario",
+        email: u.email || "",
+        picture: u.picture || ""
+      }));
+    }catch(_){ }
+    showUserChip({
+      sub: u.sub || (u.id ? ("local:" + u.id) : ""),
+      name: u.name || u.username || "Usuario",
+      email: u.email || "",
+      picture: u.picture || ""
+    });
+
+    const sec = document.getElementById("leaderboardSection");
+    if (sec) sec.style.display = "block";
+    try{ resetLeaderboardPaging(); cargarLeaderboardPage(); fetchAndApplyUserFromSheets(); }catch(_){ }
+  }
 }
 
 function jsonpRequest(url) {
@@ -353,6 +431,10 @@ function onGoogleCredential(response) {
   const idToken = response.credential;
   const user = parseJwt(idToken);
 
+  // ✅ Si existía sesión local, la cerramos para evitar conflictos.
+  try{ localStorage.removeItem("nv_local_token"); }catch(_){ }
+  try{ localStorage.removeItem("nv_local_user"); }catch(_){ }
+
   
   // 🔒 Solo cuentas del dominio institucional
   const email = String((user && user.email) || "").toLowerCase();
@@ -413,19 +495,17 @@ function initGoogleAuthAndSync() {
   // Render button una vez
   try {
     if (!btn.__rendered) {
-      // Inicializa Google Identity Services.
-      // Si ALLOWED_DOMAIN está vacío "", permitimos cualquier cuenta.
-      const initOpts = {
+      const cfg = {
         client_id: OAUTH_CLIENT_ID,
         callback: onGoogleCredential,
         ux_mode: "popup"
       };
+      // ✅ Solo restringir dominio si ALLOWED_DOMAIN tiene valor
       if (ALLOWED_DOMAIN) {
-        initOpts.hosted_domain = ALLOWED_DOMAIN;
-        // Algunos entornos usan "hd" como sugerencia de dominio (no lo forzamos si está vacío)
-        initOpts.hd = ALLOWED_DOMAIN;
+        cfg.hd = ALLOWED_DOMAIN;
+        cfg.hosted_domain = ALLOWED_DOMAIN;
       }
-      google.accounts.id.initialize(initOpts);
+      google.accounts.id.initialize(cfg);
       google.accounts.id.renderButton(btn, {
         theme: "outline",
         size: "large",
@@ -7102,12 +7182,18 @@ function actualizarStats(){
 
 try{
     const idToken = localStorage.getItem("google_id_token");
-    if(idToken){
+    const localToken = getLocalToken();
+    if(idToken || localToken){
       if(__lastXpSynced === null) __lastXpSynced = xp;
       const delta = xp - __lastXpSynced;
       if(delta > 0){
         __lastXpSynced = xp;
-        queueXpDelta(idToken, delta);
+        if(idToken){
+          queueXpDelta(idToken, delta);
+        }else if(localToken && AUTH_API_BASE){
+          // ✅ Local: el backend se encarga de escribir en Sheets (upsertLocal)
+          postToAuthApi("/api/xp", { xpDelta: delta });
+        }
         
         // ✅ Consumir (reducir) XP pendiente externo si existe
         try{
@@ -8750,9 +8836,16 @@ function cerrarAyuda(){
 }
 
 window.addEventListener("load", async () => {
-  // ✅ Solo correr la UI completa en neuroverbs.html (evita errores en index.html)
-  const _isNeuroverbsUI = !!document.getElementById("sel-grupo");
-  if (!_isNeuroverbsUI) return;
+  // ✅ HUD (común a todas las páginas)
+  try{ pinStatsBar(); }catch(_){}
+  try{ loadState(); }catch(_){}
+  try{ updateHudSafe(); }catch(_){}
+  // ✅ Si hay sesión local, reflejar UI + ranking
+  try{ initLocalSessionUI(); }catch(_){}
+
+  // ✅ Iniciar la app completa solo en la página que tenga selector de grupo
+  const isAppPage = !!document.getElementById("sel-grupo");
+  if(!isAppPage) return;
 
   // Sincroniza la base de verbos antes de iniciar la UI (Grupo/Día + Active/Passive)
   try { await ensureActiveDbFromVerbsHtml(); } catch (e) {}
