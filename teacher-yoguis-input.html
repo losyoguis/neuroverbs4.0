@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher Yoguis | Input</title>
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="stylesheet" href="ui.css" />
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+</head>
+<body>
+
+<!-- ✅ Acceso rápido (igual que index) -->
+<div class="float-actions float-actions-right" aria-label="Accesos rápidos">
+  <a class="float-action ai-float" data-help="🤖 Abre el Asistente IA para resolver dudas, pedir ejemplos y practicar." href="https://chatgpt.com/g/g-688f92ef15e88191a178208283c76eb6-neuro-aprendizaje-de-los-verbos-irregulares" target="_blank" rel="noopener" title="Abrir Asistente IA">ASISTENTE IA 🤖</a>
+</div>
+
+<div class="app">
+  <header class="tyTopbar">
+    <a class="tyBrandMini" href="teacher-yoguis.html" aria-label="Teacher Yoguis Dashboard">
+      <img src="assets/brain.png" alt="NEUROVERBS" class="tyBrandLogo">
+      <div class="tyBrandText">
+        <div class="tyBrandName">NEUROVERBS</div>
+        <div class="tyBrandSub">Teacher Yoguis</div>
+      </div>
+    </a>
+    <div class="tyTopRight">
+      <a class="tyHomeLink" href="neuroverbs.html" title="Inicio">Inicio</a>
+      <div class="tyAvatar" title="Usuario">YV</div>
+    </div>
+  </header>
+  <div class="tyGradLine" aria-hidden="true"></div>
+
+  <div class="tyLayout">
+    <section class="card tyCenterCard" aria-label="Nuevo contenido">
+      <div class="tySectionLabel">Nuevo contenido</div>
+      <div class="tyCenterWrap">
+        <div class="tyBigIcon">🧠</div>
+        <h2 class="tyCenterTitle">¿Sobre qué tema te gustaría estudiar?</h2>
+        <div class="tyCenterSub">¡Elige el tema que quieras y escribe en inglés o español!</div>
+
+        <div class="tyInputRow">
+          <input id="topic" type="text" placeholder="Escribe aquí" autocomplete="off" />
+          <button class="btn-mini" id="btnSuggestions" type="button">Sugerencias</button>
+        </div>
+
+        <div class="tyRange tyRangeCenter">
+          <input id="diffRange" type="range" min="0" max="2" step="1" value="1" />
+          <div class="tyRangeLabels"><span>Fácil</span><span>Medio</span><span>Difícil</span></div>
+        </div>
+
+        <button class="btn-main tyBigBtn" id="btnStart" type="button">Comenzar</button>
+        <div class="legend">Se abrirá la lección en una nueva página (Contenido + Cuestionario + Audio).</div>
+      </div>
+    </section>
+
+    <aside class="card" aria-label="Mis contenidos">
+      <div class="tyCardHead">
+        <h2>Mis contenidos</h2>
+        <button class="btn-mini" id="btnClear" type="button" title="Limpiar historial">Limpiar</button>
+      </div>
+
+      <div class="tySideTabs" role="tablist" aria-label="Estado de contenidos">
+        <button class="sideTab active" data-tab="open" type="button" role="tab" aria-selected="true">Abiertos</button>
+        <button class="sideTab" data-tab="done" type="button" role="tab" aria-selected="false">Concluidos</button>
+      </div>
+
+      <div class="tyHistory" id="history"></div>
+    </aside>
+  </div>
+
+</div>
+
+
+
+<script src="teacher-yoguis-input.js" defer></script>
+<script src="logout-widget.js"></script>
+</body>
+</html>

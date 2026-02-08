@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b1220"/>
+  <title>Seguimiento a Estudiantes | NEUROVERBS</title>
+
+  <link rel="stylesheet" href="ui.css"/>
+  <link rel="stylesheet" href="seguimiento-estudiantes.css"/>
+
+  <!-- Google Identity (para coherencia con el resto del proyecto) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+</head>
+
+<body>
+  <div class="appShell">
+    <header class="segHeader">
+      <div class="segHeaderLeft">
+        <img src="assets/brain.png" alt="" class="segLogo"/>
+        <div>
+          <div class="segTitle">Seguimiento a Estudiantes</div>
+          <div class="segSubtitle">Panel personal (solo para estudiantes logueados)</div>
+        </div>
+      </div>
+
+      <div class="segHeaderRight">
+        <a class="segNavBtn" href="neuroverbs.html">⬅ Volver a NEUROVERBS</a>
+        <button class="segNavBtn segTheme" id="btnThemeToggle" type="button" title="Cambiar modo día / noche">☀️ Día</button>
+        <button class="segNavBtn" id="btnPrint" type="button" title="Imprime o guarda este reporte como PDF">🖨️ Imprimir / PDF</button>
+        <button class="segNavBtn segSend" id="btnSendReport" type="button" title="Enviar tu seguimiento por correo">📩 Enviar (PDF)</button>
+      </div>
+    </header>
+
+    <main class="segMain">
+      <section class="segGate" id="segGate" style="display:none;">
+        <div class="segGateCard">
+          <h2 style="margin:0 0 8px 0;">🔒 Debes iniciar sesión</h2>
+          <p style="margin:0 0 14px 0; opacity:.9;">
+            Este panel es exclusivo para estudiantes que han iniciado sesión con su cuenta institucional.
+          </p>
+          <a class="segPrimary" href="neuroverbs.html">Ir a iniciar sesión</a>
+        </div>
+      </section>
+
+      <section id="segContent" style="display:none;">
+        <div class="segGrid">
+          <!-- Perfil -->
+          <article class="segCard">
+            <div class="segCardHeader">
+              <h3>👤 Perfil</h3>
+              <span class="segPill" id="pillDomain">Workspace</span>
+            </div>
+            <div class="segProfile">
+              <img id="profilePic" class="segAvatar" alt="Foto"/>
+              <div class="segProfileMeta">
+                <div class="segName" id="profileName">—</div>
+                <div class="segEmail" id="profileEmail">—</div>
+                <div class="segSmall" id="profileSub">ID: —</div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Progreso -->
+          <article class="segCard">
+            <div class="segCardHeader">
+              <h3>⚡ Progreso general</h3>
+              <span class="segPill" id="pillLevel">Nivel —</span>
+            </div>
+
+            <div class="segMetricRow">
+              <div class="segMetric">
+                <div class="segMetricLabel">XP Total</div>
+                <div class="segMetricValue" id="xpTotal">0</div>
+              </div>
+              <div class="segMetric">
+                <div class="segMetricLabel">Racha (días)</div>
+                <div class="segMetricValue" id="streak">0</div>
+              </div>
+              <div class="segMetric">
+                <div class="segMetricLabel">Corazones</div>
+                <div class="segMetricValue" id="hearts">❤️❤️❤️❤️❤️</div>
+              </div>
+            </div>
+
+            <div class="segBarWrap">
+              <div class="segBarLabel">
+                <span>Progreso al siguiente nivel</span>
+                <span id="lvlInto">0 / 250 XP</span>
+              </div>
+              <div class="segBar">
+                <div class="segBarFill" id="lvlBar" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div class="segHint" id="hintProgress">—</div>
+          </article>
+
+          <!-- Meta diaria -->
+          <article class="segCard">
+            <div class="segCardHeader">
+              <h3>🎯 Meta diaria</h3>
+              <span class="segPill" id="pillDaily">Hoy</span>
+            </div>
+
+            <div class="segMetricRow">
+              <div class="segMetric">
+                <div class="segMetricLabel">Meta</div>
+                <div class="segMetricValue"><span id="dailyGoal">200</span> XP</div>
+              </div>
+              <div class="segMetric">
+                <div class="segMetricLabel">Hecho hoy</div>
+                <div class="segMetricValue"><span id="dailyXP">0</span> XP</div>
+              </div>
+              <div class="segMetric">
+                <div class="segMetricLabel">Streak Freeze</div>
+                <div class="segMetricValue"><span id="freeze">0</span></div>
+              </div>
+            </div>
+
+            <div class="segBarWrap">
+              <div class="segBarLabel">
+                <span>Avance de la meta</span>
+                <span id="dailyPct">0%</span>
+              </div>
+              <div class="segBar">
+                <div class="segBarFill" id="dailyBar" style="width:0%"></div>
+              </div>
+            </div>
+
+            <div class="segHint" id="hintDaily">—</div>
+          </article>
+
+          <!-- Rendimiento -->
+          <article class="segCard">
+            <div class="segCardHeader">
+              <h3>📈 Rendimiento</h3>
+              <span class="segPill" id="pillAcc">Precisión —%</span>
+            </div>
+
+            <div class="segMetricRow">
+              <div class="segMetric">
+                <div class="segMetricLabel">Intentos</div>
+                <div class="segMetricValue" id="att">0</div>
+              </div>
+              <div class="segMetric">
+                <div class="segMetricLabel">Correctas</div>
+                <div class="segMetricValue" id="corr">0</div>
+              </div>
+              <div class="segMetric">
+                <div class="segMetricLabel">Precisión</div>
+                <div class="segMetricValue" id="acc">0%</div>
+              </div>
+            </div>
+
+            <div class="segHint" id="hintPerf">—</div>
+          </article>
+
+          <!-- Dominio -->
+          <article class="segCard segSpan2">
+            <div class="segCardHeader">
+              <h3>🧠 Dominio por verbos (Mastery)</h3>
+              <span class="segPill" id="pillMastery">—</span>
+            </div>
+
+            <div class="segMetricRow">
+              <div class="segMetric">
+                <div class="segMetricLabel">Verbos en dominio</div>
+                <div class="segMetricValue" id="mastered">0</div>
+              </div>
+              <div class="segMetric">
+                <div class="segMetricLabel">Verbos practicados</div>
+                <div class="segMetricValue" id="masteryCount">0</div>
+              </div>
+              <div class="segMetric">
+                <div class="segMetricLabel">Promedio</div>
+                <div class="segMetricValue" id="masteryAvg">0.0</div>
+              </div>
+            </div>
+
+            <div class="segMiniGrid" id="masteryGrid"></div>
+            <div class="segHint">Nota: el dominio se incrementa con práctica y consistencia. En nivel 5, el verbo está “dominado”.</div>
+          </article>
+
+          <!-- Errores frecuentes -->
+          <article class="segCard segSpan2">
+            <div class="segCardHeader">
+              <h3>⚠️ Errores frecuentes</h3>
+              <span class="segPill" id="pillMistakes">Top</span>
+            </div>
+
+            <div class="segTableWrap">
+              <table class="segTable">
+                <thead>
+                  <tr>
+                    <th>Verbo (C1)</th>
+                    <th>Veces</th>
+                    <th>Recomendación</th>
+                  </tr>
+                </thead>
+                <tbody id="mistakesBody">
+                  <tr><td colspan="3" style="opacity:.85;">Aún no hay errores registrados.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="segHint">Tip: repasa estos verbos en “Verbos” y vuelve al cuestionario para reforzar memoria.</div>
+          </article>
+
+          <!-- KP -->
+          <article class="segCard">
+            <div class="segCardHeader">
+              <h3>🧩 Conocimientos previos (KP)</h3>
+              <span class="segPill" id="pillKP">KP</span>
+            </div>
+
+            <div class="segList">
+              <div class="segListRow"><span>Insignia KP</span><b id="kpBadge">No</b></div>
+              <div class="segListRow"><span>Actividades completadas</span><b id="kpDone">0</b></div>
+              <div class="segListRow"><span>Última actividad</span><b id="kpLast">—</b></div>
+              <div class="segListRow"><span>Código de clase</span><b id="kpClass">—</b></div>
+            </div>
+            <div class="segHint">Si la insignia está “Sí”, completaste el proceso de KP y ganaste XP adicional.</div>
+          </article>
+
+          <!-- Teacher Yoguis -->
+          <article class="segCard">
+            <div class="segCardHeader">
+              <h3>🧑‍🏫 Teacher Yoguis</h3>
+              <span class="segPill" id="pillTY">Historial</span>
+            </div>
+
+            <div class="segList">
+              <div class="segListRow"><span>Temas registrados</span><b id="tyCount">0</b></div>
+              <div class="segListRow"><span>Con estado “Concluido”</span><b id="tyDone">0</b></div>
+              <div class="segListRow"><span>En proceso</span><b id="tyOpen">0</b></div>
+            </div>
+
+            <div class="segHint" style="margin-top:10px;">Últimos temas:</div>
+            <div class="segChips" id="tyChips"></div>
+          </article>
+
+          <!-- Recomendaciones -->
+          <article class="segCard segSpan2">
+            <div class="segCardHeader">
+              <h3>✅ Recomendaciones del sistema</h3>
+              <span class="segPill">Auto</span>
+            </div>
+            <div class="segReco" id="recoList"></div>
+            <div class="segHint">Estas recomendaciones se generan con base en tus métricas actuales.</div>
+          </article>
+
+          <!-- Footer note -->
+          <article class="segCard segSpan2 segFoot">
+            <div class="segSmall">
+              Última lectura de datos locales: <b id="lastRead">—</b><br/>
+              Fuente: datos guardados en tu navegador (localStorage) + sincronización de XP con Sheets cuando hay sesión.
+            </div>
+          </article>
+
+        </div>
+      </section>
+    
+      <section class="segCard segSendCard" id="segSendCard" style="display:none;">
+        <h3>Enviar seguimiento</h3>
+        <p class="segMuted">
+          Si tu navegador bloquea ventanas emergentes, usa estos enlaces para abrir el correo:
+        </p>
+        <div class="segActionsRow">
+          <a class="segActionBtn segPrimary" id="segOpenGmail" href="#" target="_blank" rel="noopener noreferrer">Abrir Gmail</a>
+          <a class="segActionBtn" id="segOpenMailto" href="#" rel="noopener noreferrer" target="_blank">Abrir correo</a>
+        </div>
+        <div class="segMuted" style="margin-top:10px;">
+          Tip: Si el navegador bloquea la ventana, usa los enlaces de arriba para abrir el correo.
+        </div>
+      </section>
+
+    </main>
+  </div>
+<script src="seguimiento-estudiantes.js"></script>
+<script src="logout-widget.js"></script>
+</body>
+</html>

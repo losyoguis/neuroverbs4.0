@@ -1,0 +1,509 @@
+
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="#0b1220" name="theme-color"/>
+<meta content="yes" name="mobile-web-app-capable"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<title>NEUROVERBS</title>
+
+<!-- ✅ Mantener la vista siempre arriba al recargar/actualizar neuroverbs.html -->
+<script>
+  // ⚠️ Importante: NO usamos scrollIntoView() aquí porque la barra HUD fija
+  // puede tapar el bloque superior en desktop y móvil. Forzamos top=0 varias veces.
+  (function(){
+    try{ if('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
+
+    function forceTop(){
+      try{ window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
+      catch(e){ try{ window.scrollTo(0,0); }catch(_){} }
+    }
+
+    function forceTopSettled(){
+      forceTop();
+      requestAnimationFrame(forceTop);
+      requestAnimationFrame(()=>requestAnimationFrame(forceTop));
+      setTimeout(forceTop, 50);
+      setTimeout(forceTop, 200);
+    }
+
+    window.addEventListener('DOMContentLoaded', forceTopSettled, { once:true });
+    window.addEventListener('load', forceTopSettled, { once:true });
+    window.addEventListener('pageshow', forceTopSettled);
+  })();
+</script>
+
+<!-- Favicon Yoguis (embebido) -->
+
+<link href="ui.css" rel="stylesheet"/>
+  <!-- Icons (externos) -->
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+</head>
+<body class="has-floating-stats">
+
+<!-- ✅✅✅ CONSOLE GOOGLE -->
+<script async="" defer="" src="https://accounts.google.com/gsi/client"></script>
+<script src="nv-config.js"></script>
+
+<!-- AUTH MOVED BELOW -->
+
+<!-- ✅✅✅ BARRA DE PUNTOS FUERA DE .app -->
+<div class="stats" id="statsBar">
+<button class="statsNavBtn left" type="button" aria-label="Desplazar a la izquierda">◀</button>
+  <button class="statsNavBtn right" type="button" aria-label="Desplazar a la derecha">▶</button>
+<div class="statBox" data-tip="🔥 Tiros seguidos practicando. Si fallas o faltas, puede bajar (Freeze te protege)."><span class="stat-label">Racha</span><span class="stat-value" id="streak">0</span></div>
+<div class="statBox" data-tip="⭐ Puntos acumulados por respuestas correctas en la app."><span class="stat-label">Total XP</span><span class="stat-value" id="xp">0</span></div>
+<div class="statBox" data-tip="🎯 Porcentaje de aciertos: correctas ÷ intentos."><span class="stat-label">Precisión</span><span class="stat-value" id="acc">100%</span></div>
+<div class="statBox" data-tip="🧬 Subes de nivel cada 250 XP (aprox.)."><span class="stat-label">Nivel</span><span class="stat-value" id="level">1</span></div>
+<div class="statBox" data-tip="❤️ Intentos disponibles. Un error consume 1. Se recuperan con el tiempo."><span class="stat-label">Vidas</span><span class="stat-value heartsText" id="hearts">❤️❤️❤️❤️❤️</span></div>
+<div class="statBox" data-tip="🧊 Protege tu racha cuando fallas o faltas. Se gana por hitos de racha."><span class="stat-label">Freeze</span><span class="stat-value" id="freeze">0</span></div>
+<div aria-label="Meta diaria" class="goalBox" data-tip="📅 Objetivo de XP del día. Completa la meta para crear hábito y mantener el ritmo.">
+<div class="goalTop">
+<span class="goalLabel">Meta diaria</span>
+<span class="goalValue" id="dailyGoalText">0/200</span>
+</div>
+
+<div class="goalBar"><div class="goalFill" id="dailyGoalFill"></div></div>
+</div>
+
+</div>
+
+<!-- ✅✅✅ ACCESOS RÁPIDOS (ABAJO‑IZQUIERDA): ASISTENTE IA -->
+<div class="float-actions float-actions-right" aria-label="Accesos rápidos">
+  <a class="float-action ai-float" data-help="🤖 Abre el Asistente IA para resolver dudas, pedir ejemplos y practicar verbos." href="https://chatgpt.com/g/g-688f92ef15e88191a178208283c76eb6-neuro-aprendizaje-de-los-verbos-irregulares" rel="noopener" target="_blank" title="Abrir Asistente IA">ASISTENTE IA 🤖</a>
+</div>
+<div class="motivation-backdrop" id="motivationBackdrop"></div>
+<div aria-live="polite" aria-modal="true" class="motivation" id="motivationToast" role="dialog">
+<div class="motivation-card">
+<button class="motivation-x" data-help="Cerrar este mensaje motivador." onclick="hideMotivation()" type="button">✕</button>
+<div class="motivation-top">
+<span class="motivation-badge">🔥 ¡Conexión exitosa!</span>
+<span style="color:#cbd5e1;font-weight:900;">Siguiente paso: <b>CONJUGAR</b></span>
+</div>
+
+<div class="motivation-lines">
+<div class="motivation-en" id="motivationEN"></div>
+<div class="motivation-es" id="motivationES"></div>
+</div>
+
+<div class="motivation-action">
+<button class="btn-conjugar" data-help="CONJUGAR: genera las oraciones y ejercicios del verbo actual." onclick="conjugarDesdeModal()" type="button">CONJUGAR ✅</button>
+</div>
+
+</div>
+</div>
+
+<div class="app">
+<div class="brand" id="appBrand" tabindex="-1">
+  <h1 id="appName"><span class="brandMark"><img src="assets/brain.png" alt="NEUROVERBS" class="brandLogo"></span> NEUROVERBS</h1>
+  <div class="brandTag">Neuroaprendizaje de Verbos Irregulares</div>
+  <div class="subtitle">“Aprende 180 verbos en 80 días”</div>
+</div>
+
+<div class="roundbar">
+<!-- ✅ FILA 1: INSTRUCCIONES + E-BOOK + REVIEW -->
+<div class="roundrow">
+<button class="roundbtn ruta" data-help="Ruta del Inglés: checklist de progreso (sin XP) para dominar pronouns, verbs, tenses y linking words." onclick="window.location.href='ruta-del-ingles.html'" title="Ruta del Inglés" type="button">RUTA DEL INGLÉS 🗺️</button>
+<button class="roundbtn" data-help="Guía rápida: cómo usar la app paso a paso." onclick="abrirInstrucciones()" title="Guía rápida: cómo usar la app paso a paso." type="button">INSTRUCCIONES 📌</button>
+<button class="roundbtn ebook" data-help="Abre el e-book (Canva) dentro de la app." onclick="abrirEbook()" title="Abre el e-book (Canva) dentro de la app." type="button">E-BOOK 📚</button>
+<button class="roundbtn kp" data-help="Conocimientos previos: pronombres, verbos, tiempos y conectores para empezar." onclick="window.location.href='conocimientos-previos.html'" title="Conocimientos previos" type="button">CONOCIMIENTOS PREVIOS 🧠 <span class="kpBtnBadge isPulse" id="kpBtnBadge" hidden>KP ✅</span></button>
+</div>
+
+<!-- ✅ FILA 2: ROUND 1 + ROUND 2 + VOZ ACTIVA + VOZ PASIVA -->
+<div class="roundrow">
+<button class="roundbtn active" data-help="Round 1: Pronombre + Verbo (sin complemento). Cambia el modo de práctica." id="btnRound1" onclick="setRound(1)" title="Round 1: Pronombre + Verbo (sin complemento)." type="button">Round 1</button>
+<button class="roundbtn" data-help="Round 2: Pronombre + Verbo + Complemento. Cambia el modo de práctica." id="btnRound2" onclick="setRound(2)" title="Round 2: Pronombre + Verbo + Complemento." type="button">Round 2</button>
+<button class="roundbtn review" data-help="Review: repasa y gana XP extra con retos." onclick="abrirReview()" title="Review: repasa y gana XP extra con retos." type="button">REVIEW 🧩</button>
+</div>
+
+<!-- Hint -->
+<div class="roundrow">
+<span class="roundhint" id="roundHint">Round 1: Pronombre + Verbo</span>
+</div>
+</div>
+<div class="top">
+<div>
+<label>Grupo</label>
+<select id="sel-grupo" onchange="actualizarDias()"></select>
+</div>
+<div>
+<label>Día</label>
+<select id="sel-dia" onchange="cargarDia()"></select>
+</div>
+<button class="btn-mini" data-help="🧠 Asociación Neuronal: abre la pista neuronal del día (patrón C1=C2=C3) y ejemplos clave." onclick="abrirAyuda()"><img src="assets/brain.png" alt="" class="inlineLogo"> Asociación Neuronal</button>
+</div>
+<div class="hint" id="pistaBox">
+<div class="hint-top">
+<span class="hint-badge" id="pistaTitulo"><img src="assets/brain.png" alt="" class="inlineLogo"> Pista Neuronal</span>
+<span class="hint-days" id="pistaDias"></span>
+<div class="voiceChip" id="voiceChip">
+<span>Modo:</span> <small id="voiceModeLabel">Voz Activa</small>
+<span id="voiceModeMiniHint" style="opacity:.85;font-weight:950">Sujeto → Verbo</span>
+</div>
+</div>
+<div class="neon-subtitle" id="pistaNeon">PISTA NEURONAL</div>
+<ul id="pistaLista"></ul>
+<div class="exNote" id="exNote"><span>⚠ EXCEPCIÓN:</span> <span id="exText"></span></div>
+</div>
+<div class="target" id="verbo-en">...</div>
+<!-- ✅ Imagen asociada al verbo (cambia con el verbo actual) -->
+<div class="verbIllustrationWrap">
+<div aria-label="Imagen del verbo" class="verbIllustration" id="verbIllustration"></div>
+</div>
+<!-- ✅ Navegación (flechas) en la FILA DE ABAJO (separada del recuadro de la imagen) -->
+<div class="navRowBelowIllustration">
+<div class="nav" id="readingNav">
+<button aria-label="Anterior" data-help="⬅️ Ir al verbo anterior del día (navegación)." onclick="cambiar(-1)">⬅️</button>
+<span id="progreso2" style="font-weight:900; color:var(--muted);">0 de 0</span>
+<button aria-label="Siguiente" data-help="➡️ Ir al siguiente verbo del día (navegación)." onclick="cambiar(1)">➡️</button>
+</div>
+</div>
+<div class="inputs">
+  <div class="inputWrap">
+    <input autocomplete="off" id="c1" placeholder="INFINITIVO (C1)"/>
+    <button class="listenMini listenC1" data-help="Escucha la pronunciación del verbo en C1 (Base)." onclick="hablarC1()" title="Escucha la pronunciación del verbo en C1 (Base)." type="button" aria-label="Escuchar C1">
+      <span class="listenIcon">🔊</span><span class="listenTag">C1</span>
+    </button>
+  </div>
+  <div class="inputWrap">
+    <input autocomplete="off" id="c2" placeholder="PASADO (C2)"/>
+    <button class="listenMini listenC2" data-help="Escucha la pronunciación del verbo en C2 (Pasado)." onclick="hablarC2()" title="Escucha la pronunciación del verbo en C2 (Pasado)." type="button" aria-label="Escuchar C2">
+      <span class="listenIcon">🔊</span><span class="listenTag">C2</span>
+    </button>
+  </div>
+  <div class="inputWrap">
+    <input autocomplete="off" id="c3" placeholder="PARTICIPIO (C3)"/>
+    <button class="listenMini listenC3" data-help="Escucha la pronunciación del verbo en C3 (Participio)." onclick="hablarC3()" title="Escucha la pronunciación del verbo en C3 (Participio)." type="button" aria-label="Escuchar C3">
+      <span class="listenIcon">🔊</span><span class="listenTag">C3</span>
+    </button>
+  </div>
+</div>
+<button class="btn-main btn-associar" data-help="✅ Conectar Neuronas: valida C1/C2/C3. Si aciertas, sumas XP y avanzas." onclick="validar()">Asociar - Repetir y Conectar Neuronas</button>
+<div id="msg"></div>
+<div id="master">
+<!-- ✅ Voz Activa / Voz Pasiva (al inicio de la sección de conjugaciones) -->
+<div class="roundrow voiceRowInTables" style="margin: 8px 0 14px 0;">
+<button class="roundbtn active" data-help="Voz activa: el sujeto realiza la acción." id="btnActive" onclick="setVoice('active')" title="Voz activa: el sujeto realiza la acción." type="button">VOZ ACTIVA</button>
+<button class="roundbtn" data-help="Voz pasiva: el sujeto recibe la acción." id="btnPassive" onclick="setVoice('passive')" title="Voz pasiva: el sujeto recibe la acción." type="button">VOZ PASIVA</button>
+</div>
+<div id="tablas"></div>
+<div id="spellingArea"></div>
+<div id="practiceArea"></div>
+<div id="readingArea"></div>
+</div>
+<footer style="margin-top:18px; padding-top:14px; border-top:1px dashed #cbd5e1; display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:center;">
+<div class="nav" id="readingNavFooter" style="margin-top:0; display:none;">
+<button aria-label="Anterior" data-help="⬅️ Ir al verbo anterior del día (navegación)." onclick="cambiar(-1)">⬅️</button>
+<span id="progreso2Footer" style="font-weight:900; color:var(--muted);">0 de 0</span>
+<button aria-label="Siguiente" data-help="➡️ Ir al siguiente verbo del día (navegación)." onclick="cambiar(1)">➡️</button>
+</div>
+<div style="flex-basis:100%; height:0;"></div>
+<!-- Login antes del Ranking -->
+<div class="rankHeader" style="text-align:center; margin:14px 0 10px 0;">
+<div class="rankTitle" style="font-size:clamp(34px, 6vw, 54px); font-weight:900; letter-spacing:.6px; color:#ffb24a; text-shadow: 0 2px 10px rgba(0,0,0,.35); line-height:1;"><img alt="Logo Los Yoguis" src="assets/logo.png" style="width:clamp(70px, 14vw, 130px); height:auto; display:inline-block; vertical-align:middle; filter:drop-shadow(0 8px 20px rgba(0,0,0,.45));"/></div>
+<div class="rankTitle" style="font-size:clamp(22px, 4vw, 40px); font-weight:900; letter-spacing:.6px; color:#ffb24a; text-shadow: 0 2px 10px rgba(0,0,0,.35); margin-top:4px;">Ranking</div>
+<div class="rankTitle" style="font-size:clamp(18px, 3.4vw, 32px); font-weight:900; letter-spacing:.6px; color:#ffb24a; text-shadow: 0 2px 10px rgba(0,0,0,.35); margin-top:2px;">I.E Manuel J. Betancur</div>
+<div class="authDomainLabel" style="margin-top:6px; font-size:clamp(14px, 2.2vw, 20px); font-weight:800; color:#fff;">Acceder con @iemanueljbetancur.edu.co</div>
+</div>
+<div class="authBar" id="authBar">
+<div data-help="🔑 Inicia sesión con Google para guardar tus XP y aparecer en el ranking. Solo estudiantes de la I.E Manuel J. Betancur." id="googleBtn"></div>
+<div class="userChip" id="userChip" style="display:none;">
+<img alt="Foto" id="userPic"/>
+<div class="userMeta">
+<div class="userName" id="userName">Usuario</div>
+<div class="userEmail" id="userEmail">—</div>
+</div>
+</div>
+</div>
+<!-- Ranking abajo (paginado 10 por página) -->
+<div class="leaderboardWrap" id="leaderboardSection" style="display:none;">
+<div class="lbHeader">
+<h3 style="margin:0;">🏆 Ranking (Todos - paginado)</h3>
+<div class="lbControls" style="display:flex; gap:10px; align-items:center;">
+<button class="lbBtn" data-help="◀ Página anterior del ranking (muestra 5 usuarios por página)." id="lbPrevBtn" onclick="lbPrev()" type="button">◀</button>
+<span id="lbPageInfo" style="opacity:.9; font-weight:700;">1</span>
+<button class="lbBtn" data-help="▶ Página siguiente del ranking (muestra 5 usuarios por página)." id="lbNextBtn" onclick="lbNext()" type="button">▶</button>
+<button class="lbBtn" data-help="🔄 Actualizar ranking: recarga participantes y XP desde la base de datos." onclick="cargarLeaderboard()" type="button">Actualizar</button>
+</div>
+</div>
+<p class="lbNote" id="lbStatus">Inicia sesión para ver el ranking.</p>
+<div class="lbList" id="leaderboardList"></div>
+<div class="lbFollowWrap" style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; margin:14px 0 2px 0;">
+  <button class="lbBtn" id="btnRankingGlobal" type="button"
+          data-help="🌍 Ver el Ranking Global (hoja publicada) en un modal dentro de la app."
+          onclick="abrirRankingGlobal()"
+          style="text-decoration:none; padding:12px 18px; border-radius:999px; font-weight:900; letter-spacing:.2px;
+                 background: linear-gradient(135deg, rgba(255, 178, 74, .95), rgba(255, 74, 160, .95));
+                 color:#08101c; border:1px solid rgba(255,255,255,.22);
+                 box-shadow: 0 10px 24px rgba(0,0,0,.30);">
+    🌍 Ranking Global
+  </button>
+  <a class="lbBtn" id="btnSeguimiento" href="seguimiento-estudiantes.html"
+     style="text-decoration:none; padding:12px 18px; border-radius:999px; font-weight:900; letter-spacing:.2px;
+            background: linear-gradient(135deg, rgba(0, 255, 178, .95), rgba(0, 140, 255, .95));
+            color:#08101c; border:1px solid rgba(255,255,255,.22);
+            box-shadow: 0 10px 24px rgba(0,0,0,.30);">
+    📊 Seguimiento a estudiantes
+  </a>
+</div>
+<p class="lbNote" style="text-align:center; margin:8px auto 0 auto; max-width:780px; opacity:.85;">
+  Este panel muestra tu progreso (XP, racha, precisión, logros, errores frecuentes) y tu actividad en los módulos de la app.
+</p>
+
+</div>
+</footer>
+</div>
+<div class="overlay" id="overlay">
+<div class="modal">
+<h2><img src="assets/brain.png" alt="" class="inlineLogo"> Red neuronal del día</h2>
+<div id="ayuda"></div>
+<button class="btn-main" data-help="Volver al ejercicio: cierra la Red Neuronal." onclick="cerrarAyuda()" style="margin-top:14px">ASOCIAR ✅</button>
+</div>
+</div>
+
+<!-- ✅ MODAL: INSTRUCCIONES -->
+<div class="overlay" id="instOverlay" style="display:none;">
+<div class="modal modal-top">
+<h2 style="margin-bottom:10px;">📌 Instrucciones</h2>
+<div class="instIntro" style="margin:6px 0 14px; padding:12px 14px; border-radius:14px; background:rgba(245,158,11,.10); border:1px solid rgba(245,158,11,.25); color:#0f172a; line-height:1.35;">
+<div style="font-weight:900; margin-bottom:6px;">🎮 Bienvenido/a</div>
+<div style="font-size:0.98rem;"><p style="margin:0 0 10px;">Este Ambiente Virtual de Aprendizaje (AVA) integra un <strong>sistema interactivo</strong> creado por <strong>Spelling Yoguis Bee</strong> para dominar <strong>180 verbos irregulares</strong> en inglés de forma práctica y progresiva. La metodología se basa en el <strong>neuroaprendizaje</strong>, combinando ejercicios de <strong>asociación</strong> y <strong>repetición</strong> para potenciar la retención y la comprensión.</p>
+<p style="margin:0 0 10px;">A través de distintos niveles de dificultad, el estudiante practica la <strong>voz activa y la voz pasiva</strong>, acumula <strong>puntos de experiencia (XP)</strong> y avanza en un <strong>ranking competitivo</strong> que motiva el progreso. La plataforma incorpora recursos multimedia como <strong>audios de pronunciación</strong>, <strong>libros electrónicos en Canva</strong>, <strong>sitio web de apoyo</strong> y un <strong>asistente de inteligencia artificial</strong> que guía el estudio y resuelve dudas.</p>
+<p style="margin:0;">El proceso incluye fases de <strong>asociación</strong>, <strong>práctica</strong> y <strong>revisión de errores</strong>, asegurando el dominio de las tres formas básicas del verbo (<strong>infinitivo, pasado y participio</strong>) y su aplicación en <strong>Presente Simple, Pasado Simple y Presente Perfecto</strong>, mediante oraciones <strong>afirmativas, negativas e interrogativas</strong>.</p></div></div>
+<div class="instHero" style="margin:10px 0 14px;">
+<img alt="Aprende 180 Verbos en 80 Días: Guía Rápida" loading="lazy" src="assets/guia-rapida.webp" style="width:100%;height:auto;border-radius:16px;box-shadow:0 10px 26px rgba(15,23,42,.20);border:1px solid rgba(15,23,42,.08);"/>
+</div>
+
+<!-- ✅ Audio guía (Instrucciones) -->
+<div class="instAudio" style="margin:10px 0 16px; padding:12px 12px; border-radius:14px; background:rgba(99,102,241,.10); border:1px solid rgba(99,102,241,.22);">
+<div style="font-weight:900; color:#0f172a; margin-bottom:8px;">🎧 Audio guía</div>
+<audio controls="" preload="none" style="width:100%; max-width:100%; outline:none;">
+<source src="Audiio.m4a" type="audio/mp4"/>
+<source src="Audiio.m4a" type="audio/x-m4a"/>
+          Tu navegador no soporta audio HTML5.
+        </audio>
+</div>
+
+<!-- Video guía (Instrucciones) -->
+<div class="instVideo" style="margin:10px 0 16px; padding:14px; border-radius:16px; background:rgba(99,102,241,.10); border:1px solid rgba(99,102,241,.22);">
+<div style="font-weight:900; color:#0f172a; margin-bottom:8px;">🎬 Video guía</div>
+<div style="position: relative; width: 100%; height: 0; padding-top: 56.2500%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+<iframe allow="fullscreen" allowfullscreen="allowfullscreen" loading="lazy" src="https://www.canva.com/design/DAG811r4OEw/6VRHvofd4IHQyI4HQLLO2g/watch?embed" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;">
+</iframe>
+</div>
+<a data-help="🎬 Abrir el video guía en Canva (nueva pestaña)." href="https://www.canva.com/design/DAG811r4OEw/6VRHvofd4IHQyI4HQLLO2g/watch?utm_content=DAG811r4OEw&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" rel="noopener" target="_blank">Video App Neuroverbs</a> de Spelling Yoguis Bee
+      </div>
+
+<!-- ✅ PDF guía (Instrucciones) -->
+<div class="instPDF" style="margin:10px 0 16px; padding:12px 12px; border-radius:14px; background:rgba(99,102,241,.10); border:1px solid rgba(99,102,241,.22);">
+<div style="font-weight:900; color:#0f172a; margin-bottom:8px;">📄 PDF guía</div>
+<div style="width:100%; height:420px; max-height:60vh; border-radius:10px; overflow:hidden; box-shadow:0 2px 8px 0 rgba(63,69,81,0.16);">
+<iframe loading="lazy" src="presentacion.pdf" style="width:100%; height:100%; border:0; margin:0; padding:0;"></iframe>
+</div>
+<div style="margin-top:8px;">
+<a data-help="📄 Abrir el PDF guía en una nueva pestaña." href="presentacion.pdf" rel="noopener" style="font-weight:850; color:#1d4ed8; text-decoration:underline;" target="_blank">Abrir PDF en otra pestaña ↗️</a>
+</div>
+</div>
+<div style="color:#0f172a; font-weight:850; line-height:1.45rem;">
+<ol style="margin:0; padding-left:18px;">
+<li style="margin-bottom:12px;"><b>Primero:</b> lee el <b>E-book</b> antes de empezar para entender el método de neuroaprendizaje. 
+            <a data-help="📚 Abrir el e-book en Canva (nueva pestaña)." href="https://www.canva.com/design/DAGiaYgaOxs/RMCSehA1T8Sm35n6gK9lnQ/view" rel="noopener" style="font-weight:950;color:var(--primary);text-decoration:underline;" target="_blank">Abrir e-book en Canva ↗️</a></li>
+<li style="margin-bottom:12px;"><b>Elige Round:</b> Round 1 (básico) o Round 2 (con complemento).</li>
+<li style="margin-bottom:12px;"><b>Selecciona Grupo y Día</b> para cargar la lista del reto.</li>
+<li style="margin-bottom:12px;"><b>Conjuga:</b> escribe C1/C2/C3 y pulsa <b>Conectar Neuronas</b>.</li>
+<li style="margin-bottom:12px;"><b>Al acertar:</b> abre <b>Tablas</b> + <b>Practice</b> + <b>Reading</b> y suma XP.</li>
+<li style="margin-bottom:0;"><b>Audio:</b> usa 🔊 para escuchar y mejorar pronunciación.</li>
+</ol>
+<div style="margin-top:16px; background:#fff7ed; border:1px dashed #fdba74; border-radius:16px; padding:14px 16px;">
+<div style="font-weight:950; color:#7c2d12; font-size:1.05rem;">🟠 Tip motivador: Practica los verbos de cada día con constancia. En el Round 1, enfócate solo en el pronombre + el verbo. Luego, en el Round 2, sube el nivel con pronombre + verbo + complemento. ¡Paso a paso, tu fluidez se fortalece! 🚀</div>
+</div>
+<button class="btn-main" data-help="✅ Cerrar instrucciones y empezar la práctica." onclick="cerrarInstrucciones()" style="margin-top:16px; width:100%;">ENTENDIDO ✅</button>
+</div>
+</div>
+</div>
+
+<!-- ✅ MODAL: E-BOOK (Canva) -->
+<div class="overlay" id="ebookOverlay" style="display:none;">
+<div class="modal modal-top">
+<h2 style="margin-bottom:10px;">📚 E-book (Canva)</h2>
+<a class="btn-main btn-link" data-help="📚 Abrir el e-book completo en Canva (nueva pestaña)." href="https://www.canva.com/design/DAGiaYgaOxs/RMCSehA1T8Sm35n6gK9lnQ/view" rel="noopener" style="width:100%; margin-top:8px; background:#0b1220; color:#fff; border:2px solid rgba(0,0,0,.12);" target="_blank">ABRIR EN CANVA ↗️</a>
+<div class="canva-embed">
+<iframe allow="fullscreen" allowfullscreen="allowfullscreen" loading="lazy" src="https://www.canva.com/design/DAGiaYgaOxs/RMCSehA1T8Sm35n6gK9lnQ/view?embed">
+</iframe>
+</div>
+<button class="btn-main" data-help="Cerrar el e-book y volver a la práctica." onclick="cerrarEbook()" style="margin-top:14px; width:100%;">CERRAR ✖️</button>
+</div>
+</div>
+
+<!-- ✅ MODAL: REVIEW (errores recientes) -->
+<div class="overlay" id="reviewOverlay">
+<div class="modal">
+<h2>🧩 Review — Errores recientes</h2>
+<div style="color:#334155;font-weight:850;line-height:1.35rem;">
+        Aquí ves tus últimos errores para volverlos a intentar . 
+        <br/>Tip: corrige primero los que más se repiten.
+      </div>
+<div class="review-list" id="reviewList"></div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:flex-end;">
+<button class="btn-main" data-help="🧹 Limpiar: borra la lista de errores para empezar de nuevo." onclick="limpiarReview()" style="width:auto;padding:12px 14px;" type="button">LIMPIAR 🧹</button>
+<button class="btn-main" data-help="Cerrar el Review y volver a la app." onclick="cerrarReview()" style="width:auto;padding:12px 14px;" type="button">CERRAR ✅</button>
+</div>
+</div>
+</div>
+
+
+<!-- ✅ MODAL: RANKING GLOBAL (Google Sheets publicado) -->
+<div class="overlay" id="globalRankingOverlay" style="display:none;">
+  <div class="modal modal-top">
+    <h2 style="margin-bottom:10px;">🌍 Ranking Global</h2>
+
+    <div style="width:100%; height:72vh; max-height:72vh; border-radius:12px; overflow:hidden; border:1px solid rgba(15,23,42,.12);
+                box-shadow:0 10px 26px rgba(15,23,42,.20); background:#fff;">
+      <iframe
+        src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQ4AY3kQOIsRM-6TJIWJVr2MDtRTcE3gJvwu1KBKQy3SVSViXTYBRZ-tXCjODwwsaLgRfGixyYoe2Zh/pubhtml?gid=1102861025&amp;single=true&amp;widget=true&amp;headers=false"
+        style="width:100%; height:100%; border:0; margin:0; padding:0;"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Ranking Global">
+      </iframe>
+    </div>
+
+    <button class="btn-main" data-help="Cerrar Ranking Global y volver a la app." onclick="cerrarRankingGlobal()" style="margin-top:14px; width:100%;">CERRAR ✖️</button>
+  </div>
+</div>
+
+<footer class="appFooter" role="contentinfo">
+  <div class="footerInner">
+    <div class="footerTopRow" aria-label="Smart E-book">
+      <a class="footerBtn footerBtn--highlight"
+         data-help="🌐 Abrir el Smart‑E‑Book (Google Sites) en una pestaña nueva."
+         href="https://sites.google.com/iemanueljbetancur.edu.co/smartebook/inicio"
+         onclick="abrirWeb(); return false;"
+         target="_blank" rel="noopener">smart-e-book 🌐</a>
+
+      <a class="footerBtn footerBtn--secondary"
+         data-help="🧑‍🏫 Abrir Teacher Yoguis (módulos de práctica) en esta app."
+         href="teacher-yoguis.html">Teacher Yoguis 🧑‍🏫</a>
+    </div>
+
+    <div class="footerMetaRow" aria-label="Créditos y sitio">
+      <div class="footerBy">Diseñado por <b>Spelling Yoguis Bee</b></div>
+    </div>
+
+    <div class="footerSiteRow" aria-label="Sitio web">
+      <a class="footerLink"
+         data-help="🌐 Abrir el sitio oficial de Los Yoguis (recursos y proyectos)."
+         href="https://sites.google.com/view/losyoguis/los-yoguis"
+         target="_blank" rel="noopener">www.losyoguis.com</a>
+    </div>
+  </div>
+</footer>
+
+<div aria-hidden="true" id="globalTooltip">
+<div class="gt-title" id="gtTitle" style="display:none"></div>
+<div class="gt-text" id="gtText"></div>
+<div class="gt-arrow" id="gtArrow"></div>
+</div>
+
+<!-- desde mjb -->
+
+<script>
+  (function () {
+    const hash = (location.hash || "").replace(/^#/, "");
+    const params = new URLSearchParams(hash);
+    const idToken = params.get("id_token");
+
+    if (idToken) {
+      // Guarda el token (ajusta la key como quieras)
+      localStorage.setItem("mjb_id_token", idToken);
+
+      // Limpia el hash para que no quede visible
+      history.replaceState(null, "", location.pathname + location.search);
+      console.log("✅ Token recibido desde MJB login");
+    }
+  })();
+</script>
+
+<!-- XP sync watcher removed: XP is synced only from exercise actions + server fetch to avoid double-counting -->
+
+<script>
+(function(){
+  try{
+    const cfgDom = (window.NEUROVERBS_CONFIG ? window.NEUROVERBS_CONFIG.allowedDomain : undefined);
+    const d = (cfgDom !== undefined ? cfgDom : (localStorage.getItem("ALLOWED_DOMAIN_NV") || "iemanueljbetancur.edu.co"));
+const el = document.querySelector(".authDomainLabel");
+    if (el) el.textContent = d ? ("Acceder con @" + d) : "Acceder con cualquier cuenta";
+  }catch(_){}
+})();
+</script>
+
+
+<script>
+  // ✅ Modal: Ranking Global
+  function abrirRankingGlobal(){
+    const ov = document.getElementById("globalRankingOverlay");
+    if(!ov) return;
+    ov.style.display = "flex";
+    document.body.classList.add("modal-open");
+  }
+  function cerrarRankingGlobal(){
+    const ov = document.getElementById("globalRankingOverlay");
+    if(!ov) return;
+    ov.style.display = "none";
+    document.body.classList.remove("modal-open");
+  }
+  // Cerrar al hacer click en el fondo y con ESC
+  (function(){
+    const ov = document.getElementById("globalRankingOverlay");
+    if(!ov) return;
+    ov.addEventListener("click", function(e){
+      if(e.target === ov) cerrarRankingGlobal();
+    });
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape" && ov.style.display === "flex") cerrarRankingGlobal();
+    });
+  })();
+</script>
+
+<script src="core.js"></script>
+  <!-- DB helpers (hidden) -->
+  <a href="verbs.html" style="display:none">verbs</a>
+  <a href="verbs2.html" style="display:none">verbs2</a>
+  <a href="index.html" style="display:none">mjb</a>
+
+<script>
+  // Mostrar insignia KP si el estudiante ya completó 7/7
+  (function(){
+    const KP_BADGE_KEY = "yoguis_kp_badge_v1";
+    function safeGet(k){ try{ return localStorage.getItem(k);}catch(e){ return null; } }
+    function show(){
+      const badge = document.getElementById("kpBtnBadge");
+      if(!badge) return;
+      const raw = safeGet(KP_BADGE_KEY);
+      if(raw){
+        badge.hidden = false;
+      }else{
+        badge.hidden = true;
+      }
+    }
+    window.addEventListener("DOMContentLoaded", show);
+    // por si vuelve desde KP sin recargar duro
+    window.addEventListener("pageshow", show);
+    window.addEventListener("storage", show);
+  })();
+</script>
+<script src="logout-widget.js"></script>
+</body>
+
+</html>

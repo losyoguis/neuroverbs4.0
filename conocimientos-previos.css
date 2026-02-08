@@ -1,0 +1,1281 @@
+/* NEUROVERBS - Conocimientos previos (A + B) */
+/* Diseño: menos saturación, más aire, acordeones y menú de puntajes sticky */
+
+:root{
+  /* Medidas calculadas por JS (para convivir con la barra de puntajes FIXED de ui.css) */
+  --statsBottom: 92px;   /* bottom del menú de puntajes en viewport px */
+  --dockTop: 0px;       /* top sticky del encabezado KP (debajo del stats) */
+  --safeTop: env(safe-area-inset-top, 0px);
+  --hudSafe: 0px;       /* safe para anclas/scroll (stats + dock) */
+  --safeBottom: env(safe-area-inset-bottom, 0px);
+
+  /* Paleta (heredada de ui.css) */
+  --kpOrange: var(--orange, #F28B16);
+  --kpPurple: var(--purple, #65116B);
+  --kpBlue: var(--blue, #2563eb);
+}
+
+
+
+
+
+body.kp-body #statsBar{
+  top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
+}
+body.kp-body{
+  /* Avoid huge top gaps: only reserve space for the fixed score bar */
+  padding-top: calc(var(--statsBottom, 92px) + 10px) !important;
+}
+body{
+  background: var(--bg);
+  margin:0;
+  /* ✅ Estilo "app": aire lateral, pero sin dejar vacío gigante arriba */
+  padding: 16px;
+  /*
+    Reservamos espacio SOLO para la barra fija de puntajes.
+    En algunos móviles/navegadores el cálculo del "top" puede inflarse y crear
+    un espacio vacío grande. Por eso dejamos un margen pequeño fijo (+10px)
+    y el JS clampa --statsBottom.
+  */
+  padding-top: calc(10px + var(--statsBottom, 0px));
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif;
+  color:#e5e7eb;
+  display:block;
+}
+
+/* Override global ui.css padding for pages with floating stats */
+body.has-floating-stats{
+  padding-top: calc(10px + var(--statsBottom, 0px));
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-bottom: 24px;
+}
+
+
+
+.kpApp{
+  width: min(1040px, 100%);
+  margin: 0 auto;
+}
+
+.kpTopDock{
+  /* ✅ Encabezado SIEMPRE visible: sticky justo debajo del menú de puntajes */
+  position: sticky;
+  top: var(--dockTop, 0px);
+  z-index: 190; /* debajo de la barra fija (z=200), encima del contenido */
+  padding-bottom: 12px;
+  isolation: isolate;
+}
+
+/* “Glass” suave para que al hacer scroll no se mezcle con el contenido */
+.kpTopDock::before{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  top:-10px; bottom:0;
+  z-index:-1;
+  background: linear-gradient(180deg, rgba(11,18,32,.88), rgba(11,18,32,.72));
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events:none;
+}
+
+/* ===== Dock compacto (auto) =====
+   En pantallas pequeñas, cuando el usuario baja, el encabezado se compacta
+   para no ocupar tanto alto, sin perder los botones 1–4.
+*/
+.kpTopDock{ transition: padding .18s ease, transform .18s ease; }
+.kpTopDock .kpBrand,
+.kpTopDock .kpNavRow,
+.kpTopDock .kpNotice,
+.kpTopDock .kpSectionNav{ transition: margin .18s ease, padding .18s ease, opacity .18s ease; }
+
+.kpTopDock.isCompact{
+  padding-bottom: 8px;
+}
+.kpTopDock.isCompact::before{
+  top:-10px;
+  border-radius: 20px;
+}
+.kpTopDock.isCompact .kpBrand{ margin: 2px 0 8px; }
+.kpTopDock.isCompact .brand h1{ font-size: 1.55rem; }
+.kpTopDock.isCompact .brand .brandTag{ margin-top: 2px; font-size: 0.95rem; }
+.kpTopDock.isCompact .subtitle{ display:none; }
+
+.kpTopDock.isCompact .kpNavRow{ margin: 6px 0 10px; gap: 8px; }
+.kpTopDock.isCompact .kpPendingChip{ padding: 8px 10px; border-radius: 12px; }
+.kpTopDock.isCompact .roundbtn{ padding: 10px 12px; border-radius: 16px; }
+.kpTopDock.isCompact .roundbtn.mini{ padding: 8px 10px; }
+
+/* El objetivo se mantiene, pero en 2 líneas para ahorrar espacio */
+.kpTopDock.isCompact .kpNotice{
+  padding: 10px 12px;
+  margin: 6px 0 10px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.kpTopDock.isCompact .kpSectionNav{ margin: 8px 0 10px; gap: 8px; }
+.kpTopDock.isCompact .kpSectionBtn{
+  padding: 10px 10px;
+  border-radius: 14px;
+  font-size: 0.96rem;
+}
+
+@media (max-width: 520px){
+  .kpTopDock.isCompact .brand h1{ font-size: 1.35rem; }
+  .kpTopDock.isCompact .roundbtn{ min-height: 40px; }
+  .kpTopDock.isCompact .kpSectionBtn{ padding: 10px 8px; }
+}
+
+
+
+.kpBrand{ margin: 6px 0 14px; }
+.kpBrand h1{ margin:0; }
+.subtitle{
+  color:#cbd5e1;
+  font-weight:750;
+  margin-top:6px;
+  opacity:.92;
+}
+
+
+/* ===== Nav row (acciones rápidas bajo el título) ===== */
+.kpNavRow{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  margin: 10px 0 16px;
+}
+.kpNavLeft{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.kpNavRight{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.kpPendingChip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:14px;
+  font-weight:900;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color:#e5e7eb;
+}
+.kpPendingChip b{ color:#fff; }
+
+/* ===== Top bar (sticky) ===== */
+.kpTopBar{
+  position: sticky;
+  top: 10px;
+  z-index: 60;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+
+  padding:12px 12px;
+  margin: 10px 0 14px;
+  border-radius: 18px;
+  background: rgba(5, 10, 25, .78);
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow: 0 12px 24px rgba(0,0,0,.35);
+  backdrop-filter: blur(14px);
+}
+.kpTopBar .roundbtn{ white-space:nowrap; }
+.kpTopActions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.kpStats{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius:14px;
+  padding:10px 12px;
+}
+.kpStat{ display:flex; flex-direction:column; min-width:110px; }
+.kpLabel{ font-size:12px; color:#cbd5e1; font-weight:800; opacity:.85; }
+.kpValue{ font-size:18px; font-weight:950; color:#fff; letter-spacing:.4px; }
+
+/* ===== Content layout ===== */
+.kpContent{ padding-bottom: 40px; }
+
+/* Layout helpers */
+.kpSplit{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:14px;
+}
+@media (min-width: 980px){
+  .kpSplit{ grid-template-columns: 1fr 1fr; }
+}
+
+.kpList{ margin: 6px 0 0 18px; color:#e5e7eb; font-weight:750; }
+.kpList li{ margin:6px 0; }
+
+.kpRoadmap{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:10px;
+}
+@media (min-width: 780px){
+  .kpRoadmap{ grid-template-columns: 1fr 1fr; }
+}
+.kpStep{
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.16);
+  border-radius:16px;
+  padding:12px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+.kpStep .kpDot{
+  width:14px; height:14px; border-radius:999px;
+  background: var(--secondary);
+  margin-top:4px;
+  box-shadow: 0 0 0 4px rgba(242,139,22,.18);
+}
+.kpStep .kpStepTitle{ font-weight:950; color:#fff; }
+.kpStep .kpStepDesc{ color:#cbd5e1; font-weight:750; margin-top:2px; }
+.kpStep .kpStepMeta{ margin-top:6px; display:flex; gap:8px; flex-wrap:wrap; }
+
+/* Pills (uso general; navegación rápida las amplía) */
+.kpChip{
+  font-size:12px;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  font-weight:900;
+  text-decoration:none;
+}
+
+
+
+.kpNotice{
+  background: rgba(242,139,22,.12);
+  border: 1px solid rgba(242,139,22,.35);
+  border-radius:16px;
+  padding:12px 14px;
+  margin: 8px 0 14px;
+  color:#fff;
+  font-weight:800;
+  line-height: 1.55;
+}
+
+.kpQuickNav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin: 6px 0 14px;
+}
+.kpQuickNav .kpChip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color: #fff;
+  text-decoration:none;
+  font-weight: 900;
+  letter-spacing: .2px;
+  font-size: 12.5px;
+}
+.kpQuickNav .kpChip:hover{ background: rgba(255,255,255,.10); }
+
+/* ===== Cards ===== */
+.kpCard{
+  background: rgba(9, 38, 92, .55);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius:22px;
+  padding:18px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  margin-bottom:14px;
+  scroll-margin-top: calc(var(--hudSafe, 360px) + 24px);
+}
+
+
+/* Evita que el HUD fijo tape actividades/anclas internas */
+.kpActivity,
+.kpSectionH3,
+details.kpDetails,
+details.kpSubAcc{
+  scroll-margin-top: calc(var(--hudSafe, 360px) + 24px);
+}
+/* ===== Títulos dentro de tarjetas =====
+   El usuario pidió: "títulos importantes" con fondo naranja.
+   Usamos h2 como título principal de sección dentro de acordeones.
+*/
+.kpCard h2{
+  margin: 2px 0 10px;
+  font-size: 18px;
+  letter-spacing:.2px;
+  font-weight: 950;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+
+  background: linear-gradient(180deg, rgba(242,139,22,1), rgba(242,139,22,.88));
+  color:#0b1220;
+  padding: 10px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,.18);
+  box-shadow: 0 10px 18px rgba(0,0,0,.25);
+}
+
+/* Subtítulos dentro de tarjetas: color de paleta (azul) */
+.kpCard h3{
+  margin: 10px 0 10px;
+  font-size: 15px;
+  font-weight: 950;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(37, 99, 235, .22);
+  border: 1px solid rgba(37, 99, 235, .35);
+  color: rgba(255,255,255,.95);
+}
+.kpText{
+  font-weight: 540;
+  line-height: 1.7;
+  margin: 8px 0 14px;
+  color: rgba(255,255,255,.88);
+}
+
+/* ===== Accordion sections ===== */
+.kpAcc{
+  padding:0;
+  overflow:hidden;
+}
+.kpAcc > summary{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding: 16px 18px;
+  cursor:pointer;
+  list-style:none;
+}
+.kpAcc > summary::-webkit-details-marker{ display:none; }
+.kpAccTitle{
+  font-size: 18px;
+  font-weight: 950;
+  letter-spacing: .2px;
+  /* ✅ Título importante con fondo naranja */
+  display:inline-flex;
+  align-items:center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(242,139,22,1), rgba(242,139,22,.88));
+  color:#0b1220;
+  border: 1px solid rgba(0,0,0,.18);
+  box-shadow: 0 10px 18px rgba(0,0,0,.22);
+}
+.kpAccMeta{
+  margin-left:auto;
+  font-size:12px;
+  padding: 6px 10px;
+  border-radius:999px;
+  /* ✅ Subtítulo: otro color acorde a paleta (azul) */
+  background: rgba(37, 99, 235, .20);
+  border: 1px solid rgba(37, 99, 235, .36);
+  color: rgba(255,255,255,.94);
+  font-weight: 850;
+  white-space:nowrap;
+}
+.kpAccChevron{
+  width: 26px;
+  height: 26px;
+  border-radius:999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.06);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex: 0 0 auto;
+}
+.kpAccChevron::before{
+  content:"▾";
+  font-weight: 950;
+  opacity:.95;
+  transform: translateY(-1px);
+}
+details[open].kpAcc > summary .kpAccChevron::before{ content:"▴"; }
+
+.kpAccBody{
+  padding: 0 18px 18px;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+
+/* ===== PDF ===== */
+.kpPdfWrap{
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  overflow:hidden;
+  background:#0b1220;
+}
+.kpPdfFrame{
+  width:100%;
+  height: min(72vh, 740px);
+  border:0;
+  background: rgba(255,255,255,.04);
+}
+
+/* ===== Missions ===== */
+.kpMissions .kpTip{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:16px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(148,163,184,.16);
+  color:#e5e7eb;
+  font-weight: 750;
+  line-height:1.55;
+}
+.kpMissionList{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:12px;
+}
+.kpMission{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px 12px;
+  border-radius:18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.16);
+}
+.kpMissionTitle{ font-weight: 950; color:#fff; }
+.kpMissionMeta{ margin-top:4px; font-weight: 750; color:#cbd5e1; font-size: 12px; }
+.kpMissionRight{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.roundbtn.mini{
+  padding:8px 10px;
+  border-radius:14px;
+  font-weight: 900;
+  font-size: 12px;
+}
+
+/* ===== Activities / quizzes ===== */
+.kpActivity{
+  margin-top:14px;
+  padding:14px;
+  border-radius:18px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+}
+.kpActTop{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.kpBadge{
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:950;
+  font-size:12px;
+  background: rgba(245,158,11,.12);
+  border: 1px solid rgba(245,158,11,.35);
+  color:#fff;
+}
+.kpBadge.done{
+  background: rgba(16,185,129,.14);
+  border-color: rgba(16,185,129,.35);
+}
+.kpBadge.locked{
+  background: rgba(239,68,68,.10);
+  border-color: rgba(239,68,68,.25);
+}
+
+.kpQuiz{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+.kpQ{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  border-radius:14px;
+  padding:10px;
+}
+.kpQ .kpQTitle{ font-weight:950; color:#fff; margin-bottom:6px; }
+.kpQ label{ display:block; margin:6px 0; font-weight:750; color:#e5e7eb; cursor:pointer; }
+.kpQ input{ margin-right:8px; }
+.kpActActions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+.kpResult{ margin-top:10px; font-weight:950; }
+
+/* ===== Details (inner) ===== */
+.kpDetails{
+  margin-top:12px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius:16px;
+  padding:10px 12px;
+  background: rgba(0,0,0,.12);
+}
+.kpDetails summary{
+  cursor:pointer;
+  font-weight:950;
+  color:#fff;
+  list-style:none;
+}
+.kpDetails summary::-webkit-details-marker{ display:none; }
+.kpDetails + .kpDetails{ margin-top:10px; }
+
+/* ===== Tables ===== */
+.kpScroll{
+  overflow:auto;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius:16px;
+  background: rgba(0,0,0,.15);
+}
+.kpTable{
+  width:100%;
+  border-collapse: collapse;
+  min-width: 520px;
+}
+.kpTable th, .kpTable td{
+  padding:10px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  vertical-align: top;
+}
+.kpTable th{
+  text-align:left;
+  font-weight:950;
+  color:#fff;
+  background: rgba(255,255,255,.06);
+}
+.kpTable td{ color: rgba(255,255,255,.92); }
+
+/* ===== Propuesta B: Modo clase (Docente) ===== */
+.kpTabs{
+  display:flex;
+  gap:8px;
+  margin:-2px 0 14px;
+  padding:6px;
+  border-radius:16px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(148,163,184,.18);
+}
+.kpTab{
+  flex:1;
+  border:0;
+  border-radius:12px;
+  padding:10px 12px;
+  font-weight:950;
+  cursor:pointer;
+  color:#cbd5e1;
+  background: rgba(0,0,0,.18);
+}
+.kpTab:hover{ filter:brightness(1.08); }
+.kpTab.active{
+  background: rgba(59,130,246,.20);
+  border: 1px solid rgba(59,130,246,.35);
+  color:#ffffff;
+}
+.kpTabPane.hidden{ display:none; }
+
+.kpRow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin:10px 0;
+}
+.kpInput{
+  flex:1;
+  min-width:220px;
+  border-radius:12px;
+  border:1px solid rgba(148,163,184,.22);
+  background: rgba(0,0,0,.20);
+  color:#e5e7eb;
+  padding:10px 12px;
+  font-weight:800;
+  outline:none;
+}
+.kpInput:focus{
+  border-color: rgba(59,130,246,.55);
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+}
+
+.kpTextarea{
+  width:100%;
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,.22);
+  background: rgba(0,0,0,.20);
+  color:#e5e7eb;
+  padding:10px 12px;
+  font-weight:800;
+  outline:none;
+  margin-top:8px;
+}
+.kpTextarea:focus{
+  border-color: rgba(16,185,129,.55);
+  box-shadow: 0 0 0 3px rgba(16,185,129,.15);
+}
+
+.kpMini{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:10px 12px;
+  border-radius:14px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(148,163,184,.16);
+  margin-top:8px;
+}
+.kpMini b{ color:#fff; }
+
+.kpHint{
+  color:#cbd5e1;
+  font-size:12px;
+  font-weight:800;
+  margin-top:6px;
+  opacity:.92;
+}
+
+.kpChecklist{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:8px;
+  margin-top:10px;
+}
+.kpChecklist label{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,.14);
+  background: rgba(255,255,255,.04);
+  font-weight:850;
+  color:#e5e7eb;
+}
+.kpChecklist input{ margin-top:2px; transform:scale(1.15); }
+
+.roundbtn.teacher{
+  background: rgba(59,130,246,.20);
+  border: 1px solid rgba(59,130,246,.35);
+}
+.roundbtn.danger{
+  background: rgba(239,68,68,.18);
+  border: 1px solid rgba(239,68,68,.35);
+}
+
+.kpSub{ font-size:11px; color:#94a3b8; font-weight:800; margin-top:2px; }
+
+.kpDupInfo{ margin-top:10px; }
+.kpDupInfo code{ font-weight:900; }
+
+/* ===== Responsive ===== */
+@media (max-width: 760px){
+  body{ padding: 12px; }
+  .kpTopBar{ top: 6px; padding: 10px; }
+  .kpStat{ min-width: 96px; }
+  .kpValue{ font-size: 16px; }
+  .kpCard{ padding: 16px 14px; }
+  .kpAcc > summary{ padding: 14px 14px; }
+  .kpAccBody{ padding: 0 14px 14px; }
+  .kpPdfFrame{ height: 62vh; }
+  .kpMission{ align-items:flex-start; }
+  .kpMissionRight{ justify-content:flex-start; }
+  .kpTable{ min-width: 520px; }
+}
+
+
+
+/* ===== Secciones principales (1-4) ===== */
+.kpSectionNav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  /* más compacto: evita que los tabs queden "muy abajo" */
+  margin: 6px 0 10px;
+}
+.kpSectionBtn{
+  flex:1 1 180px;
+  text-align:center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  text-decoration:none;
+  font-weight: 950;
+  letter-spacing: .2px;
+}
+.kpSectionBtn:hover{ background: rgba(255,255,255,.10); }
+.kpSectionBtn:active{ transform: translateY(1px); }
+
+.kpSectionBtn.isActive,
+.kpSectionBtn[aria-current="true"]{
+  background: rgba(56,189,248,.16);
+  border-color: rgba(56,189,248,.40);
+  box-shadow: 0 0 0 2px rgba(56,189,248,.12) inset;
+}
+.kpSectionBtn:focus-visible{
+  outline: 2px solid rgba(56,189,248,.55);
+  outline-offset: 2px;
+}
+
+.kpSectionH3{
+  margin: 14px 0 8px;
+  font-size: 15px;
+  font-weight: 950;
+  color:#fff;
+}
+
+/* Sub-acordeón (dentro de una sección) */
+.kpSubAcc{
+  margin-top: 10px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.045);
+  border-radius: 16px;
+  overflow:hidden;
+}
+.kpSubAcc > summary{
+  list-style:none;
+  cursor:pointer;
+  padding: 12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  font-weight: 900;
+}
+.kpSubAcc > summary::-webkit-details-marker{ display:none; }
+.kpSubAcc[open] > summary{ background: rgba(255,255,255,.06); }
+.kpSubAcc .kpAccBody{ padding: 14px; }
+
+/* Reduce saturación en tablas grandes */
+.kpTableWrap{ overflow:auto; border-radius: 14px; }
+.kpTableWrap table{ min-width: 720px; }
+
+/* Extras */
+#extras .kpAccBody{ padding-top: 6px; }
+
+
+/* KP mini indicador en la barra de puntajes */
+#statsBar .goalRight{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+#statsBar .kpMiniPill{
+  font-size:.78rem;
+  font-weight:950;
+  color:#0b1220;
+  background:rgba(255,255,255,.35);
+  padding:4px 8px;
+  border-radius:999px;
+  white-space:nowrap;
+  border:1px solid rgba(255,255,255,.25);
+}
+
+
+/* ✅ KP completado (pill + mini mensaje) */
+.goalBox{ position: relative; }
+
+.kpMiniPill.isDone{
+  background: rgba(34,197,94,.85);
+  border-color: rgba(34,197,94,.85);
+  color:#05220f;
+  box-shadow: 0 10px 20px rgba(34,197,94,.18);
+}
+
+.kpDoneMsg{
+  position:absolute;
+  right:12px;
+  bottom:10px;
+  font-size:.78rem;
+  font-weight:950;
+  padding:4px 8px;
+  border-radius:999px;
+  background: rgba(34,197,94,.18);
+  border:1px solid rgba(34,197,94,.35);
+  color:#dcfce7;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+#statsBar .kpMiniPill b{ font-weight:950; }
+
+@media (max-width: 520px){
+  #statsBar .goalRight{ gap:6px; }
+  #statsBar .kpMiniPill{ font-size:.72rem; padding:3px 6px; }
+}
+
+
+/* ===== KP DONE CELEBRATION ===== */
+.kpMiniPill.isDone{
+  background: rgba(34,197,94,.18);
+  border-color: rgba(34,197,94,.55);
+  color: #b7ffd1;
+}
+.kpDoneMsg{
+  margin-top: 6px;
+  font-weight: 700;
+  color: #b7ffd1;
+  text-shadow: 0 0 18px rgba(34,197,94,.25);
+}
+
+/* Confetti (sutil) */
+.kpConfetti{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+.kpConfetti .c{
+  position: absolute;
+  top: -12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  opacity: .9;
+  transform: translate3d(0,0,0);
+  animation: kpFall 1.6s ease-out forwards, kpSpin 1.6s linear forwards;
+}
+@keyframes kpFall{
+  0%{ transform: translateY(-20px) rotate(0deg); opacity: 0; }
+  10%{ opacity: .95; }
+  100%{ transform: translateY(110vh) rotate(260deg); opacity: 0; }
+}
+@keyframes kpSpin{
+  0%{ filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+  50%{ filter: drop-shadow(0 8px 10px rgba(0,0,0,.25)); }
+  100%{ filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+}
+
+
+/* ===========================
+   ✅ Bottom tabs (solo móvil)
+   =========================== */
+.kpBottomTabs{
+  display:none;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(12px + var(--safeBottom));
+  width: min(520px, calc(100% - 20px));
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background: rgba(11,18,32,.72);
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.45);
+  z-index: 220;
+  justify-content: space-between;
+  align-items: center;
+}
+.kpBottomTabs .kpTabBtn{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  color: #e5e7eb;
+  font-weight: 900;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+.kpBottomTabs .kpTabBtn.isActive{
+  background: linear-gradient(135deg, rgba(245,158,11,.28), rgba(168,85,247,.22));
+  border-color: rgba(245,158,11,.55);
+  box-shadow: 0 10px 22px rgba(0,0,0,.35);
+}
+@media (max-width: 760px){
+  body{
+    padding: 12px;
+    /* evita el "hueco" grande en móviles */
+    padding-top: calc(10px + var(--statsBottom, 0px));
+    padding-bottom: calc(92px + var(--safeBottom));
+  }
+  .kpBottomTabs{ display:flex; }
+  .kpApp{ width: 100%; }
+  .kpTopDock{ padding-bottom: 10px; }
+  .kpTopDock::before{ border-radius: 18px; }
+  .kpNavRow{ flex-wrap: wrap; gap: 10px; }
+  .kpNavLeft{ width:100%; flex-wrap: wrap; gap: 10px; }
+  .kpNavRight{ width:100%; display:flex; justify-content:flex-end; }
+  .kpSectionNav{
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .kpSectionBtn{ flex: 0 0 auto; min-width: 150px; text-align:center; }
+  .kpCard{ border-radius: 18px; }
+  .kpTable{ font-size: .92rem; }
+}
+
+
+
+/* ✅ Navegación estilo neuroverbs.html (Round buttons + hint) */
+.kpRoundActions{
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+.kpRoundActions .kpPendingChip{
+  margin-left: auto;
+}
+
+.kpRoundSections{
+  /* más arriba (menos altura del dock) */
+  margin-top: 0px;
+  justify-content: center;
+}
+.kpSecBtn{
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.kpSecBtn:focus{ outline: 2px solid rgba(255,255,255,.25); outline-offset: 2px; }
+
+/* Estado activo (como neuroverbs.html): resalta la sección seleccionada */
+.kpSecBtn.active,
+.kpSecBtn.isActive{
+  background: var(--secondary);
+  color: #0b1220;
+  border-color: var(--secondary);
+  box-shadow: 0 10px 22px rgba(242,139,22,.22);
+}
+.kpSecBtn:not(.active):not(.isActive):hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.25);
+}
+
+.kpRoundHintRow{
+  margin-top: 2px;
+}
+
+/* En pantallas pequeñas, prioriza lectura: permite 2 filas naturales */
+@media (max-width: 520px){
+  .kpRoundActions{ justify-content: center; }
+  .kpRoundActions .kpPendingChip{ margin-left: 0; width: 100%; text-align: center; }
+  .kpRoundSections{ gap: 8px; }
+  .kpSecBtn{ flex: 1 1 auto; }
+}
+
+
+/* --- KP NAV: ensure active color always visible (like neuroverbs.html) --- */
+.kpRoundSections .kpSecBtn.active,
+.kpRoundSections .kpSecBtn.isActive{
+  background: var(--secondary) !important;
+  color: #0b1220 !important;
+  border-color: var(--secondary) !important;
+}
+/* Type headings inside tables */
+.kpTypeTitle{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  margin: 10px 0 8px;
+  border-radius: 999px;
+  background: rgba(242,139,22,.22);
+  border: 1px solid rgba(242,139,22,.55);
+  color: #fff;
+  font-weight: 950;
+  letter-spacing: .2px;
+}
+.kpTypeTitle2{
+  background: rgba(67, 97, 238, .18);
+  border-color: rgba(67, 97, 238, .45);
+}
+
+
+/* ===== Overrides: colores especiales para PDF/Misiones/Extras ===== */
+/* PDF = Azul (paleta) */
+#pdf > summary .kpAccTitle{
+  background: linear-gradient(180deg, rgba(37,99,235,1), rgba(37,99,235,.86));
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,.22);
+  text-shadow: 0 1px 0 rgba(0,0,0,.35);
+  box-shadow: 0 12px 22px rgba(0,0,0,.25);
+}
+
+/* Misiones = Morado (paleta) */
+#misiones > summary .kpAccTitle{
+  background: linear-gradient(180deg, rgba(101,17,107,1), rgba(101,17,107,.86));
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,.20);
+  text-shadow: 0 1px 0 rgba(0,0,0,.35);
+  box-shadow: 0 12px 22px rgba(0,0,0,.25);
+}
+
+/* Extras = Gris (neutro) */
+#extras > summary .kpAccTitle{
+  background: linear-gradient(180deg, rgba(148,163,184,.55), rgba(148,163,184,.40));
+  color: #0b1220;
+  border: 1px solid rgba(255,255,255,.20);
+  text-shadow: none;
+  box-shadow: 0 12px 22px rgba(0,0,0,.18);
+}
+
+/* Un poquito más pequeño en móvil para que no sature */
+@media (max-width: 640px){
+  #pdf > summary .kpAccTitle,
+  #misiones > summary .kpAccTitle,
+  #extras > summary .kpAccTitle{
+    font-size: 16px;
+    padding: 7px 11px;
+  }
+}
+
+
+
+/* ===== KP Top nav row: Volver + secciones en UNA sola fila ===== */
+.kpTopNavRow{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:nowrap;           /* ✅ todo en una fila */
+  justify-content:space-between;
+  margin: 8px 0 10px;
+}
+.kpTopNavRow .kpBackBtn{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+.kpTopTabs{
+  flex:1 1 auto;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:nowrap;           /* ✅ tabs en una fila */
+  overflow-x:auto;            /* si no cabe en móvil, scroll horizontal */
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+.kpTopTabs::-webkit-scrollbar{ display:none; }
+.kpTopTabs .roundbtn{ white-space:nowrap; }
+
+/* En pantallas pequeñas, se prioriza el scroll horizontal de tabs */
+@media (max-width: 760px){
+  .kpTopNavRow{ gap:10px; }
+  .kpTopTabs{ justify-content:flex-start; }
+}
+
+
+/* ===== Botón especial: Asistente I.A (KP) =====
+   (Debe resaltar y ser diferente al botón ASISTENTE IA del resto de la app)
+*/
+.kp-ai-float{
+  background: linear-gradient(180deg, rgba(34,197,94,1), rgba(34,197,94,.82)) !important;
+  color:#062012 !important;
+  border: 2px solid rgba(255,255,255,.22) !important;
+  text-transform: none !important;
+  letter-spacing: .2px;
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.45),
+    0 16px 38px rgba(34,197,94,.22);
+}
+.kp-ai-float:hover{
+  background: linear-gradient(180deg, rgba(22,163,74,1), rgba(22,163,74,.85)) !important;
+  border-color: rgba(255,255,255,.30) !important;
+}
+
+/* En móvil: que no tape elementos inferiores */
+@media (max-width: 520px){
+  .kp-float-actions{
+    bottom: 8px !important;
+    right: 10px !important;
+  }
+}
+
+
+/* Botón ENVIAR (Modo Estudiante) */
+.roundbtn.send{
+  background: linear-gradient(135deg, rgba(0,255,178,.95), rgba(0,140,255,.95));
+  border: 1px solid rgba(255,255,255,.22);
+  color: #07101d;
+  font-weight: 900;
+  box-shadow: 0 10px 24px rgba(0,0,0,.30);
+}
+.roundbtn.send:hover{ filter: brightness(1.06); transform: translateY(-1px); }
+.roundbtn.send:active{ transform: translateY(0px); }
+
+
+/* Fallback enlaces (si el popup de Gmail se bloquea) */
+.kpSendFallback{
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(255,255,255,.14);
+}
+
+
+/* Asegurar que <a class="roundbtn"> se vea como botón */
+a.roundbtn{
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Pronouns table audio buttons (EN) */
+.kpSpeakCol{
+  width: 46px;
+  text-align: right;
+}
+.kpSpeakBtn{
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: radial-gradient(circle at 30% 30%, rgba(95,210,255,.95), rgba(135,120,255,.85));
+  color: #071125;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 22px rgba(0,0,0,.26);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px;
+}
+.kpSpeakBtn:hover{ filter: brightness(1.05); transform: translateY(-1px); }
+.kpSpeakBtn:active{ transform: translateY(0px); }
+
+@media (max-width: 520px){
+  .kpSpeakCol{ width: 34px; }
+  .kpSpeakBtn{ width: 24px; height: 24px; font-size: 11px; }
+}
+
+
+/* Generic audio button positioning inside table cell */
+.kpCellAudio{
+  position: relative;
+  overflow: hidden;
+  padding-right: 40px !important;
+}
+.kpCellAudio .kpSpeakBtn{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+@media (max-width: 520px){
+  .kpCellAudio{ padding-right: 44px !important; }
+  .kpCellAudio .kpSpeakBtn{ right: 8px; }
+}
+
+
+
+/* ===== KP: Ajuste tablas en móvil (para ver el audio en FUTURE sin scroll) ===== */
+@media (max-width: 860px){
+  .kpTableWrap{ overflow-x:auto; }
+  .kpTableWrap table{ min-width: 0 !important; width:100%; }
+  .kpTable{ min-width: 0 !important; width:100%; table-layout: fixed; }
+  .kpTable th, .kpTable td{
+    padding: 8px 8px;
+    font-size: 0.98rem;
+  }
+  .kpTable td{
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  /* 4 columnas: Subject / Present / Past / Future */
+  .kpTable th:nth-child(1), .kpTable td:nth-child(1){ width: 22%; }
+  .kpTable th:nth-child(2), .kpTable td:nth-child(2){ width: 24%; }
+  .kpTable th:nth-child(3), .kpTable td:nth-child(3){ width: 24%; }
+  .kpTable th:nth-child(4), .kpTable td:nth-child(4){ width: 30%; }
+
+  /* Botón de audio más compacto en móvil */
+  .kpSpeakBtn{ width: 24px; height: 24px; }
+}
+
+.kpSpeakWrap{ padding-right: 6px; }
+
+
+/* === Twin tables (Haber ES vs Have EN) alignment + fit === */
+.kpTwinTables{
+  align-items: start;
+}
+.kpTwinTables .kpTable{
+  min-width: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+.kpTwinTables .kpTable thead th{
+  white-space: nowrap;
+}
+.kpTwinTables .kpTable th,
+.kpTwinTables .kpTable td{
+  padding: 14px 10px;
+  vertical-align: middle;
+}
+.kpTwinTables .kpTable tbody tr{
+  height: 72px;
+}
+
+/* Column widths (avoid horizontal cut, keep FUTURE audio visible) */
+.kpHaberEs th:nth-child(1), .kpHaberEs td:nth-child(1){
+  width: 34%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kpHaberEs th:nth-child(2), .kpHaberEs td:nth-child(2){ width: 22%; }
+.kpHaberEs th:nth-child(3), .kpHaberEs td:nth-child(3){ width: 22%; }
+.kpHaberEs th:nth-child(4), .kpHaberEs td:nth-child(4){ width: 22%; }
+
+.kpHaveEn th:nth-child(1), .kpHaveEn td:nth-child(1){
+  width: 22%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kpHaveEn th:nth-child(2), .kpHaveEn td:nth-child(2){ width: 22%; }
+.kpHaveEn th:nth-child(3), .kpHaveEn td:nth-child(3){ width: 20%; }
+.kpHaveEn th:nth-child(4), .kpHaveEn td:nth-child(4){
+  width: 36%;
+  white-space: nowrap;
+}

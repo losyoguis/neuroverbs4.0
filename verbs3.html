@@ -1,0 +1,4454 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>verbs3 DB</title>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+</head>
+<body>
+<script>
+/**
+ * verbs3.html — Base de datos Grupo 3 (correcciones + nuevos verbos)
+ * Formato compatible con core.js (loader por fetch + regex).
+ */
+const VERBS3_DB = [
+  {
+    "key": "get",
+    "c1": "GET",
+    "c2": "GOT",
+    "c3": "GOTTEN",
+    "es": "Obtener / Conseguir / Recibir / Llegar / Convertirse / Atrapar / Entender",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I get",
+            "Yo consigo / obtengo"
+          ],
+          [
+            "YOU_S",
+            "You get",
+            "Tú consigues"
+          ],
+          [
+            "HE",
+            "He gets",
+            "Él consigue"
+          ],
+          [
+            "SHE",
+            "She gets",
+            "Ella consigue"
+          ],
+          [
+            "IT",
+            "It gets",
+            "Eso consigue"
+          ],
+          [
+            "WE",
+            "We get",
+            "Nosotros conseguimos"
+          ],
+          [
+            "YOU_P",
+            "You get",
+            "Ustedes consiguen"
+          ],
+          [
+            "THEY",
+            "They get",
+            "Ellos consiguen"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t get",
+            "Yo no consigo / no obtengo"
+          ],
+          [
+            "YOU_S",
+            "You don’t get",
+            "Tú no consigues"
+          ],
+          [
+            "HE",
+            "He doesn’t get",
+            "Él no consigue"
+          ],
+          [
+            "SHE",
+            "She doesn’t get",
+            "Ella no consigue"
+          ],
+          [
+            "IT",
+            "It doesn’t get",
+            "Eso no consigue"
+          ],
+          [
+            "WE",
+            "We don’t get",
+            "Nosotros no conseguimos"
+          ],
+          [
+            "YOU_P",
+            "You don’t get",
+            "Ustedes no consiguen"
+          ],
+          [
+            "THEY",
+            "They don’t get",
+            "Ellos no consiguen"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I get?",
+            "¿Consigo yo?"
+          ],
+          [
+            "Do you get?",
+            "¿Consigues tú?"
+          ],
+          [
+            "Does he get?",
+            "¿Consigue él?"
+          ],
+          [
+            "Does she get?",
+            "¿Consigue ella?"
+          ],
+          [
+            "Does it get?",
+            "¿Consigue eso?"
+          ],
+          [
+            "Do we get?",
+            "¿Conseguimos nosotros?"
+          ],
+          [
+            "Do you get?",
+            "¿Consiguen ustedes?"
+          ],
+          [
+            "Do they get?",
+            "¿Consiguen ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I got",
+            "Yo conseguí / obtuve"
+          ],
+          [
+            "YOU_S",
+            "You got",
+            "Tú conseguiste"
+          ],
+          [
+            "HE",
+            "He got",
+            "Él consiguió"
+          ],
+          [
+            "SHE",
+            "She got",
+            "Ella consiguió"
+          ],
+          [
+            "IT",
+            "It got",
+            "Eso consiguió"
+          ],
+          [
+            "WE",
+            "We got",
+            "Nosotros conseguimos / obtuvimos"
+          ],
+          [
+            "YOU_P",
+            "You got",
+            "Ustedes consiguieron"
+          ],
+          [
+            "THEY",
+            "They got",
+            "Ellos consiguieron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t get",
+            "Yo no conseguí / no obtuve"
+          ],
+          [
+            "YOU_S",
+            "You didn’t get",
+            "Tú no conseguiste"
+          ],
+          [
+            "HE",
+            "He didn’t get",
+            "Él no consiguió"
+          ],
+          [
+            "SHE",
+            "She didn’t get",
+            "Ella no consiguió"
+          ],
+          [
+            "IT",
+            "It didn’t get",
+            "Eso no consiguió"
+          ],
+          [
+            "WE",
+            "We didn’t get",
+            "Nosotros no conseguimos / no obtuvimos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t get",
+            "Ustedes no consiguieron"
+          ],
+          [
+            "THEY",
+            "They didn’t get",
+            "Ellos no consiguieron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I get?",
+            "¿Conseguí yo?"
+          ],
+          [
+            "Did you get?",
+            "¿Conseguiste tú?"
+          ],
+          [
+            "Did he get?",
+            "¿Consiguió él?"
+          ],
+          [
+            "Did she get?",
+            "¿Consiguió ella?"
+          ],
+          [
+            "Did it get?",
+            "¿Consiguió eso?"
+          ],
+          [
+            "Did we get?",
+            "¿Conseguimos nosotros?"
+          ],
+          [
+            "Did you get?",
+            "¿Consiguieron ustedes?"
+          ],
+          [
+            "Did they get?",
+            "¿Consiguieron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have gotten / got",
+            "Yo he conseguido / he obtenido"
+          ],
+          [
+            "YOU_S",
+            "You have gotten",
+            "Tú has conseguido"
+          ],
+          [
+            "HE",
+            "He has gotten",
+            "Él ha conseguido"
+          ],
+          [
+            "SHE",
+            "She has gotten",
+            "Ella ha conseguido"
+          ],
+          [
+            "IT",
+            "It has gotten",
+            "Eso ha conseguido"
+          ],
+          [
+            "WE",
+            "We have gotten",
+            "Nosotros hemos conseguido"
+          ],
+          [
+            "YOU_P",
+            "You have gotten",
+            "Ustedes han conseguido"
+          ],
+          [
+            "THEY",
+            "They have gotten",
+            "Ellos han conseguido"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t gotten / got",
+            "Yo no he conseguido"
+          ],
+          [
+            "YOU_S",
+            "You haven’t gotten",
+            "Tú no has conseguido"
+          ],
+          [
+            "HE",
+            "He hasn’t gotten",
+            "Él no ha conseguido"
+          ],
+          [
+            "SHE",
+            "She hasn’t gotten",
+            "Ella no ha conseguido"
+          ],
+          [
+            "IT",
+            "It hasn’t gotten",
+            "Eso no ha conseguido"
+          ],
+          [
+            "WE",
+            "We haven’t gotten",
+            "Nosotros no hemos conseguido"
+          ],
+          [
+            "YOU_P",
+            "You haven’t gotten",
+            "Ustedes no han conseguido"
+          ],
+          [
+            "THEY",
+            "They haven’t gotten",
+            "Ellos no han conseguido"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I gotten / got?",
+            "¿He conseguido yo?"
+          ],
+          [
+            "Have you gotten?",
+            "¿Has conseguido tú?"
+          ],
+          [
+            "Has he gotten?",
+            "¿Ha conseguido él?"
+          ],
+          [
+            "Has she gotten?",
+            "¿Ha conseguido ella?"
+          ],
+          [
+            "Has it gotten?",
+            "¿Ha conseguido eso?"
+          ],
+          [
+            "Have we gotten?",
+            "¿Hemos conseguido nosotros?"
+          ],
+          [
+            "Have you gotten?",
+            "¿Han conseguido ustedes?"
+          ],
+          [
+            "Have they gotten?",
+            "¿Han conseguido ellos?"
+          ]
+        ]
+      }
+    },
+    "note": "“gotten” es más común en EE. UU.; en Reino Unido se usa más “got” como participio."
+  },
+  {
+    "key": "foresee",
+    "c1": "FORESEE",
+    "c2": "FORESAW",
+    "c3": "FORESEEN",
+    "es": "Prever / Anticipar / Ver con anticipación",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I foresee",
+            "Yo preveo"
+          ],
+          [
+            "YOU_S",
+            "You foresee",
+            "Tú prevés"
+          ],
+          [
+            "HE",
+            "He foresees",
+            "Él prevé"
+          ],
+          [
+            "SHE",
+            "She foresees",
+            "Ella prevé"
+          ],
+          [
+            "IT",
+            "It foresees",
+            "Eso prevé"
+          ],
+          [
+            "WE",
+            "We foresee",
+            "Nosotros prevemos"
+          ],
+          [
+            "YOU_P",
+            "You foresee",
+            "Ustedes prevén"
+          ],
+          [
+            "THEY",
+            "They foresee",
+            "Ellos prevén"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t foresee",
+            "Yo no preveo"
+          ],
+          [
+            "YOU_S",
+            "You don’t foresee",
+            "Tú no prevés"
+          ],
+          [
+            "HE",
+            "He doesn’t foresee",
+            "Él no prevé"
+          ],
+          [
+            "SHE",
+            "She doesn’t foresee",
+            "Ella no prevé"
+          ],
+          [
+            "IT",
+            "It doesn’t foresee",
+            "Eso no prevé"
+          ],
+          [
+            "WE",
+            "We don’t foresee",
+            "Nosotros no prevemos"
+          ],
+          [
+            "YOU_P",
+            "You don’t foresee",
+            "Ustedes no prevén"
+          ],
+          [
+            "THEY",
+            "They don’t foresee",
+            "Ellos no prevén"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I foresee?",
+            "¿Preveo yo?"
+          ],
+          [
+            "Do you foresee?",
+            "¿Prevés tú?"
+          ],
+          [
+            "Does he foresee?",
+            "¿Prevé él?"
+          ],
+          [
+            "Does she foresee?",
+            "¿Prevé ella?"
+          ],
+          [
+            "Does it foresee?",
+            "¿Prevé eso?"
+          ],
+          [
+            "Do we foresee?",
+            "¿Prevemos nosotros?"
+          ],
+          [
+            "Do you foresee?",
+            "¿Prevén ustedes?"
+          ],
+          [
+            "Do they foresee?",
+            "¿Prevén ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I foresaw",
+            "Yo preví"
+          ],
+          [
+            "YOU_S",
+            "You foresaw",
+            "Tú previste"
+          ],
+          [
+            "HE",
+            "He foresaw",
+            "Él previó"
+          ],
+          [
+            "SHE",
+            "She foresaw",
+            "Ella previó"
+          ],
+          [
+            "IT",
+            "It foresaw",
+            "Eso previó"
+          ],
+          [
+            "WE",
+            "We foresaw",
+            "Nosotros previmos"
+          ],
+          [
+            "YOU_P",
+            "You foresaw",
+            "Ustedes previeron"
+          ],
+          [
+            "THEY",
+            "They foresaw",
+            "Ellos previeron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t foresee",
+            "Yo no preví"
+          ],
+          [
+            "YOU_S",
+            "You didn’t foresee",
+            "Tú no previste"
+          ],
+          [
+            "HE",
+            "He didn’t foresee",
+            "Él no previó"
+          ],
+          [
+            "SHE",
+            "She didn’t foresee",
+            "Ella no previó"
+          ],
+          [
+            "IT",
+            "It didn’t foresee",
+            "Eso no previó"
+          ],
+          [
+            "WE",
+            "We didn’t foresee",
+            "Nosotros no previmos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t foresee",
+            "Ustedes no previeron"
+          ],
+          [
+            "THEY",
+            "They didn’t foresee",
+            "Ellos no previeron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I foresee?",
+            "¿Preví yo?"
+          ],
+          [
+            "Did you foresee?",
+            "¿Previste tú?"
+          ],
+          [
+            "Did he foresee?",
+            "¿Previó él?"
+          ],
+          [
+            "Did she foresee?",
+            "¿Previó ella?"
+          ],
+          [
+            "Did it foresee?",
+            "¿Previó eso?"
+          ],
+          [
+            "Did we foresee?",
+            "¿Previmos nosotros?"
+          ],
+          [
+            "Did you foresee?",
+            "¿Previeron ustedes?"
+          ],
+          [
+            "Did they foresee?",
+            "¿Previeron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have foreseen",
+            "Yo he previsto"
+          ],
+          [
+            "YOU_S",
+            "You have foreseen",
+            "Tú has previsto"
+          ],
+          [
+            "HE",
+            "He has foreseen",
+            "Él ha previsto"
+          ],
+          [
+            "SHE",
+            "She has foreseen",
+            "Ella ha previsto"
+          ],
+          [
+            "IT",
+            "It has foreseen",
+            "Eso ha previsto"
+          ],
+          [
+            "WE",
+            "We have foreseen",
+            "Nosotros hemos previsto"
+          ],
+          [
+            "YOU_P",
+            "You have foreseen",
+            "Ustedes han previsto"
+          ],
+          [
+            "THEY",
+            "They have foreseen",
+            "Ellos han previsto"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t foreseen",
+            "Yo no he previsto"
+          ],
+          [
+            "YOU_S",
+            "You haven’t foreseen",
+            "Tú no has previsto"
+          ],
+          [
+            "HE",
+            "He hasn’t foreseen",
+            "Él no ha previsto"
+          ],
+          [
+            "SHE",
+            "She hasn’t foreseen",
+            "Ella no ha previsto"
+          ],
+          [
+            "IT",
+            "It hasn’t foreseen",
+            "Eso no ha previsto"
+          ],
+          [
+            "WE",
+            "We haven’t foreseen",
+            "Nosotros no hemos previsto"
+          ],
+          [
+            "YOU_P",
+            "You haven’t foreseen",
+            "Ustedes no han previsto"
+          ],
+          [
+            "THEY",
+            "They haven’t foreseen",
+            "Ellos no han previsto"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I foreseen?",
+            "¿He previsto yo?"
+          ],
+          [
+            "Have you foreseen?",
+            "¿Has previsto tú?"
+          ],
+          [
+            "Has he foreseen?",
+            "¿Ha previsto él?"
+          ],
+          [
+            "Has she foreseen?",
+            "¿Ha previsto ella?"
+          ],
+          [
+            "Has it foreseen?",
+            "¿Ha previsto eso?"
+          ],
+          [
+            "Have we foreseen?",
+            "¿Hemos previsto nosotros?"
+          ],
+          [
+            "Have you foreseen?",
+            "¿Han previsto ustedes?"
+          ],
+          [
+            "Have they foreseen?",
+            "¿Han previsto ellos?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "mistake",
+    "c1": "MISTAKE",
+    "c2": "MISTOOK",
+    "c3": "MISTAKEN",
+    "es": "Equivocarse / Confundir algo con otra cosa",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I mistake",
+            "Yo me equivoco / confundo"
+          ],
+          [
+            "YOU_S",
+            "You mistake",
+            "Tú te equivocas / confundes"
+          ],
+          [
+            "HE",
+            "He mistakes",
+            "Él se equivoca / confunde"
+          ],
+          [
+            "SHE",
+            "She mistakes",
+            "Ella se equivoca / confunde"
+          ],
+          [
+            "IT",
+            "It mistakes",
+            "Eso se equivoca / confunde"
+          ],
+          [
+            "WE",
+            "We mistake",
+            "Nosotros nos equivocamos"
+          ],
+          [
+            "YOU_P",
+            "You mistake",
+            "Ustedes se equivocan"
+          ],
+          [
+            "THEY",
+            "They mistake",
+            "Ellos se equivocan"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t mistake",
+            "Yo no me equivoco / confundo"
+          ],
+          [
+            "YOU_S",
+            "You don’t mistake",
+            "Tú no te equivocas"
+          ],
+          [
+            "HE",
+            "He doesn’t mistake",
+            "Él no se equivoca"
+          ],
+          [
+            "SHE",
+            "She doesn’t mistake",
+            "Ella no se equivoca"
+          ],
+          [
+            "IT",
+            "It doesn’t mistake",
+            "Eso no se equivoca"
+          ],
+          [
+            "WE",
+            "We don’t mistake",
+            "Nosotros no nos equivocamos"
+          ],
+          [
+            "YOU_P",
+            "You don’t mistake",
+            "Ustedes no se equivocan"
+          ],
+          [
+            "THEY",
+            "They don’t mistake",
+            "Ellos no se equivocan"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I mistake?",
+            "¿Me equivoco yo?"
+          ],
+          [
+            "Do you mistake?",
+            "¿Te equivocas tú?"
+          ],
+          [
+            "Does he mistake?",
+            "¿Se equivoca él?"
+          ],
+          [
+            "Does she mistake?",
+            "¿Se equivoca ella?"
+          ],
+          [
+            "Does it mistake?",
+            "¿Se equivoca eso?"
+          ],
+          [
+            "Do we mistake?",
+            "¿Nos equivocamos nosotros?"
+          ],
+          [
+            "Do you mistake?",
+            "¿Se equivocan ustedes?"
+          ],
+          [
+            "Do they mistake?",
+            "¿Se equivocan ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I mistook",
+            "Yo me equivoqué / confundí"
+          ],
+          [
+            "YOU_S",
+            "You mistook",
+            "Tú te equivocaste"
+          ],
+          [
+            "HE",
+            "He mistook",
+            "Él se equivocó"
+          ],
+          [
+            "SHE",
+            "She mistook",
+            "Ella se equivocó"
+          ],
+          [
+            "IT",
+            "It mistook",
+            "Eso se equivocó"
+          ],
+          [
+            "WE",
+            "We mistook",
+            "Nosotros nos equivocamos"
+          ],
+          [
+            "YOU_P",
+            "You mistook",
+            "Ustedes se equivocaron"
+          ],
+          [
+            "THEY",
+            "They mistook",
+            "Ellos se equivocaron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t mistake",
+            "Yo no me equivoqué"
+          ],
+          [
+            "YOU_S",
+            "You didn’t mistake",
+            "Tú no te equivocaste"
+          ],
+          [
+            "HE",
+            "He didn’t mistake",
+            "Él no se equivocó"
+          ],
+          [
+            "SHE",
+            "She didn’t mistake",
+            "Ella no se equivocó"
+          ],
+          [
+            "IT",
+            "It didn’t mistake",
+            "Eso no se equivocó"
+          ],
+          [
+            "WE",
+            "We didn’t mistake",
+            "Nosotros no nos equivocamos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t mistake",
+            "Ustedes no se equivocaron"
+          ],
+          [
+            "THEY",
+            "They didn’t mistake",
+            "Ellos no se equivocaron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I mistake?",
+            "¿Me equivoqué yo?"
+          ],
+          [
+            "Did you mistake?",
+            "¿Te equivocaste tú?"
+          ],
+          [
+            "Did he mistake?",
+            "¿Se equivocó él?"
+          ],
+          [
+            "Did she mistake?",
+            "¿Se equivocó ella?"
+          ],
+          [
+            "Did it mistake?",
+            "¿Se equivocó eso?"
+          ],
+          [
+            "Did we mistake?",
+            "¿Nos equivocamos nosotros?"
+          ],
+          [
+            "Did you mistake?",
+            "¿Se equivocaron ustedes?"
+          ],
+          [
+            "Did they mistake?",
+            "¿Se equivocaron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have mistaken",
+            "Yo me he equivocado"
+          ],
+          [
+            "YOU_S",
+            "You have mistaken",
+            "Tú te has equivocado"
+          ],
+          [
+            "HE",
+            "He has mistaken",
+            "Él se ha equivocado"
+          ],
+          [
+            "SHE",
+            "She has mistaken",
+            "Ella se ha equivocado"
+          ],
+          [
+            "IT",
+            "It has mistaken",
+            "Eso se ha equivocado"
+          ],
+          [
+            "WE",
+            "We have mistaken",
+            "Nosotros nos hemos equivocado"
+          ],
+          [
+            "YOU_P",
+            "You have mistaken",
+            "Ustedes se han equivocado"
+          ],
+          [
+            "THEY",
+            "They have mistaken",
+            "Ellos se han equivocado"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t mistaken",
+            "Yo no me he equivocado"
+          ],
+          [
+            "YOU_S",
+            "You haven’t mistaken",
+            "Tú no te has equivocado"
+          ],
+          [
+            "HE",
+            "He hasn’t mistaken",
+            "Él no se ha equivocado"
+          ],
+          [
+            "SHE",
+            "She hasn’t mistaken",
+            "Ella no se ha equivocado"
+          ],
+          [
+            "IT",
+            "It hasn’t mistaken",
+            "Eso no se ha equivocado"
+          ],
+          [
+            "WE",
+            "We haven’t mistaken",
+            "Nosotros no nos hemos equivocado"
+          ],
+          [
+            "YOU_P",
+            "You haven’t mistaken",
+            "Ustedes no se han equivocado"
+          ],
+          [
+            "THEY",
+            "They haven’t mistaken",
+            "Ellos no se han equivocado"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I mistaken?",
+            "¿Me he equivocado yo?"
+          ],
+          [
+            "Have you mistaken?",
+            "¿Te has equivocado tú?"
+          ],
+          [
+            "Has he mistaken?",
+            "¿Se ha equivocado él?"
+          ],
+          [
+            "Has she mistaken?",
+            "¿Se ha equivocado ella?"
+          ],
+          [
+            "Has it mistaken?",
+            "¿Se ha equivocado eso?"
+          ],
+          [
+            "Have we mistaken?",
+            "¿Nos hemos equivocado nosotros?"
+          ],
+          [
+            "Have you mistaken?",
+            "¿Se han equivocado ustedes?"
+          ],
+          [
+            "Have they mistaken?",
+            "¿Se han equivocado ellos?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "undertake",
+    "c1": "UNDERTAKE",
+    "c2": "UNDERTOOK",
+    "c3": "UNDERTAKEN",
+    "es": "Emprender / Asumir (una tarea, responsabilidad, proyecto)",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I undertake",
+            "Yo emprendo / asumo"
+          ],
+          [
+            "YOU_S",
+            "You undertake",
+            "Tú emprendes"
+          ],
+          [
+            "HE",
+            "He undertakes",
+            "Él emprende"
+          ],
+          [
+            "SHE",
+            "She undertakes",
+            "Ella emprende"
+          ],
+          [
+            "IT",
+            "It undertakes",
+            "Eso emprende"
+          ],
+          [
+            "WE",
+            "We undertake",
+            "Nosotros emprendemos"
+          ],
+          [
+            "YOU_P",
+            "You undertake",
+            "Ustedes emprenden"
+          ],
+          [
+            "THEY",
+            "They undertake",
+            "Ellos emprenden"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t undertake",
+            "Yo no emprendo"
+          ],
+          [
+            "YOU_S",
+            "You don’t undertake",
+            "Tú no emprendes"
+          ],
+          [
+            "HE",
+            "He doesn’t undertake",
+            "Él no emprende"
+          ],
+          [
+            "SHE",
+            "She doesn’t undertake",
+            "Ella no emprende"
+          ],
+          [
+            "IT",
+            "It doesn’t undertake",
+            "Eso no emprende"
+          ],
+          [
+            "WE",
+            "We don’t undertake",
+            "Nosotros no emprendemos"
+          ],
+          [
+            "YOU_P",
+            "You don’t undertake",
+            "Ustedes no emprenden"
+          ],
+          [
+            "THEY",
+            "They don’t undertake",
+            "Ellos no emprenden"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I undertake?",
+            "¿Emprendo yo?"
+          ],
+          [
+            "Do you undertake?",
+            "¿Emprendes tú?"
+          ],
+          [
+            "Does he undertake?",
+            "¿Emprende él?"
+          ],
+          [
+            "Does she undertake?",
+            "¿Emprende ella?"
+          ],
+          [
+            "Does it undertake?",
+            "¿Emprende eso?"
+          ],
+          [
+            "Do we undertake?",
+            "¿Emprendemos nosotros?"
+          ],
+          [
+            "Do you undertake?",
+            "¿Emprenden ustedes?"
+          ],
+          [
+            "Do they undertake?",
+            "¿Emprenden ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I undertook",
+            "Yo emprendí"
+          ],
+          [
+            "YOU_S",
+            "You undertook",
+            "Tú emprendiste"
+          ],
+          [
+            "HE",
+            "He undertook",
+            "Él emprendió"
+          ],
+          [
+            "SHE",
+            "She undertook",
+            "Ella emprendió"
+          ],
+          [
+            "IT",
+            "It undertook",
+            "Eso emprendió"
+          ],
+          [
+            "WE",
+            "We undertook",
+            "Nosotros emprendimos"
+          ],
+          [
+            "YOU_P",
+            "You undertook",
+            "Ustedes emprendieron"
+          ],
+          [
+            "THEY",
+            "They undertook",
+            "Ellos emprendieron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t undertake",
+            "Yo no emprendí"
+          ],
+          [
+            "YOU_S",
+            "You didn’t undertake",
+            "Tú no emprendiste"
+          ],
+          [
+            "HE",
+            "He didn’t undertake",
+            "Él no emprendió"
+          ],
+          [
+            "SHE",
+            "She didn’t undertake",
+            "Ella no emprendió"
+          ],
+          [
+            "IT",
+            "It didn’t undertake",
+            "Eso no emprendió"
+          ],
+          [
+            "WE",
+            "We didn’t undertake",
+            "Nosotros no emprendimos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t undertake",
+            "Ustedes no emprendieron"
+          ],
+          [
+            "THEY",
+            "They didn’t undertake",
+            "Ellos no emprendieron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I undertake?",
+            "¿Emprendí yo?"
+          ],
+          [
+            "Did you undertake?",
+            "¿Emprendiste tú?"
+          ],
+          [
+            "Did he undertake?",
+            "¿Emprendió él?"
+          ],
+          [
+            "Did she undertake?",
+            "¿Emprendió ella?"
+          ],
+          [
+            "Did it undertake?",
+            "¿Emprendió eso?"
+          ],
+          [
+            "Did we undertake?",
+            "¿Emprendimos nosotros?"
+          ],
+          [
+            "Did you undertake?",
+            "¿Emprendieron ustedes?"
+          ],
+          [
+            "Did they undertake?",
+            "¿Emprendieron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have undertaken",
+            "Yo he emprendido / asumido"
+          ],
+          [
+            "YOU_S",
+            "You have undertaken",
+            "Tú has emprendido"
+          ],
+          [
+            "HE",
+            "He has undertaken",
+            "Él ha emprendido"
+          ],
+          [
+            "SHE",
+            "She has undertaken",
+            "Ella ha emprendido"
+          ],
+          [
+            "IT",
+            "It has undertaken",
+            "Eso ha emprendido"
+          ],
+          [
+            "WE",
+            "We have undertaken",
+            "Nosotros hemos emprendido"
+          ],
+          [
+            "YOU_P",
+            "You have undertaken",
+            "Ustedes han emprendido"
+          ],
+          [
+            "THEY",
+            "They have undertaken",
+            "Ellos han emprendido"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t undertaken",
+            "Yo no he emprendido"
+          ],
+          [
+            "YOU_S",
+            "You haven’t undertaken",
+            "Tú no has emprendido"
+          ],
+          [
+            "HE",
+            "He hasn’t undertaken",
+            "Él no ha emprendido"
+          ],
+          [
+            "SHE",
+            "She hasn’t undertaken",
+            "Ella no ha emprendido"
+          ],
+          [
+            "IT",
+            "It hasn’t undertaken",
+            "Eso no ha emprendido"
+          ],
+          [
+            "WE",
+            "We haven’t undertaken",
+            "Nosotros no hemos emprendido"
+          ],
+          [
+            "YOU_P",
+            "You haven’t undertaken",
+            "Ustedes no han emprendido"
+          ],
+          [
+            "THEY",
+            "They haven’t undertaken",
+            "Ellos no han emprendido"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I undertaken?",
+            "¿He emprendido yo?"
+          ],
+          [
+            "Have you undertaken?",
+            "¿Has emprendido tú?"
+          ],
+          [
+            "Has he undertaken?",
+            "¿Ha emprendido él?"
+          ],
+          [
+            "Has she undertaken?",
+            "¿Ha emprendido ella?"
+          ],
+          [
+            "Has it undertaken?",
+            "¿Ha emprendido eso?"
+          ],
+          [
+            "Have we undertaken?",
+            "¿Hemos emprendido nosotros?"
+          ],
+          [
+            "Have you undertaken?",
+            "¿Han emprendido ustedes?"
+          ],
+          [
+            "Have they undertaken?",
+            "¿Han emprendido ellos?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "sink",
+    "c1": "SINK",
+    "c2": "SANK",
+    "c3": "SUNK",
+    "es": "Hundirse / Sumergirse",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I sink",
+            "Yo me hundo"
+          ],
+          [
+            "YOU_S",
+            "You sink",
+            "Tú te hundes"
+          ],
+          [
+            "HE",
+            "He sinks",
+            "Él se hunde"
+          ],
+          [
+            "SHE",
+            "She sinks",
+            "Ella se hunde"
+          ],
+          [
+            "IT",
+            "It sinks",
+            "Eso se hunde"
+          ],
+          [
+            "WE",
+            "We sink",
+            "Nosotros nos hundimos"
+          ],
+          [
+            "YOU_P",
+            "You sink",
+            "Ustedes se hunden"
+          ],
+          [
+            "THEY",
+            "They sink",
+            "Ellos se hunden"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t sink",
+            "Yo no me hundo"
+          ],
+          [
+            "YOU_S",
+            "You don’t sink",
+            "Tú no te hundes"
+          ],
+          [
+            "HE",
+            "He doesn’t sink",
+            "Él no se hunde"
+          ],
+          [
+            "SHE",
+            "She doesn’t sink",
+            "Ella no se hunde"
+          ],
+          [
+            "IT",
+            "It doesn’t sink",
+            "Eso no se hunde"
+          ],
+          [
+            "WE",
+            "We don’t sink",
+            "Nosotros no nos hundimos"
+          ],
+          [
+            "YOU_P",
+            "You don’t sink",
+            "Ustedes no se hunden"
+          ],
+          [
+            "THEY",
+            "They don’t sink",
+            "Ellos no se hunden"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I sink?",
+            "¿Me hundo yo?"
+          ],
+          [
+            "Do you sink?",
+            "¿Te hundes tú?"
+          ],
+          [
+            "Does he sink?",
+            "¿Se hunde él?"
+          ],
+          [
+            "Does she sink?",
+            "¿Se hunde ella?"
+          ],
+          [
+            "Does it sink?",
+            "¿Se hunde eso?"
+          ],
+          [
+            "Do we sink?",
+            "¿Nos hundimos nosotros?"
+          ],
+          [
+            "Do you sink?",
+            "¿Se hunden ustedes?"
+          ],
+          [
+            "Do they sink?",
+            "¿Se hunden ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I sank",
+            "Yo me hundí"
+          ],
+          [
+            "YOU_S",
+            "You sank",
+            "Tú te hundiste"
+          ],
+          [
+            "HE",
+            "He sank",
+            "Él se hundió"
+          ],
+          [
+            "SHE",
+            "She sank",
+            "Ella se hundió"
+          ],
+          [
+            "IT",
+            "It sank",
+            "Eso se hundió"
+          ],
+          [
+            "WE",
+            "We sank",
+            "Nosotros nos hundimos"
+          ],
+          [
+            "YOU_P",
+            "You sank",
+            "Ustedes se hundieron"
+          ],
+          [
+            "THEY",
+            "They sank",
+            "Ellos se hundieron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t sink",
+            "Yo no me hundí"
+          ],
+          [
+            "YOU_S",
+            "You didn’t sink",
+            "Tú no te hundiste"
+          ],
+          [
+            "HE",
+            "He didn’t sink",
+            "Él no se hundió"
+          ],
+          [
+            "SHE",
+            "She didn’t sink",
+            "Ella no se hundió"
+          ],
+          [
+            "IT",
+            "It didn’t sink",
+            "Eso no se hundió"
+          ],
+          [
+            "WE",
+            "We didn’t sink",
+            "Nosotros no nos hundimos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t sink",
+            "Ustedes no se hundieron"
+          ],
+          [
+            "THEY",
+            "They didn’t sink",
+            "Ellos no se hundieron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I sink?",
+            "¿Me hundí yo?"
+          ],
+          [
+            "Did you sink?",
+            "¿Te hundiste tú?"
+          ],
+          [
+            "Did he sink?",
+            "¿Se hundió él?"
+          ],
+          [
+            "Did she sink?",
+            "¿Se hundió ella?"
+          ],
+          [
+            "Did it sink?",
+            "¿Se hundió eso?"
+          ],
+          [
+            "Did we sink?",
+            "¿Nos hundimos nosotros?"
+          ],
+          [
+            "Did you sink?",
+            "¿Se hundieron ustedes?"
+          ],
+          [
+            "Did they sink?",
+            "¿Se hundieron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have sunk",
+            "Yo me he hundido"
+          ],
+          [
+            "YOU_S",
+            "You have sunk",
+            "Tú te has hundido"
+          ],
+          [
+            "HE",
+            "He has sunk",
+            "Él se ha hundido"
+          ],
+          [
+            "SHE",
+            "She has sunk",
+            "Ella se ha hundido"
+          ],
+          [
+            "IT",
+            "It has sunk",
+            "Eso se ha hundido"
+          ],
+          [
+            "WE",
+            "We have sunk",
+            "Nosotros nos hemos hundido"
+          ],
+          [
+            "YOU_P",
+            "You have sunk",
+            "Ustedes se han hundido"
+          ],
+          [
+            "THEY",
+            "They have sunk",
+            "Ellos se han hundido"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t sunk",
+            "Yo no me he hundido"
+          ],
+          [
+            "YOU_S",
+            "You haven’t sunk",
+            "Tú no te has hundido"
+          ],
+          [
+            "HE",
+            "He hasn’t sunk",
+            "Él no se ha hundido"
+          ],
+          [
+            "SHE",
+            "She hasn’t sunk",
+            "Ella no se ha hundido"
+          ],
+          [
+            "IT",
+            "It hasn’t sunk",
+            "Eso no se ha hundido"
+          ],
+          [
+            "WE",
+            "We haven’t sunk",
+            "Nosotros no nos hemos hundido"
+          ],
+          [
+            "YOU_P",
+            "You haven’t sunk",
+            "Ustedes no se han hundido"
+          ],
+          [
+            "THEY",
+            "They haven’t sunk",
+            "Ellos no se han hundido"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I sunk?",
+            "¿Me he hundido yo?"
+          ],
+          [
+            "Have you sunk?",
+            "¿Te has hundido tú?"
+          ],
+          [
+            "Has he sunk?",
+            "¿Se ha hundido él?"
+          ],
+          [
+            "Has she sunk?",
+            "¿Se ha hundido ella?"
+          ],
+          [
+            "Has it sunk?",
+            "¿Se ha hundido eso?"
+          ],
+          [
+            "Have we sunk?",
+            "¿Nos hemos hundido nosotros?"
+          ],
+          [
+            "Have you sunk?",
+            "¿Se han hundido ustedes?"
+          ],
+          [
+            "Have they sunk?",
+            "¿Se han hundido ellos?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "shrink",
+    "c1": "SHRINK",
+    "c2": "SHRANK",
+    "c3": "SHRUNK",
+    "es": "Encogerse / Reducirse / Disminuir de tamaño",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I shrink",
+            "Yo me encojo / me reduzco"
+          ],
+          [
+            "YOU_S",
+            "You shrink",
+            "Tú te encoges"
+          ],
+          [
+            "HE",
+            "He shrinks",
+            "Él se encoge"
+          ],
+          [
+            "SHE",
+            "She shrinks",
+            "Ella se encoge"
+          ],
+          [
+            "IT",
+            "It shrinks",
+            "Eso se encoge"
+          ],
+          [
+            "WE",
+            "We shrink",
+            "Nosotros nos encogemos"
+          ],
+          [
+            "YOU_P",
+            "You shrink",
+            "Ustedes se encogen"
+          ],
+          [
+            "THEY",
+            "They shrink",
+            "Ellos se encogen"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t shrink",
+            "Yo no me encojo"
+          ],
+          [
+            "YOU_S",
+            "You don’t shrink",
+            "Tú no te encoges"
+          ],
+          [
+            "HE",
+            "He doesn’t shrink",
+            "Él no se encoge"
+          ],
+          [
+            "SHE",
+            "She doesn’t shrink",
+            "Ella no se encoge"
+          ],
+          [
+            "IT",
+            "It doesn’t shrink",
+            "Eso no se encoge"
+          ],
+          [
+            "WE",
+            "We don’t shrink",
+            "Nosotros no nos encogemos"
+          ],
+          [
+            "YOU_P",
+            "You don’t shrink",
+            "Ustedes no se encogen"
+          ],
+          [
+            "THEY",
+            "They don’t shrink",
+            "Ellos no se encogen"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I shrink?",
+            "¿Me encojo yo?"
+          ],
+          [
+            "Do you shrink?",
+            "¿Te encoges tú?"
+          ],
+          [
+            "Does he shrink?",
+            "¿Se encoge él?"
+          ],
+          [
+            "Does she shrink?",
+            "¿Se encoge ella?"
+          ],
+          [
+            "Does it shrink?",
+            "¿Se encoge eso?"
+          ],
+          [
+            "Do we shrink?",
+            "¿Nos encogemos nosotros?"
+          ],
+          [
+            "Do you shrink?",
+            "¿Se encogen ustedes?"
+          ],
+          [
+            "Do they shrink?",
+            "¿Se encogen ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I shrank",
+            "Yo me encogí"
+          ],
+          [
+            "YOU_S",
+            "You shrank",
+            "Tú te encogiste"
+          ],
+          [
+            "HE",
+            "He shrank",
+            "Él se encogió"
+          ],
+          [
+            "SHE",
+            "She shrank",
+            "Ella se encogió"
+          ],
+          [
+            "IT",
+            "It shrank",
+            "Eso se encogió"
+          ],
+          [
+            "WE",
+            "We shrank",
+            "Nosotros nos encogimos"
+          ],
+          [
+            "YOU_P",
+            "You shrank",
+            "Ustedes se encogieron"
+          ],
+          [
+            "THEY",
+            "They shrank",
+            "Ellos se encogieron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t shrink",
+            "Yo no me encogí"
+          ],
+          [
+            "YOU_S",
+            "You didn’t shrink",
+            "Tú no te encogiste"
+          ],
+          [
+            "HE",
+            "He didn’t shrink",
+            "Él no se encogió"
+          ],
+          [
+            "SHE",
+            "She didn’t shrink",
+            "Ella no se encogió"
+          ],
+          [
+            "IT",
+            "It didn’t shrink",
+            "Eso no se encogió"
+          ],
+          [
+            "WE",
+            "We didn’t shrink",
+            "Nosotros no nos encogimos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t shrink",
+            "Ustedes no se encogieron"
+          ],
+          [
+            "THEY",
+            "They didn’t shrink",
+            "Ellos no se encogieron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I shrink?",
+            "¿Me encogí yo?"
+          ],
+          [
+            "Did you shrink?",
+            "¿Te encogiste tú?"
+          ],
+          [
+            "Did he shrink?",
+            "¿Se encogió él?"
+          ],
+          [
+            "Did she shrink?",
+            "¿Se encogió ella?"
+          ],
+          [
+            "Did it shrink?",
+            "¿Se encogió eso?"
+          ],
+          [
+            "Did we shrink?",
+            "¿Nos encogimos nosotros?"
+          ],
+          [
+            "Did you shrink?",
+            "¿Se encogieron ustedes?"
+          ],
+          [
+            "Did they shrink?",
+            "¿Se encogieron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have shrunk",
+            "Yo me he encogido"
+          ],
+          [
+            "YOU_S",
+            "You have shrunk",
+            "Tú te has encogido"
+          ],
+          [
+            "HE",
+            "He has shrunk",
+            "Él se ha encogido"
+          ],
+          [
+            "SHE",
+            "She has shrunk",
+            "Ella se ha encogido"
+          ],
+          [
+            "IT",
+            "It has shrunk",
+            "Eso se ha encogido"
+          ],
+          [
+            "WE",
+            "We have shrunk",
+            "Nosotros nos hemos encogido"
+          ],
+          [
+            "YOU_P",
+            "You have shrunk",
+            "Ustedes se han encogido"
+          ],
+          [
+            "THEY",
+            "They have shrunk",
+            "Ellos se han encogido"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t shrunk",
+            "Yo no me he encogido"
+          ],
+          [
+            "YOU_S",
+            "You haven’t shrunk",
+            "Tú no te has encogido"
+          ],
+          [
+            "HE",
+            "He hasn’t shrunk",
+            "Él no se ha encogido"
+          ],
+          [
+            "SHE",
+            "She hasn’t shrunk",
+            "Ella no se ha encogido"
+          ],
+          [
+            "IT",
+            "It hasn’t shrunk",
+            "Eso no se ha encogido"
+          ],
+          [
+            "WE",
+            "We haven’t shrunk",
+            "Nosotros no nos hemos encogido"
+          ],
+          [
+            "YOU_P",
+            "You haven’t shrunk",
+            "Ustedes no se han encogido"
+          ],
+          [
+            "THEY",
+            "They haven’t shrunk",
+            "Ellos no se han encogido"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I shrunk?",
+            "¿Me he encogido yo?"
+          ],
+          [
+            "Have you shrunk?",
+            "¿Te has encogido tú?"
+          ],
+          [
+            "Has he shrunk?",
+            "¿Se ha encogido él?"
+          ],
+          [
+            "Has she shrunk?",
+            "¿Se ha encogido ella?"
+          ],
+          [
+            "Has it shrunk?",
+            "¿Se ha encogido eso?"
+          ],
+          [
+            "Have we shrunk?",
+            "¿Nos hemos encogido nosotros?"
+          ],
+          [
+            "Have you shrunk?",
+            "¿Se han encogido ustedes?"
+          ],
+          [
+            "Have they shrunk?",
+            "¿Se han encogido ellos?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "choose",
+    "c1": "CHOOSE",
+    "c2": "CHOSE",
+    "c3": "CHOSEN",
+    "es": "Elegir / Escoger",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I choose",
+            "Yo elijo"
+          ],
+          [
+            "YOU_S",
+            "You choose",
+            "Tú eliges"
+          ],
+          [
+            "HE",
+            "He chooses",
+            "Él elige"
+          ],
+          [
+            "SHE",
+            "She chooses",
+            "Ella elige"
+          ],
+          [
+            "IT",
+            "It chooses",
+            "Eso elige"
+          ],
+          [
+            "WE",
+            "We choose",
+            "Nosotros elegimos"
+          ],
+          [
+            "YOU_P",
+            "You choose",
+            "Ustedes eligen"
+          ],
+          [
+            "THEY",
+            "They choose",
+            "Ellos eligen"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t choose",
+            "Yo no elijo"
+          ],
+          [
+            "YOU_S",
+            "You don’t choose",
+            "Tú no eliges"
+          ],
+          [
+            "HE",
+            "He doesn’t choose",
+            "Él no elige"
+          ],
+          [
+            "SHE",
+            "She doesn’t choose",
+            "Ella no elige"
+          ],
+          [
+            "IT",
+            "It doesn’t choose",
+            "Eso no elige"
+          ],
+          [
+            "WE",
+            "We don’t choose",
+            "Nosotros no elegimos"
+          ],
+          [
+            "YOU_P",
+            "You don’t choose",
+            "Ustedes no eligen"
+          ],
+          [
+            "THEY",
+            "They don’t choose",
+            "Ellos no eligen"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I choose?",
+            "¿Elijo yo?"
+          ],
+          [
+            "Do you choose?",
+            "¿Eliges tú?"
+          ],
+          [
+            "Does he choose?",
+            "¿Elige él?"
+          ],
+          [
+            "Does she choose?",
+            "¿Elige ella?"
+          ],
+          [
+            "Does it choose?",
+            "¿Elige eso?"
+          ],
+          [
+            "Do we choose?",
+            "¿Elegimos nosotros?"
+          ],
+          [
+            "Do you choose?",
+            "¿Eligen ustedes?"
+          ],
+          [
+            "Do they choose?",
+            "¿Eligen ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I chose",
+            "Yo elegí"
+          ],
+          [
+            "YOU_S",
+            "You chose",
+            "Tú elegiste"
+          ],
+          [
+            "HE",
+            "He chose",
+            "Él eligió"
+          ],
+          [
+            "SHE",
+            "She chose",
+            "Ella eligió"
+          ],
+          [
+            "IT",
+            "It chose",
+            "Eso eligió"
+          ],
+          [
+            "WE",
+            "We chose",
+            "Nosotros elegimos"
+          ],
+          [
+            "YOU_P",
+            "You chose",
+            "Ustedes eligieron"
+          ],
+          [
+            "THEY",
+            "They chose",
+            "Ellos eligieron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t choose",
+            "Yo no elegí"
+          ],
+          [
+            "YOU_S",
+            "You didn’t choose",
+            "Tú no elegiste"
+          ],
+          [
+            "HE",
+            "He didn’t choose",
+            "Él no eligió"
+          ],
+          [
+            "SHE",
+            "She didn’t choose",
+            "Ella no eligió"
+          ],
+          [
+            "IT",
+            "It didn’t choose",
+            "Eso no eligió"
+          ],
+          [
+            "WE",
+            "We didn’t choose",
+            "Nosotros no elegimos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t choose",
+            "Ustedes no eligieron"
+          ],
+          [
+            "THEY",
+            "They didn’t choose",
+            "Ellos no eligieron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I choose?",
+            "¿Elegí yo?"
+          ],
+          [
+            "Did you choose?",
+            "¿Elegiste tú?"
+          ],
+          [
+            "Did he choose?",
+            "¿Eligió él?"
+          ],
+          [
+            "Did she choose?",
+            "¿Eligió ella?"
+          ],
+          [
+            "Did it choose?",
+            "¿Eligió eso?"
+          ],
+          [
+            "Did we choose?",
+            "¿Elegimos nosotros?"
+          ],
+          [
+            "Did you choose?",
+            "¿Eligieron ustedes?"
+          ],
+          [
+            "Did they choose?",
+            "¿Eligieron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have chosen",
+            "Yo he elegido"
+          ],
+          [
+            "YOU_S",
+            "You have chosen",
+            "Tú has elegido"
+          ],
+          [
+            "HE",
+            "He has chosen",
+            "Él ha elegido"
+          ],
+          [
+            "SHE",
+            "She has chosen",
+            "Ella ha elegido"
+          ],
+          [
+            "IT",
+            "It has chosen",
+            "Eso ha elegido"
+          ],
+          [
+            "WE",
+            "We have chosen",
+            "Nosotros hemos elegido"
+          ],
+          [
+            "YOU_P",
+            "You have chosen",
+            "Ustedes han elegido"
+          ],
+          [
+            "THEY",
+            "They have chosen",
+            "Ellos han elegido"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t chosen",
+            "Yo no he elegido"
+          ],
+          [
+            "YOU_S",
+            "You haven’t chosen",
+            "Tú no has elegido"
+          ],
+          [
+            "HE",
+            "He hasn’t chosen",
+            "Él no ha elegido"
+          ],
+          [
+            "SHE",
+            "She hasn’t chosen",
+            "Ella no ha elegido"
+          ],
+          [
+            "IT",
+            "It hasn’t chosen",
+            "Eso no ha elegido"
+          ],
+          [
+            "WE",
+            "We haven’t chosen",
+            "Nosotros no hemos elegido"
+          ],
+          [
+            "YOU_P",
+            "You haven’t chosen",
+            "Ustedes no han elegido"
+          ],
+          [
+            "THEY",
+            "They haven’t chosen",
+            "Ellos no han elegido"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I chosen?",
+            "¿He elegido yo?"
+          ],
+          [
+            "Have you chosen?",
+            "¿Has elegido tú?"
+          ],
+          [
+            "Has he chosen?",
+            "¿Ha elegido él?"
+          ],
+          [
+            "Has she chosen?",
+            "¿Ha elegido ella?"
+          ],
+          [
+            "Has it chosen?",
+            "¿Ha elegido eso?"
+          ],
+          [
+            "Have we chosen?",
+            "¿Hemos elegido nosotros?"
+          ],
+          [
+            "Have you chosen?",
+            "¿Han elegido ustedes?"
+          ],
+          [
+            "Have they chosen?",
+            "¿Han elegido ellos?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "know",
+    "c1": "KNOW",
+    "c2": "KNEW",
+    "c3": "KNOWN",
+    "es": "Saber / Conocer",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I know",
+            "Yo sé / Yo conozco"
+          ],
+          [
+            "YOU_S",
+            "You know",
+            "Tú sabes / conoces"
+          ],
+          [
+            "HE",
+            "He knows",
+            "Él sabe / conoce"
+          ],
+          [
+            "SHE",
+            "She knows",
+            "Ella sabe / conoce"
+          ],
+          [
+            "IT",
+            "It knows",
+            "Eso sabe"
+          ],
+          [
+            "WE",
+            "We know",
+            "Nosotros sabemos"
+          ],
+          [
+            "YOU_P",
+            "You know",
+            "Ustedes saben"
+          ],
+          [
+            "THEY",
+            "They know",
+            "Ellos saben"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t know",
+            "Yo no sé / no conozco"
+          ],
+          [
+            "YOU_S",
+            "You don’t know",
+            "Tú no sabes / conoces"
+          ],
+          [
+            "HE",
+            "He doesn’t know",
+            "Él no sabe / conoce"
+          ],
+          [
+            "SHE",
+            "She doesn’t know",
+            "Ella no sabe / conoce"
+          ],
+          [
+            "IT",
+            "It doesn’t know",
+            "Eso no sabe"
+          ],
+          [
+            "WE",
+            "We don’t know",
+            "Nosotros no sabemos"
+          ],
+          [
+            "YOU_P",
+            "You don’t know",
+            "Ustedes no saben"
+          ],
+          [
+            "THEY",
+            "They don’t know",
+            "Ellos no saben"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I know?",
+            "¿Sé yo? / ¿Conozco yo?"
+          ],
+          [
+            "Do you know?",
+            "¿Sabes tú? / ¿Conoces tú?"
+          ],
+          [
+            "Does he know?",
+            "¿Sabe él? / ¿Conoce él?"
+          ],
+          [
+            "Does she know?",
+            "¿Sabe ella? / ¿Conoce ella?"
+          ],
+          [
+            "Does it know?",
+            "¿Sabe eso?"
+          ],
+          [
+            "Do we know?",
+            "¿Sabemos nosotros?"
+          ],
+          [
+            "Do you know?",
+            "¿Saben ustedes?"
+          ],
+          [
+            "Do they know?",
+            "¿Saben ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I knew",
+            "Yo supe / conocí"
+          ],
+          [
+            "YOU_S",
+            "You knew",
+            "Tú supiste / conociste"
+          ],
+          [
+            "HE",
+            "He knew",
+            "Él supo / conoció"
+          ],
+          [
+            "SHE",
+            "She knew",
+            "Ella supo / conoció"
+          ],
+          [
+            "IT",
+            "It knew",
+            "Eso supo"
+          ],
+          [
+            "WE",
+            "We knew",
+            "Nosotros supimos"
+          ],
+          [
+            "YOU_P",
+            "You knew",
+            "Ustedes supieron"
+          ],
+          [
+            "THEY",
+            "They knew",
+            "Ellos supieron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t know",
+            "Yo no supe / no conocí"
+          ],
+          [
+            "YOU_S",
+            "You didn’t know",
+            "Tú no supiste"
+          ],
+          [
+            "HE",
+            "He didn’t know",
+            "Él no supo"
+          ],
+          [
+            "SHE",
+            "She didn’t know",
+            "Ella no supo"
+          ],
+          [
+            "IT",
+            "It didn’t know",
+            "Eso no supo"
+          ],
+          [
+            "WE",
+            "We didn’t know",
+            "Nosotros no supimos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t know",
+            "Ustedes no supieron"
+          ],
+          [
+            "THEY",
+            "They didn’t know",
+            "Ellos no supieron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I know?",
+            "¿Supe yo? / ¿Conocí yo?"
+          ],
+          [
+            "Did you know?",
+            "¿Supiste tú?"
+          ],
+          [
+            "Did he know?",
+            "¿Supo él?"
+          ],
+          [
+            "Did she know?",
+            "¿Supo ella?"
+          ],
+          [
+            "Did it know?",
+            "¿Supo eso?"
+          ],
+          [
+            "Did we know?",
+            "¿Supimos nosotros?"
+          ],
+          [
+            "Did you know?",
+            "¿Supieron ustedes?"
+          ],
+          [
+            "Did they know?",
+            "¿Supieron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have known",
+            "Yo he sabido / conocido"
+          ],
+          [
+            "YOU_S",
+            "You have known",
+            "Tú has sabido / conocido"
+          ],
+          [
+            "HE",
+            "He has known",
+            "Él ha sabido / conocido"
+          ],
+          [
+            "SHE",
+            "She has known",
+            "Ella ha sabido / conocido"
+          ],
+          [
+            "IT",
+            "It has known",
+            "Eso ha sabido"
+          ],
+          [
+            "WE",
+            "We have known",
+            "Nosotros hemos sabido"
+          ],
+          [
+            "YOU_P",
+            "You have known",
+            "Ustedes han sabido"
+          ],
+          [
+            "THEY",
+            "They have known",
+            "Ellos han sabido"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t known",
+            "Yo no he sabido / conocido"
+          ],
+          [
+            "YOU_S",
+            "You haven’t known",
+            "Tú no has sabido"
+          ],
+          [
+            "HE",
+            "He hasn’t known",
+            "Él no ha sabido"
+          ],
+          [
+            "SHE",
+            "She hasn’t known",
+            "Ella no ha sabido"
+          ],
+          [
+            "IT",
+            "It hasn’t known",
+            "Eso no ha sabido"
+          ],
+          [
+            "WE",
+            "We haven’t known",
+            "Nosotros no hemos sabido"
+          ],
+          [
+            "YOU_P",
+            "You haven’t known",
+            "Ustedes no han sabido"
+          ],
+          [
+            "THEY",
+            "They haven’t known",
+            "Ellos no han sabido"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I known?",
+            "¿He sabido yo?"
+          ],
+          [
+            "Have you known?",
+            "¿Has sabido tú?"
+          ],
+          [
+            "Has he known?",
+            "¿Ha sabido él?"
+          ],
+          [
+            "Has she known?",
+            "¿Ha sabido ella?"
+          ],
+          [
+            "Has it known?",
+            "¿Ha sabido eso?"
+          ],
+          [
+            "Have we known?",
+            "¿Hemos sabido nosotros?"
+          ],
+          [
+            "Have you known?",
+            "¿Han sabido ustedes?"
+          ],
+          [
+            "Have they known?",
+            "¿Han sabido ellos?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "grow",
+    "c1": "GROW",
+    "c2": "GREW",
+    "c3": "GROWN",
+    "es": "Crecer / Cultivar / Aumentar",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I grow",
+            "Yo crezco / cultivo"
+          ],
+          [
+            "YOU_S",
+            "You grow",
+            "Tú creces / cultivas"
+          ],
+          [
+            "HE",
+            "He grows",
+            "Él crece / cultiva"
+          ],
+          [
+            "SHE",
+            "She grows",
+            "Ella crece / cultiva"
+          ],
+          [
+            "IT",
+            "It grows",
+            "Eso crece"
+          ],
+          [
+            "WE",
+            "We grow",
+            "Nosotros crecemos"
+          ],
+          [
+            "YOU_P",
+            "You grow",
+            "Ustedes crecen"
+          ],
+          [
+            "THEY",
+            "They grow",
+            "Ellos crecen"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t grow",
+            "Yo no crezco / no cultivo"
+          ],
+          [
+            "YOU_S",
+            "You don’t grow",
+            "Tú no creces"
+          ],
+          [
+            "HE",
+            "He doesn’t grow",
+            "Él no crece"
+          ],
+          [
+            "SHE",
+            "She doesn’t grow",
+            "Ella no crece"
+          ],
+          [
+            "IT",
+            "It doesn’t grow",
+            "Eso no crece"
+          ],
+          [
+            "WE",
+            "We don’t grow",
+            "Nosotros no crecemos"
+          ],
+          [
+            "YOU_P",
+            "You don’t grow",
+            "Ustedes no crecen"
+          ],
+          [
+            "THEY",
+            "They don’t grow",
+            "Ellos no crecen"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I grow?",
+            "¿Crezco yo? / ¿Cultivo yo?"
+          ],
+          [
+            "Do you grow?",
+            "¿Creces tú?"
+          ],
+          [
+            "Does he grow?",
+            "¿Crece él?"
+          ],
+          [
+            "Does she grow?",
+            "¿Crece ella?"
+          ],
+          [
+            "Does it grow?",
+            "¿Crece eso?"
+          ],
+          [
+            "Do we grow?",
+            "¿Crecemos nosotros?"
+          ],
+          [
+            "Do you grow?",
+            "¿Crecen ustedes?"
+          ],
+          [
+            "Do they grow?",
+            "¿Crecen ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I grew",
+            "Yo crecí / cultivé"
+          ],
+          [
+            "YOU_S",
+            "You grew",
+            "Tú creciste"
+          ],
+          [
+            "HE",
+            "He grew",
+            "Él creció"
+          ],
+          [
+            "SHE",
+            "She grew",
+            "Ella creció"
+          ],
+          [
+            "IT",
+            "It grew",
+            "Eso creció"
+          ],
+          [
+            "WE",
+            "We grew",
+            "Nosotros crecimos"
+          ],
+          [
+            "YOU_P",
+            "You grew",
+            "Ustedes crecieron"
+          ],
+          [
+            "THEY",
+            "They grew",
+            "Ellos crecieron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t grow",
+            "Yo no crecí"
+          ],
+          [
+            "YOU_S",
+            "You didn’t grow",
+            "Tú no creciste"
+          ],
+          [
+            "HE",
+            "He didn’t grow",
+            "Él no creció"
+          ],
+          [
+            "SHE",
+            "She didn’t grow",
+            "Ella no creció"
+          ],
+          [
+            "IT",
+            "It didn’t grow",
+            "Eso no creció"
+          ],
+          [
+            "WE",
+            "We didn’t grow",
+            "Nosotros no crecimos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t grow",
+            "Ustedes no crecieron"
+          ],
+          [
+            "THEY",
+            "They didn’t grow",
+            "Ellos no crecieron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I grow?",
+            "¿Crecí yo?"
+          ],
+          [
+            "Did you grow?",
+            "¿Creciste tú?"
+          ],
+          [
+            "Did he grow?",
+            "¿Creció él?"
+          ],
+          [
+            "Did she grow?",
+            "¿Creció ella?"
+          ],
+          [
+            "Did it grow?",
+            "¿Creció eso?"
+          ],
+          [
+            "Did we grow?",
+            "¿Crecimos nosotros?"
+          ],
+          [
+            "Did you grow?",
+            "¿Crecieron ustedes?"
+          ],
+          [
+            "Did they grow?",
+            "¿Crecieron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have grown",
+            "Yo he crecido / cultivado"
+          ],
+          [
+            "YOU_S",
+            "You have grown",
+            "Tú has crecido"
+          ],
+          [
+            "HE",
+            "He has grown",
+            "Él ha crecido"
+          ],
+          [
+            "SHE",
+            "She has grown",
+            "Ella ha crecido"
+          ],
+          [
+            "IT",
+            "It has grown",
+            "Eso ha crecido"
+          ],
+          [
+            "WE",
+            "We have grown",
+            "Nosotros hemos crecido"
+          ],
+          [
+            "YOU_P",
+            "You have grown",
+            "Ustedes han crecido"
+          ],
+          [
+            "THEY",
+            "They have grown",
+            "Ellos han crecido"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t grown",
+            "Yo no he crecido"
+          ],
+          [
+            "YOU_S",
+            "You haven’t grown",
+            "Tú no has crecido"
+          ],
+          [
+            "HE",
+            "He hasn’t grown",
+            "Él no ha crecido"
+          ],
+          [
+            "SHE",
+            "She hasn’t grown",
+            "Ella no ha crecido"
+          ],
+          [
+            "IT",
+            "It hasn’t grown",
+            "Eso no ha crecido"
+          ],
+          [
+            "WE",
+            "We haven’t grown",
+            "Nosotros no hemos crecido"
+          ],
+          [
+            "YOU_P",
+            "You haven’t grown",
+            "Ustedes no han crecido"
+          ],
+          [
+            "THEY",
+            "They haven’t grown",
+            "Ellos no han crecido"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I grown?",
+            "¿He crecido yo?"
+          ],
+          [
+            "Have you grown?",
+            "¿Has crecido tú?"
+          ],
+          [
+            "Has he grown?",
+            "¿Ha crecido él?"
+          ],
+          [
+            "Has she grown?",
+            "¿Ha crecido ella?"
+          ],
+          [
+            "Has it grown?",
+            "¿Ha crecido eso?"
+          ],
+          [
+            "Have we grown?",
+            "¿Hemos crecido nosotros?"
+          ],
+          [
+            "Have you grown?",
+            "¿Han crecido ustedes?"
+          ],
+          [
+            "Have they grown?",
+            "¿Han crecido ellos?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "stride",
+    "c1": "STRIDE",
+    "c2": "STRODE",
+    "c3": "STRIDDEN",
+    "es": "Dar zancadas / Caminar con paso largo y firme",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I stride",
+            "Yo camino con paso firme"
+          ],
+          [
+            "YOU_S",
+            "You stride",
+            "Tú caminas con paso firme"
+          ],
+          [
+            "HE",
+            "He strides",
+            "Él camina con paso firme"
+          ],
+          [
+            "SHE",
+            "She strides",
+            "Ella camina con paso firme"
+          ],
+          [
+            "IT",
+            "It strides",
+            "Eso camina con paso firme"
+          ],
+          [
+            "WE",
+            "We stride",
+            "Nosotros caminamos firme"
+          ],
+          [
+            "YOU_P",
+            "You stride",
+            "Ustedes caminan firme"
+          ],
+          [
+            "THEY",
+            "They stride",
+            "Ellos caminan firme"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t stride",
+            "Yo no camino con paso firme"
+          ],
+          [
+            "YOU_S",
+            "You don’t stride",
+            "Tú no caminas con paso firme"
+          ],
+          [
+            "HE",
+            "He doesn’t stride",
+            "Él no camina con paso firme"
+          ],
+          [
+            "SHE",
+            "She doesn’t stride",
+            "Ella no camina con paso firme"
+          ],
+          [
+            "IT",
+            "It doesn’t stride",
+            "Eso no camina con paso firme"
+          ],
+          [
+            "WE",
+            "We don’t stride",
+            "Nosotros no caminamos con firmeza"
+          ],
+          [
+            "YOU_P",
+            "You don’t stride",
+            "Ustedes no caminan con firmeza"
+          ],
+          [
+            "THEY",
+            "They don’t stride",
+            "Ellos no caminan con firmeza"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I stride?",
+            "¿Camino con paso firme yo?"
+          ],
+          [
+            "Do you stride?",
+            "¿Caminas con paso firme tú?"
+          ],
+          [
+            "Does he stride?",
+            "¿Camina con paso firme él?"
+          ],
+          [
+            "Does she stride?",
+            "¿Camina con paso firme ella?"
+          ],
+          [
+            "Does it stride?",
+            "¿Camina con paso firme eso?"
+          ],
+          [
+            "Do we stride?",
+            "¿Caminamos con paso firme?"
+          ],
+          [
+            "Do you stride?",
+            "¿Caminan con paso firme ustedes?"
+          ],
+          [
+            "Do they stride?",
+            "¿Caminan con paso firme ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I strode",
+            "Yo caminé con paso firme"
+          ],
+          [
+            "YOU_S",
+            "You strode",
+            "Tú caminaste con paso firme"
+          ],
+          [
+            "HE",
+            "He strode",
+            "Él caminó con paso firme"
+          ],
+          [
+            "SHE",
+            "She strode",
+            "Ella caminó con paso firme"
+          ],
+          [
+            "IT",
+            "It strode",
+            "Eso caminó con paso firme"
+          ],
+          [
+            "WE",
+            "We strode",
+            "Nosotros caminamos firmemente"
+          ],
+          [
+            "YOU_P",
+            "You strode",
+            "Ustedes caminaron con firmeza"
+          ],
+          [
+            "THEY",
+            "They strode",
+            "Ellos caminaron con firmeza"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t stride",
+            "Yo no caminé con paso firme"
+          ],
+          [
+            "YOU_S",
+            "You didn’t stride",
+            "Tú no caminaste con paso firme"
+          ],
+          [
+            "HE",
+            "He didn’t stride",
+            "Él no caminó con paso firme"
+          ],
+          [
+            "SHE",
+            "She didn’t stride",
+            "Ella no caminó con paso firme"
+          ],
+          [
+            "IT",
+            "It didn’t stride",
+            "Eso no caminó con paso firme"
+          ],
+          [
+            "WE",
+            "We didn’t stride",
+            "Nosotros no caminamos así"
+          ],
+          [
+            "YOU_P",
+            "You didn’t stride",
+            "Ustedes no caminaron firmemente"
+          ],
+          [
+            "THEY",
+            "They didn’t stride",
+            "Ellos no caminaron con firmeza"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I stride?",
+            "¿Caminé con paso firme yo?"
+          ],
+          [
+            "Did you stride?",
+            "¿Caminaste tú con paso firme?"
+          ],
+          [
+            "Did he stride?",
+            "¿Caminó él con paso firme?"
+          ],
+          [
+            "Did she stride?",
+            "¿Caminó ella con paso firme?"
+          ],
+          [
+            "Did it stride?",
+            "¿Caminó eso con paso firme?"
+          ],
+          [
+            "Did we stride?",
+            "¿Caminamos con paso firme?"
+          ],
+          [
+            "Did you stride?",
+            "¿Caminaron ustedes con firmeza?"
+          ],
+          [
+            "Did they stride?",
+            "¿Caminaron ellos con paso firme?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have stridden",
+            "Yo he caminado con paso firme"
+          ],
+          [
+            "YOU_S",
+            "You have stridden",
+            "Tú has caminado con paso firme"
+          ],
+          [
+            "HE",
+            "He has stridden",
+            "Él ha caminado con paso firme"
+          ],
+          [
+            "SHE",
+            "She has stridden",
+            "Ella ha caminado con paso firme"
+          ],
+          [
+            "IT",
+            "It has stridden",
+            "Eso ha caminado con paso firme"
+          ],
+          [
+            "WE",
+            "We have stridden",
+            "Nosotros hemos caminado con firmeza"
+          ],
+          [
+            "YOU_P",
+            "You have stridden",
+            "Ustedes han caminado con firmeza"
+          ],
+          [
+            "THEY",
+            "They have stridden",
+            "Ellos han caminado con firmeza"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t stridden",
+            "Yo no he caminado con paso firme"
+          ],
+          [
+            "YOU_S",
+            "You haven’t stridden",
+            "Tú no has caminado con firmeza"
+          ],
+          [
+            "HE",
+            "He hasn’t stridden",
+            "Él no ha caminado con paso firme"
+          ],
+          [
+            "SHE",
+            "She hasn’t stridden",
+            "Ella no ha caminado con firmeza"
+          ],
+          [
+            "IT",
+            "It hasn’t stridden",
+            "Eso no ha caminado con paso firme"
+          ],
+          [
+            "WE",
+            "We haven’t stridden",
+            "Nosotros no hemos caminado así"
+          ],
+          [
+            "YOU_P",
+            "You haven’t stridden",
+            "Ustedes no han caminado con firmeza"
+          ],
+          [
+            "THEY",
+            "They haven’t stridden",
+            "Ellos no han caminado con firmeza"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I stridden?",
+            "¿He caminado con paso firme yo?"
+          ],
+          [
+            "Have you stridden?",
+            "¿Has caminado tú con paso firme?"
+          ],
+          [
+            "Has he stridden?",
+            "¿Ha caminado él con paso firme?"
+          ],
+          [
+            "Has she stridden?",
+            "¿Ha caminado ella con paso firme?"
+          ],
+          [
+            "Has it stridden?",
+            "¿Ha caminado eso con paso firme?"
+          ],
+          [
+            "Have we stridden?",
+            "¿Hemos caminado nosotros así?"
+          ],
+          [
+            "Have you stridden?",
+            "¿Han caminado ustedes con firmeza?"
+          ],
+          [
+            "Have they stridden?",
+            "¿Han caminado ellos con firmeza?"
+          ]
+        ]
+      }
+    }
+  },
+  {
+    "key": "swell",
+    "c1": "SWELL",
+    "c2": "SWELLED",
+    "c3": "SWOLLEN",
+    "es": "Hincharse / Inflarse / Aumentar",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I swell",
+            "Yo me hincho / inflamo"
+          ],
+          [
+            "YOU_S",
+            "You swell",
+            "Tú te hinchas"
+          ],
+          [
+            "HE",
+            "He swells",
+            "Él se hincha"
+          ],
+          [
+            "SHE",
+            "She swells",
+            "Ella se hincha"
+          ],
+          [
+            "IT",
+            "It swells",
+            "Eso se hincha"
+          ],
+          [
+            "WE",
+            "We swell",
+            "Nosotros nos hinchamos"
+          ],
+          [
+            "YOU_P",
+            "You swell",
+            "Ustedes se hinchan"
+          ],
+          [
+            "THEY",
+            "They swell",
+            "Ellos se hinchan"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t swell",
+            "Yo no me hincho"
+          ],
+          [
+            "YOU_S",
+            "You don’t swell",
+            "Tú no te hinchas"
+          ],
+          [
+            "HE",
+            "He doesn’t swell",
+            "Él no se hincha"
+          ],
+          [
+            "SHE",
+            "She doesn’t swell",
+            "Ella no se hincha"
+          ],
+          [
+            "IT",
+            "It doesn’t swell",
+            "Eso no se hincha"
+          ],
+          [
+            "WE",
+            "We don’t swell",
+            "Nosotros no nos hinchamos"
+          ],
+          [
+            "YOU_P",
+            "You don’t swell",
+            "Ustedes no se hinchan"
+          ],
+          [
+            "THEY",
+            "They don’t swell",
+            "Ellos no se hinchan"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I swell?",
+            "¿Me hincho yo?"
+          ],
+          [
+            "Do you swell?",
+            "¿Te hinchas tú?"
+          ],
+          [
+            "Does he swell?",
+            "¿Se hincha él?"
+          ],
+          [
+            "Does she swell?",
+            "¿Se hincha ella?"
+          ],
+          [
+            "Does it swell?",
+            "¿Se hincha eso?"
+          ],
+          [
+            "Do we swell?",
+            "¿Nos hinchamos nosotros?"
+          ],
+          [
+            "Do you swell?",
+            "¿Se hinchan ustedes?"
+          ],
+          [
+            "Do they swell?",
+            "¿Se hinchan ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I swelled",
+            "Yo me hinché / me inflé"
+          ],
+          [
+            "YOU_S",
+            "You swelled",
+            "Tú te hinchaste"
+          ],
+          [
+            "HE",
+            "He swelled",
+            "Él se hinchó"
+          ],
+          [
+            "SHE",
+            "She swelled",
+            "Ella se hinchó"
+          ],
+          [
+            "IT",
+            "It swelled",
+            "Eso se hinchó"
+          ],
+          [
+            "WE",
+            "We swelled",
+            "Nosotros nos hinchamos"
+          ],
+          [
+            "YOU_P",
+            "You swelled",
+            "Ustedes se hincharon"
+          ],
+          [
+            "THEY",
+            "They swelled",
+            "Ellos se hincharon"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t swell",
+            "Yo no me hinché"
+          ],
+          [
+            "YOU_S",
+            "You didn’t swell",
+            "Tú no te hinchaste"
+          ],
+          [
+            "HE",
+            "He didn’t swell",
+            "Él no se hinchó"
+          ],
+          [
+            "SHE",
+            "She didn’t swell",
+            "Ella no se hinchó"
+          ],
+          [
+            "IT",
+            "It didn’t swell",
+            "Eso no se hinchó"
+          ],
+          [
+            "WE",
+            "We didn’t swell",
+            "Nosotros no nos hinchamos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t swell",
+            "Ustedes no se hincharon"
+          ],
+          [
+            "THEY",
+            "They didn’t swell",
+            "Ellos no se hincharon"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I swell?",
+            "¿Me hinché yo?"
+          ],
+          [
+            "Did you swell?",
+            "¿Te hinchaste tú?"
+          ],
+          [
+            "Did he swell?",
+            "¿Se hinchó él?"
+          ],
+          [
+            "Did she swell?",
+            "¿Se hinchó ella?"
+          ],
+          [
+            "Did it swell?",
+            "¿Se hinchó eso?"
+          ],
+          [
+            "Did we swell?",
+            "¿Nos hinchamos nosotros?"
+          ],
+          [
+            "Did you swell?",
+            "¿Se hincharon ustedes?"
+          ],
+          [
+            "Did they swell?",
+            "¿Se hincharon ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have swollen",
+            "Yo me he hinchado"
+          ],
+          [
+            "YOU_S",
+            "You have swollen",
+            "Tú te has hinchado"
+          ],
+          [
+            "HE",
+            "He has swollen",
+            "Él se ha hinchado"
+          ],
+          [
+            "SHE",
+            "She has swollen",
+            "Ella se ha hinchado"
+          ],
+          [
+            "IT",
+            "It has swollen",
+            "Eso se ha hinchado"
+          ],
+          [
+            "WE",
+            "We have swollen",
+            "Nosotros nos hemos hinchado"
+          ],
+          [
+            "YOU_P",
+            "You have swollen",
+            "Ustedes se han hinchado"
+          ],
+          [
+            "THEY",
+            "They have swollen",
+            "Ellos se han hinchado"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t swollen",
+            "Yo no me he hinchado"
+          ],
+          [
+            "YOU_S",
+            "You haven’t swollen",
+            "Tú no te has hinchado"
+          ],
+          [
+            "HE",
+            "He hasn’t swollen",
+            "Él no se ha hinchado"
+          ],
+          [
+            "SHE",
+            "She hasn’t swollen",
+            "Ella no se ha hinchado"
+          ],
+          [
+            "IT",
+            "It hasn’t swollen",
+            "Eso no se ha hinchado"
+          ],
+          [
+            "WE",
+            "We haven’t swollen",
+            "Nosotros no nos hemos hinchado"
+          ],
+          [
+            "YOU_P",
+            "You haven’t swollen",
+            "Ustedes no se han hinchado"
+          ],
+          [
+            "THEY",
+            "They haven’t swollen",
+            "Ellos no se han hinchado"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I swollen?",
+            "¿Me he hinchado yo?"
+          ],
+          [
+            "Have you swollen?",
+            "¿Te has hinchado tú?"
+          ],
+          [
+            "Has he swollen?",
+            "¿Se ha hinchado él?"
+          ],
+          [
+            "Has she swollen?",
+            "¿Se ha hinchado ella?"
+          ],
+          [
+            "Has it swollen?",
+            "¿Se ha hinchado eso?"
+          ],
+          [
+            "Have we swollen?",
+            "¿Nos hemos hinchado nosotros?"
+          ],
+          [
+            "Have you swollen?",
+            "¿Se han hinchado ustedes?"
+          ],
+          [
+            "Have they swollen?",
+            "¿Se han hinchado ellos?"
+          ]
+        ]
+      }
+    },
+    "note": "Como participio, “swollen” es el más común; “swelled” también se usa en algunos contextos."
+  },
+  {
+    "key": "undo",
+    "c1": "UNDO",
+    "c2": "UNDID",
+    "c3": "UNDONE",
+    "es": "Deshacer / Revertir",
+    "active": {
+      "P": {
+        "A": [
+          [
+            "I",
+            "I undo",
+            "Yo deshago"
+          ],
+          [
+            "YOU_S",
+            "You undo",
+            "Tú deshaces"
+          ],
+          [
+            "HE",
+            "He undoes",
+            "Él deshace"
+          ],
+          [
+            "SHE",
+            "She undoes",
+            "Ella deshace"
+          ],
+          [
+            "IT",
+            "It undoes",
+            "Eso deshace"
+          ],
+          [
+            "WE",
+            "We undo",
+            "Nosotros deshacemos"
+          ],
+          [
+            "YOU_P",
+            "You undo",
+            "Ustedes deshacen"
+          ],
+          [
+            "THEY",
+            "They undo",
+            "Ellos deshacen"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I don’t undo",
+            "Yo no deshago"
+          ],
+          [
+            "YOU_S",
+            "You don’t undo",
+            "Tú no deshaces"
+          ],
+          [
+            "HE",
+            "He doesn’t undo",
+            "Él no deshace"
+          ],
+          [
+            "SHE",
+            "She doesn’t undo",
+            "Ella no deshace"
+          ],
+          [
+            "IT",
+            "It doesn’t undo",
+            "Eso no deshace"
+          ],
+          [
+            "WE",
+            "We don’t undo",
+            "Nosotros no deshacemos"
+          ],
+          [
+            "YOU_P",
+            "You don’t undo",
+            "Ustedes no deshacen"
+          ],
+          [
+            "THEY",
+            "They don’t undo",
+            "Ellos no deshacen"
+          ]
+        ],
+        "Q": [
+          [
+            "Do I undo?",
+            "¿Deshago yo?"
+          ],
+          [
+            "Do you undo?",
+            "¿Deshaces tú?"
+          ],
+          [
+            "Does he undo?",
+            "¿Deshace él?"
+          ],
+          [
+            "Does she undo?",
+            "¿Deshace ella?"
+          ],
+          [
+            "Does it undo?",
+            "¿Deshace eso?"
+          ],
+          [
+            "Do we undo?",
+            "¿Deshacemos nosotros?"
+          ],
+          [
+            "Do you undo?",
+            "¿Deshacen ustedes?"
+          ],
+          [
+            "Do they undo?",
+            "¿Deshacen ellos?"
+          ]
+        ]
+      },
+      "S": {
+        "A": [
+          [
+            "I",
+            "I undid",
+            "Yo deshice"
+          ],
+          [
+            "YOU_S",
+            "You undid",
+            "Tú deshiciste"
+          ],
+          [
+            "HE",
+            "He undid",
+            "Él deshizo"
+          ],
+          [
+            "SHE",
+            "She undid",
+            "Ella deshizo"
+          ],
+          [
+            "IT",
+            "It undid",
+            "Eso deshizo"
+          ],
+          [
+            "WE",
+            "We undid",
+            "Nosotros deshicimos"
+          ],
+          [
+            "YOU_P",
+            "You undid",
+            "Ustedes deshicieron"
+          ],
+          [
+            "THEY",
+            "They undid",
+            "Ellos deshicieron"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I didn’t undo",
+            "Yo no deshice"
+          ],
+          [
+            "YOU_S",
+            "You didn’t undo",
+            "Tú no deshiciste"
+          ],
+          [
+            "HE",
+            "He didn’t undo",
+            "Él no deshizo"
+          ],
+          [
+            "SHE",
+            "She didn’t undo",
+            "Ella no deshizo"
+          ],
+          [
+            "IT",
+            "It didn’t undo",
+            "Eso no deshizo"
+          ],
+          [
+            "WE",
+            "We didn’t undo",
+            "Nosotros no deshicimos"
+          ],
+          [
+            "YOU_P",
+            "You didn’t undo",
+            "Ustedes no deshicieron"
+          ],
+          [
+            "THEY",
+            "They didn’t undo",
+            "Ellos no deshicieron"
+          ]
+        ],
+        "Q": [
+          [
+            "Did I undo?",
+            "¿Deshice yo?"
+          ],
+          [
+            "Did you undo?",
+            "¿Deshiciste tú?"
+          ],
+          [
+            "Did he undo?",
+            "¿Deshizo él?"
+          ],
+          [
+            "Did she undo?",
+            "¿Deshizo ella?"
+          ],
+          [
+            "Did it undo?",
+            "¿Deshizo eso?"
+          ],
+          [
+            "Did we undo?",
+            "¿Deshicimos nosotros?"
+          ],
+          [
+            "Did you undo?",
+            "¿Deshicieron ustedes?"
+          ],
+          [
+            "Did they undo?",
+            "¿Deshicieron ellos?"
+          ]
+        ]
+      },
+      "PP": {
+        "A": [
+          [
+            "I",
+            "I have undone",
+            "Yo he deshecho"
+          ],
+          [
+            "YOU_S",
+            "You have undone",
+            "Tú has deshecho"
+          ],
+          [
+            "HE",
+            "He has undone",
+            "Él ha deshecho"
+          ],
+          [
+            "SHE",
+            "She has undone",
+            "Ella ha deshecho"
+          ],
+          [
+            "IT",
+            "It has undone",
+            "Eso ha deshecho"
+          ],
+          [
+            "WE",
+            "We have undone",
+            "Nosotros hemos deshecho"
+          ],
+          [
+            "YOU_P",
+            "You have undone",
+            "Ustedes han deshecho"
+          ],
+          [
+            "THEY",
+            "They have undone",
+            "Ellos han deshecho"
+          ]
+        ],
+        "N": [
+          [
+            "I",
+            "I haven’t undone",
+            "Yo no he deshecho"
+          ],
+          [
+            "YOU_S",
+            "You haven’t undone",
+            "Tú no has deshecho"
+          ],
+          [
+            "HE",
+            "He hasn’t undone",
+            "Él no ha deshecho"
+          ],
+          [
+            "SHE",
+            "She hasn’t undone",
+            "Ella no ha deshecho"
+          ],
+          [
+            "IT",
+            "It hasn’t undone",
+            "Eso no ha deshecho"
+          ],
+          [
+            "WE",
+            "We haven’t undone",
+            "Nosotros no hemos deshecho"
+          ],
+          [
+            "YOU_P",
+            "You haven’t undone",
+            "Ustedes no han deshecho"
+          ],
+          [
+            "THEY",
+            "They haven’t undone",
+            "Ellos no han deshecho"
+          ]
+        ],
+        "Q": [
+          [
+            "Have I undone?",
+            "¿He deshecho yo?"
+          ],
+          [
+            "Have you undone?",
+            "¿Has deshecho tú?"
+          ],
+          [
+            "Has he undone?",
+            "¿Ha deshecho él?"
+          ],
+          [
+            "Has she undone?",
+            "¿Ha deshecho ella?"
+          ],
+          [
+            "Has it undone?",
+            "¿Ha deshecho eso?"
+          ],
+          [
+            "Have we undone?",
+            "¿Hemos deshecho nosotros?"
+          ],
+          [
+            "Have you undone?",
+            "¿Han deshecho ustedes?"
+          ],
+          [
+            "Have they undone?",
+            "¿Han deshecho ellos?"
+          ]
+        ]
+      }
+    }
+  }
+];
+</script>
+<script src="logout-widget.js"></script>
+</body>
+</html>

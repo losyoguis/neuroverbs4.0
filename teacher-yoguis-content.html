@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher Yoguis | Contenido</title>
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="stylesheet" href="ui.css" />
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+</head>
+<body>
+
+<!-- ✅ Acceso rápido (igual que index) -->
+<div class="float-actions float-actions-right" aria-label="Accesos rápidos">
+  <a class="float-action ai-float" data-help="🤖 Abre el Asistente IA para resolver dudas, pedir ejemplos y practicar." href="https://chatgpt.com/g/g-688f92ef15e88191a178208283c76eb6-neuro-aprendizaje-de-los-verbos-irregulares" target="_blank" rel="noopener" title="Abrir Asistente IA">ASISTENTE IA 🤖</a>
+</div>
+
+<div class="app">
+    <header class="tyTopbar">
+    <a class="tyBrandMini" href="teacher-yoguis.html" aria-label="Teacher Yoguis Dashboard">
+      <img src="assets/brain.png" alt="NEUROVERBS" class="tyBrandLogo">
+      <div class="tyBrandText">
+        <div class="tyBrandName">NEUROVERBS</div>
+        <div class="tyBrandSub">Teacher Yoguis</div>
+      </div>
+    </a>
+    <div class="tyTopRight">
+      <a class="tyHomeLink" href="neuroverbs.html" title="Inicio">Inicio</a>
+      <div class="tyAvatar" title="Usuario">YV</div>
+    </div>
+  </header>
+  <div class="tyGradLine" aria-hidden="true"></div>
+
+
+
+  <div class="tyHeaderRow">
+    <div class="tyPill">
+      <span id="pillTopic">Tema</span>
+      <span>•</span>
+      <b id="pillLevel">Intermedio</b>
+    </div>
+  </div>
+
+  <div class="tyLayout">
+    <main class="card">
+      <div class="tyCardHead">
+        <div>
+          <h2 id="topicTitle">Cargando…</h2>
+          <div class="legend" id="topicMeta">Contenido + cuestionario + audio</div>
+        </div>
+
+        <div class="tyControls">
+          <div class="tySeg" title="Idioma">
+            <button id="btnEN" class="active" type="button">EN</button>
+            <button id="btnES" type="button">ES</button>
+          </div>
+
+          <button class="btn-mini tyIconButton" id="btnPlay" type="button" title="Reproducir">▶︎ <span>Play</span></button>
+          <button class="btn-mini tyIconButton" id="btnPause" type="button" title="Pausar/Reanudar">⏸ <span>Pause</span></button>
+          <button class="btn-mini tyIconButton" id="btnStop" type="button" title="Detener">■ <span>Stop</span></button>
+
+          <select class="tySmallSelect" id="speedSelect" title="Velocidad (educativa)">
+            <optgroup label="Velocidad (educativa)">
+              <!-- Nota: speechSynthesis a 1.0 suele sonar rápido. Estos valores son más cómodos para aprender. -->
+              <option value="0.65" selected>0.65x</option>
+              <option value="0.75">0.75x</option>
+              <option value="0.85">0.85x</option>
+              <option value="0.95">0.95x</option>
+              <option value="1.05">1.05x</option>
+              <option value="1.15">1.15x</option>
+              <option value="1.25">1.25x</option>
+              <option value="1.35">1.35x</option>
+            </optgroup>
+          </select>
+
+          <button class="btn-mini" id="btnNew" type="button" title="Nuevo tema">＋ Nuevo</button>
+        </div>
+      </div>
+
+      <div class="tyTabs">
+        <div class="tab active" data-tab="content">Contenido</div>
+        <div class="tab" data-tab="quiz">Cuestionario</div>
+      </div>
+
+      <div class="legend" id="note">Selecciona una palabra o fragmento (máx. 3 palabras) y haz clic en “Ver traducción y significado”. Mientras escuchas, se resaltan las frases.</div>
+
+<div class="tyVocabBar" id="tyVocabBar" aria-label="Adquirir vocabulario">
+  <div class="legend">
+    <b>Adquirir vocabulario</b><br>
+    <span class="vocabMuted">Selecciona una palabra o fragmento y luego haz clic en el botón.</span>
+  </div>
+  <button class="btn-main" id="btnVocabSelection" type="button" disabled>Ver traducción y significado</button>
+</div>
+
+      <div id="panelContent" class="tyContentArea">
+        <div class="warn" id="loading">Buscando información del tema…</div>
+      </div>
+
+      <div id="panelQuiz" class="tyContentArea isHidden">
+        <div class="warn">Generando cuestionario…</div>
+      </div>
+    </main>
+
+    <aside class="card">
+      <div class="tyCardHead">
+        <h2>Mis contenidos</h2>
+        <button class="btn-mini" id="btnPlus" type="button" title="Crear nuevo">＋</button>
+      </div>
+
+      <div class="tySideTabs">
+        <div class="sideTab active" data-tab="open">Abiertos</div>
+        <div class="sideTab" data-tab="done">Concluidos</div>
+      </div>
+
+      <div class="tyHistory" id="history"></div>
+    </aside>
+  </div>
+</div>
+
+<!-- ✅ Modal de vocabulario (hover/clic sobre palabras) -->
+<div class="overlay" id="vocabOverlay" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="vocabTitle">
+    <div class="vocabModalTop">
+      <h2 id="vocabTitle">Adquirir vocabulario</h2>
+      <button class="btn-mini" id="vocabClose" type="button" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="vocabTermCard">
+      <div class="vocabTermLine">
+        <b id="vocabTerm">—</b>
+        <span id="vocabPhonetic" class="vocabMuted"></span>
+      </div>
+      <div id="vocabSentence" class="vocabSentence"></div>
+</div>
+
+    <div class="vocabSection">
+      <h4>Traducción</h4>
+      <p id="vocabTranslation" class="vocabMuted">—</p>
+    </div>
+
+    <div class="vocabSection">
+      <h4>Significado</h4>
+      <div id="vocabMeaning" class="vocabMeaning">—</div>
+    </div>
+
+    <div class="vocabSection">
+      <h4>Ejemplos de uso</h4>
+      <ul id="vocabExamples" class="vocabExamples"></ul>
+    </div>
+</div>
+</div>
+
+  <script src="ai-config.js" defer></script>
+  <script src="ai-client.js" defer></script>
+
+  <script src="teacher-yoguis-content.js" defer></script>
+<script src="logout-widget.js"></script>
+</body>
+</html>

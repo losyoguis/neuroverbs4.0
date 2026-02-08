@@ -1,0 +1,226 @@
+
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="#0b1220" name="theme-color"/>
+<meta content="yes" name="mobile-web-app-capable"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<title>NEUROVERBS</title>
+
+<!-- Favicon Yoguis (embebido) -->
+
+<link href="ui.css" rel="stylesheet"/><!-- Icons (externos) -->
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+</head>
+
+<body class="has-floating-stats">
+
+<!-- ✅✅✅ CONSOLE GOOGLE -->
+<script async="" defer="" src="https://accounts.google.com/gsi/client"></script>
+<script src="nv-config.js"></script>
+
+<!-- AUTH MOVED BELOW -->
+
+<!-- ✅✅✅ BARRA DE PUNTOS FUERA DE .app -->
+<div class="stats" id="statsBar">
+<div class="statBox" data-tip="🔥 Tiros seguidos practicando. Si fallas o faltas, puede bajar (Freeze te protege)."><span class="stat-label">Racha</span><span class="stat-value" id="streak">0</span></div>
+<div class="statBox" data-tip="⭐ Puntos acumulados por respuestas correctas en la app."><span class="stat-label">Total XP</span><span class="stat-value" id="xp">0</span></div>
+<div class="statBox" data-tip="🎯 Porcentaje de aciertos: correctas ÷ intentos."><span class="stat-label">Precisión</span><span class="stat-value" id="acc">100%</span></div>
+<div class="statBox" data-tip="🧬 Subes de nivel cada 250 XP (aprox.)."><span class="stat-label">Nivel</span><span class="stat-value" id="level">1</span></div>
+<div class="statBox" data-tip="❤️ Intentos disponibles. Un error consume 1. Se recuperan con el tiempo."><span class="stat-label">Vidas</span><span class="stat-value heartsText" id="hearts">❤️❤️❤️❤️❤️</span></div>
+<div class="statBox" data-tip="🧊 Protege tu racha cuando fallas o faltas. Se gana por hitos de racha."><span class="stat-label">Freeze</span><span class="stat-value" id="freeze">0</span></div>
+<div aria-label="Meta diaria" class="goalBox" data-tip="📅 Objetivo de XP del día. Completa la meta para crear hábito y mantener el ritmo.">
+<div class="goalTop">
+<span class="goalLabel">Meta diaria</span>
+<span class="goalValue" id="dailyGoalText">0/200</span>
+</div>
+
+<div class="goalBar"><div class="goalFill" id="dailyGoalFill"></div></div>
+</div>
+
+</div>
+
+<div class="app">
+<div class="brand" id="appBrand" tabindex="-1">
+  <h1 id="appName"><span class="brandMark"><img src="assets/brain.png" alt="NEUROVERBS" class="brandLogo"></span> NEUROVERBS</h1>
+  <div class="brandTag">Neuroaprendizaje de Verbos Irregulares</div>
+  <div class="subtitle">“Aprende 180 verbos en 80 días”</div>
+</div>
+
+<!-- Login antes del Ranking -->
+<div class="rankHeader" style="text-align:center; margin:14px 0 10px 0;">
+<img src="assets/logo.png" alt="Logo Neuroverbs" style="width:128px;height:128px;display:block;margin:0 auto 14px;filter: drop-shadow(0 10px 30px rgba(0,0,0,.55));" />
+<div class="rankTitle" style="font-size:clamp(22px, 4vw, 40px); font-weight:900; letter-spacing:.6px; color:#ffb24a; text-shadow: 0 2px 10px rgba(0,0,0,.35); margin-top:4px;">Ranking</div>
+<div class="rankTitle" style="font-size:clamp(18px, 3.4vw, 32px); font-weight:900; letter-spacing:.6px; color:#ffb24a; text-shadow: 0 2px 10px rgba(0,0,0,.35); margin-top:2px;">I.E Manuel J. Betancur</div>
+<div class="authDomainLabel" style="margin-top:6px; font-size:clamp(14px, 2.2vw, 20px); font-weight:800; color:#fff;">Acceder con @iemanueljbetancur.edu.co</div>
+</div>
+<div class="authBar" id="authBar" style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+<div data-help="🔑 Inicia sesión con Google para guardar tus XP y aparecer en el ranking. Solo estudiantes de la I.E Manuel J. Betancur." id="googleBtn"></div>
+<div class="userChip" id="userChip" style="display:none;">
+<img alt="Foto" id="userPic"/>
+<div class="userMeta">
+<div class="userName" id="userName">Usuario</div>
+<div class="userEmail" id="userEmail">—</div>
+</div>
+</div>
+</div>
+
+<!-- XP sync watcher removed: XP is synced only from exercise actions + server fetch to avoid double-counting -->
+<script>
+/* ✅ Dominio institucional + auto-login + redirección */
+(function () {
+  const cfgDom = (window.NEUROVERBS_CONFIG ? window.NEUROVERBS_CONFIG.allowedDomain : undefined);
+  const ALLOWED_DOMAIN = (cfgDom !== undefined ? cfgDom : (localStorage.getItem('ALLOWED_DOMAIN_NV') || 'iemanueljbetancur.edu.co'));
+const TARGET = 'neuroverbs.html';
+
+  function decodeJwtPayload(jwt) {
+    try {
+      const part = jwt.split(".")[1];
+      const b64 = part.replace(/-/g, "+").replace(/_/g, "/");
+      const json = decodeURIComponent(atob(b64).split("").map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join(""));
+      return JSON.parse(json);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // ✅ Si ya está autenticado en ESTA página, redirige sin pedir clic
+  // (esto aplica cuando core.js ya guardó sesión del usuario aquí)
+  function tryRedirectIfAlreadyAuthed() {
+    try {
+      const raw = localStorage.getItem("rank_user") || localStorage.getItem("mjb_user") || "";
+      if (!raw) return false;
+      const u = JSON.parse(raw);
+      const email = (u.email || "").toLowerCase();
+      if (email && (!ALLOWED_DOMAIN || email.endsWith("@" + ALLOWED_DOMAIN))) {
+        window.location.replace(TARGET);
+        return true;
+      }
+    } catch (_) {}
+    return false;
+  }
+
+  // Intenta redirigir inmediatamente si detecta sesión local
+  if (tryRedirectIfAlreadyAuthed()) return;
+
+  function patch() {
+    if (!window.google || !google.accounts || !google.accounts.id || !google.accounts.id.initialize) return false;
+
+    const origInit = google.accounts.id.initialize;
+    if (origInit.__mjb_patched__) return true;
+
+    google.accounts.id.initialize = function (cfg) {
+      cfg = cfg || {};
+
+      // 1) Hint de dominio (Workspace)
+      if (!cfg.hd) cfg.hd = ALLOWED_DOMAIN;
+
+      // 2) Auto select si ya hay una sesión válida en Google
+      if (!("auto_select" in cfg)) cfg.auto_select = true;
+      if (!("itp_support" in cfg)) cfg.itp_support = true;
+
+      // 3) Envolver callback: guardar usuario + redirigir a /neuroverbs/
+      const userCb = cfg.callback;
+      cfg.callback = function (resp) {
+        let ok = false;
+        let payload = null;
+
+        try {
+          const token = resp && resp.credential;
+          if (token) {
+            payload = decodeJwtPayload(token);
+            const email = (payload && payload.email ? String(payload.email) : "").toLowerCase();
+            ok = (!ALLOWED_DOMAIN || email.endsWith("@" + ALLOWED_DOMAIN));
+
+            // guarda “sesión” local para redirección automática futura
+            if (ok) {
+              localStorage.setItem("rank_user", JSON.stringify({
+                name: payload.name || "",
+                email,
+                picture: payload.picture || "",
+                ts: Date.now()
+              }));
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
+
+        // Callback original
+        try { if (typeof userCb === "function") userCb(resp); } catch (e) { console.error(e); }
+
+        // Redirección final
+        if (ok) {
+          // Si quieres pasar el token al destino:
+          // const next = TARGET + "#id_token=" + encodeURIComponent(resp.credential) + "&src=mjb";
+          // window.location.replace(next);
+          window.location.replace(TARGET);
+        }
+      };
+
+      return origInit.call(this, cfg);
+    };
+
+    google.accounts.id.initialize.__mjb_patched__ = true;
+
+    // ✅ Dispara One Tap / auto sign-in cuando sea posible
+    try {
+      google.accounts.id.prompt();
+    } catch (_) {}
+
+    return true;
+  }
+
+  const t = setInterval(() => { if (patch()) clearInterval(t); }, 50);
+})();
+</script>
+
+<script>
+(function(){
+  try{
+    const d = ((window.NEUROVERBS_CONFIG && window.NEUROVERBS_CONFIG.allowedDomain) || localStorage.getItem("ALLOWED_DOMAIN_NV") || "iemanueljbetancur.edu.co");
+    const el = document.querySelector(".authDomainLabel");
+    if (el) el.textContent = "Acceder con @" + d;
+  }catch(_){}
+})();
+</script>
+
+<script src="core.js"></script>
+
+
+<script>
+(function(){
+  try{ if('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
+
+  function forceTop(){
+    try{ window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }
+    catch(e){ try{ window.scrollTo(0,0); }catch(_){} }
+  }
+
+  function forceTopSettled(){
+    forceTop();
+    requestAnimationFrame(forceTop);
+    requestAnimationFrame(()=>requestAnimationFrame(forceTop));
+    setTimeout(forceTop, 50);
+    setTimeout(forceTop, 200);
+  }
+
+  // ✅ Al refrescar, quedar como en la pantalla principal (banner + ranking visibles)
+  window.addEventListener('DOMContentLoaded', forceTopSettled, { once:true });
+  window.addEventListener('load', forceTopSettled, { once:true });
+  window.addEventListener('pageshow', forceTopSettled);
+})();
+</script>
+
+<script src="logout-widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Teacher Yoguis | Writing</title>
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="stylesheet" href="ui.css" />
+  <script src="ai-config.js" defer></script>
+  <script src="ai-client.js" defer></script>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+</head>
+<body>
+
+<div class="float-actions float-actions-right" aria-label="Accesos rápidos">
+  <a class="float-action ai-float" data-help="🤖 Abre el Asistente IA para resolver dudas, pedir ejemplos y practicar." href="https://chatgpt.com/g/g-688f92ef15e88191a178208283c76eb6-neuro-aprendizaje-de-los-verbos-irregulares" target="_blank" rel="noopener" title="Abrir Asistente IA">ASISTENTE IA 🤖</a>
+</div>
+
+<div class="app">
+  <header class="tyTopbar">
+    <a class="tyBrandMini" href="teacher-yoguis.html" aria-label="Teacher Yoguis Dashboard">
+      <img src="assets/brain.png" alt="NEUROVERBS" class="tyBrandLogo">
+      <div class="tyBrandText">
+        <div class="tyBrandName">NEUROVERBS</div>
+        <div class="tyBrandSub">Teacher Yoguis</div>
+      </div>
+    </a>
+    <div class="tyTopRight">
+      <a class="tyHomeLink" href="neuroverbs.html" title="Inicio">Inicio</a>
+      <div class="tyAvatar" title="Usuario">YV</div>
+    </div>
+  </header>
+  <div class="tyGradLine" aria-hidden="true"></div>
+
+  <div class="tyLayout">
+    <section class="card tyCenterCard" aria-label="Nueva conversación de texto">
+      <div class="tySectionLabel">Nueva conversación de texto</div>
+
+      <div class="tyCenterWrap">
+        <div class="tyBigIcon">💬</div>
+        <h2 class="tyCenterTitle">¿Sobre qué te gustaría conversar?</h2>
+        <div class="tyCenterSub">¡Elige el tema que quieras y escribe en inglés o español!</div>
+
+        <div class="tyInputRow tyInputRowSolo">
+          <input id="topic" type="text" placeholder="Escribe aquí" autocomplete="off" />
+        </div>
+
+        <button class="btn-main tyBigBtn" id="btnStart" type="button">Comenzar</button>
+        <div class="tyBtnRow" style="justify-content:center;margin-top:12px">
+  <button class="btn-mini" id="btnTestIA" type="button">Probar IA</button>
+  <span class="tyIaPill" id="iaStatus">IA: sin probar</span>
+</div>
+<div class="legend">Se abrirá el chat de escritura para practicar tu inglés.</div>
+      </div>
+    </section>
+
+    <aside class="card" aria-label="Mis conversaciones">
+      <div class="tyCardHead">
+        <h2>Mis conversaciones</h2>
+      </div>
+
+      <div class="tyHistory" id="convWrap"></div>
+    </aside>
+  </div>
+
+
+  <div class="tyFooter">Copyright Teacher Yoguis, 2026. Todos los derechos reservados.</div>
+</div>
+
+
+<script src="teacher-yoguis-writing.js" defer></script>
+<script src="logout-widget.js"></script>
+</body>
+</html>

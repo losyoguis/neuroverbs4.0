@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0b1220"/>
+  <title>Ruta del Inglés 🗺️ | NEUROVERBS</title>
+
+<link rel="stylesheet" href="ui.css"/>
+  <link rel="stylesheet" href="ruta-del-ingles.css"/>
+
+  <link rel="icon" href="favicon.ico">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+</head>
+<body class="appShell">
+  <div class="appWrap">
+    <header class="rutaDock" id="rutaDock">
+      <div class="rutaTopRow">
+        <button class="btn-mini" type="button" id="btnBack">← Volver</button>
+        <div class="rutaTitle">
+          <img class="rutaLogo" src="assets/logo.png" alt="NEUROVERBS"/>
+          <div>
+            <div class="rutaTitleMain">Ruta del Inglés 🗺️</div>
+            <div class="rutaTitleSub">Checklist de progreso (sin XP) • Guardado en este dispositivo</div>
+          </div>
+        </div>
+        <button class="btn-mini ghost" type="button" id="btnReset">Reiniciar</button>
+      </div>
+
+      <nav class="rutaTabs" aria-label="Secciones de la Ruta del Inglés" role="tablist">
+        <button class="rutaTab isActive" type="button" data-sec="pronouns" role="tab" aria-selected="true">1. Pronouns</button>
+        <button class="rutaTab" type="button" data-sec="verbs" role="tab" aria-selected="false">2. Verbs</button>
+        <button class="rutaTab" type="button" data-sec="tenses" role="tab" aria-selected="false">3. Tenses</button>
+        <button class="rutaTab" type="button" data-sec="linking" role="tab" aria-selected="false">4. Linking Words</button>
+      </nav>
+
+      <div class="rutaProgress">
+        <div class="rutaProgressBar" aria-hidden="true"><div class="rutaProgressFill" id="progFill"></div></div>
+        <div class="rutaProgressMeta">
+          <span id="progText">Cargando…</span>
+          <span class="rutaProgressSmall" id="secText"></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="rutaMain" id="rutaMain">
+      <section class="rutaSection isVisible" id="sec_pronouns" data-sec="pronouns" aria-label="Pronouns"></section>
+      <section class="rutaSection" id="sec_verbs" data-sec="verbs" aria-label="Verbs"></section>
+      <section class="rutaSection" id="sec_tenses" data-sec="tenses" aria-label="Tenses"></section>
+      <section class="rutaSection" id="sec_linking" data-sec="linking" aria-label="Linking Words"></section>
+    </main>
+
+    <footer class="rutaBottomNav" id="rutaBottomNav" aria-label="Navegación inferior">
+      <button class="rutaBottomBtn isActive" type="button" data-sec="pronouns">Pronouns</button>
+      <button class="rutaBottomBtn" type="button" data-sec="verbs">Verbs</button>
+      <button class="rutaBottomBtn" type="button" data-sec="tenses">Tenses</button>
+      <button class="rutaBottomBtn" type="button" data-sec="linking">Linking</button>
+    </footer>
+  </div>
+
+  <script src="ruta-del-ingles.js"></script>
+<script src="logout-widget.js"></script>
+</body>
+</html>
