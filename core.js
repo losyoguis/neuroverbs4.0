@@ -15,7 +15,8 @@ const WEB_APP_URL = (
 );
 console.log("[Neuroverbs] WEB_APP_URL =", WEB_APP_URL);
 try{ localStorage.setItem("WEB_APP_URL_V5", WEB_APP_URL); }catch(_){ }
-const ALLOWED_DOMAIN = (NV_CFG.allowedDomain !== undefined ? NV_CFG.allowedDomain : (localStorage.getItem("ALLOWED_DOMAIN_NV") || "iemanueljbetancur.edu.co"));
+const _storedDomain = localStorage.getItem("ALLOWED_DOMAIN_NV");
+const ALLOWED_DOMAIN = (NV_CFG.allowedDomain !== undefined ? NV_CFG.allowedDomain : (_storedDomain !== null ? _storedDomain : "iemanueljbetancur.edu.co"));
 const ALLOWED_EMAIL_SUFFIX = (ALLOWED_DOMAIN ? "@"+ALLOWED_DOMAIN : "");
 const OAUTH_CLIENT_ID = (NV_CFG.oauthClientId || localStorage.getItem("OAUTH_CLIENT_ID_NV") || "637468265896-5olh8rhf76setm52743tashi3vq1la67.apps.googleusercontent.com");
 
@@ -412,13 +413,19 @@ function initGoogleAuthAndSync() {
   // Render button una vez
   try {
     if (!btn.__rendered) {
-      google.accounts.id.initialize({
+      // Inicializa Google Identity Services.
+      // Si ALLOWED_DOMAIN está vacío "", permitimos cualquier cuenta.
+      const initOpts = {
         client_id: OAUTH_CLIENT_ID,
-        hd: "iemanueljbetancur.edu.co",
         callback: onGoogleCredential,
-        ux_mode: "popup",
-        hosted_domain: ALLOWED_DOMAIN
-      });
+        ux_mode: "popup"
+      };
+      if (ALLOWED_DOMAIN) {
+        initOpts.hosted_domain = ALLOWED_DOMAIN;
+        // Algunos entornos usan "hd" como sugerencia de dominio (no lo forzamos si está vacío)
+        initOpts.hd = ALLOWED_DOMAIN;
+      }
+      google.accounts.id.initialize(initOpts);
       google.accounts.id.renderButton(btn, {
         theme: "outline",
         size: "large",
@@ -8743,6 +8750,10 @@ function cerrarAyuda(){
 }
 
 window.addEventListener("load", async () => {
+  // ✅ Solo correr la UI completa en neuroverbs.html (evita errores en index.html)
+  const _isNeuroverbsUI = !!document.getElementById("sel-grupo");
+  if (!_isNeuroverbsUI) return;
+
   // Sincroniza la base de verbos antes de iniciar la UI (Grupo/Día + Active/Passive)
   try { await ensureActiveDbFromVerbsHtml(); } catch (e) {}
   init();
