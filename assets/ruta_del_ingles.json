@@ -1,0 +1,923 @@
+{
+  "version": 1,
+  "createdAt": "2026-02-01T19:34:37.268096Z",
+  "sections": {
+    "pronouns": {
+      "title": "Pronouns",
+      "items": [
+        {
+          "id": "pron_subject",
+          "label": "I can use subject pronouns (I, you, he, she, it, we, they)."
+        },
+        {
+          "id": "pron_object",
+          "label": "I can use object pronouns (me, you, him, her, it, us, them)."
+        },
+        {
+          "id": "pron_poss_adj",
+          "label": "I can use possessive adjectives (my, your, his, her, its, our, their)."
+        },
+        {
+          "id": "pron_poss_pron",
+          "label": "I can use possessive pronouns (mine, yours, his, hers, ours, theirs)."
+        },
+        {
+          "id": "pron_reflexive",
+          "label": "I can use reflexive pronouns (myself, yourself, himself, etc.)."
+        }
+      ]
+    },
+    "verbs": {
+      "title": "Verbs",
+      "items": [
+        {
+          "id": "verb_regular_ed",
+          "label": "I know how to form regular past tense (-ed) and spelling rules."
+        },
+        {
+          "id": "verb_irregular_v123",
+          "label": "I can recognize irregular verbs (V1/V2/V3)."
+        },
+        {
+          "id": "verb_third_person_s",
+          "label": "I use -s / -es / -ies in the 3rd person singular (he/she/it)."
+        },
+        {
+          "id": "verb_do_does",
+          "label": "I use DO/DOES for questions and negatives in the present."
+        },
+        {
+          "id": "verb_did",
+          "label": "I use DID for questions and negatives in the past."
+        },
+        {
+          "id": "verb_have_has_pp",
+          "label": "I use HAVE/HAS + past participle (present perfect)."
+        },
+        {
+          "id": "verb_passive_basic",
+          "label": "I can build the passive voice (be + V3) in basic tenses."
+        }
+      ]
+    },
+    "tenses": {
+      "title": "Tenses",
+      "tenses": [
+        {
+          "id": "present_simple",
+          "label": "Present Simple",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": true
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "present_continuous",
+          "label": "Present Continuous",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "present_perfect",
+          "label": "Present Perfect",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": true
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "present_perfect_cont",
+          "label": "Present Perfect Cont.",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": true,
+                "default": false
+              },
+              "-": {
+                "na": true,
+                "default": false
+              },
+              "?": {
+                "na": true,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": true,
+                "default": false
+              },
+              "-": {
+                "na": true,
+                "default": false
+              },
+              "?": {
+                "na": true,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "past_simple",
+          "label": "Past Simple",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": true
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "past_continuous",
+          "label": "Past Continuous",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "past_perfect",
+          "label": "Past Perfect",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "past_perfect_cont",
+          "label": "Past Perfect Cont.",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": true,
+                "default": false
+              },
+              "-": {
+                "na": true,
+                "default": false
+              },
+              "?": {
+                "na": true,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": true,
+                "default": false
+              },
+              "-": {
+                "na": true,
+                "default": false
+              },
+              "?": {
+                "na": true,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "future_simple",
+          "label": "Future Simple",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "future_continuous",
+          "label": "Future Continuous",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": true,
+                "default": false
+              },
+              "-": {
+                "na": true,
+                "default": false
+              },
+              "?": {
+                "na": true,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": true,
+                "default": false
+              },
+              "-": {
+                "na": true,
+                "default": false
+              },
+              "?": {
+                "na": true,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "future_perfect",
+          "label": "Future Perfect",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            }
+          }
+        },
+        {
+          "id": "future_perfect_cont",
+          "label": "Future Perfect Cont.",
+          "regular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": true,
+                "default": false
+              },
+              "-": {
+                "na": true,
+                "default": false
+              },
+              "?": {
+                "na": true,
+                "default": false
+              }
+            }
+          },
+          "irregular": {
+            "active": {
+              "+": {
+                "na": false,
+                "default": false
+              },
+              "-": {
+                "na": false,
+                "default": false
+              },
+              "?": {
+                "na": false,
+                "default": false
+              }
+            },
+            "passive": {
+              "+": {
+                "na": true,
+                "default": false
+              },
+              "-": {
+                "na": true,
+                "default": false
+              },
+              "?": {
+                "na": true,
+                "default": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "linking_words": {
+      "title": "Linking Words",
+      "categories": [
+        {
+          "id": "addition",
+          "title": "Addition",
+          "desc_es": "Para añadir información",
+          "masteryItemId": "lw_addition_mastery",
+          "words": []
+        },
+        {
+          "id": "contrast",
+          "title": "Contrast",
+          "desc_es": "Para mostrar oposición",
+          "masteryItemId": "lw_contrast_mastery",
+          "words": []
+        },
+        {
+          "id": "cause_effect",
+          "title": "Cause & Effect",
+          "desc_es": "Causa y Efecto",
+          "masteryItemId": "lw_cause_effect_mastery",
+          "words": []
+        },
+        {
+          "id": "sequence_time",
+          "title": "Sequence & Time",
+          "desc_es": "Orden y Tiempo",
+          "masteryItemId": "lw_sequence_time_mastery",
+          "words": []
+        },
+        {
+          "id": "illustration",
+          "title": "Illustration",
+          "desc_es": "Para dar ejemplos",
+          "masteryItemId": "lw_illustration_mastery",
+          "words": []
+        }
+      ]
+    }
+  },
+  "defaults": {
+    "linkingWordsSuggested": {
+      "addition": [
+        "and",
+        "also",
+        "too",
+        "moreover",
+        "furthermore",
+        "in addition",
+        "besides"
+      ],
+      "contrast": [
+        "but",
+        "however",
+        "although",
+        "though",
+        "nevertheless",
+        "on the other hand",
+        "whereas"
+      ],
+      "cause_effect": [
+        "because",
+        "since",
+        "so",
+        "therefore",
+        "as a result",
+        "consequently"
+      ],
+      "sequence_time": [
+        "first",
+        "then",
+        "next",
+        "after that",
+        "finally",
+        "meanwhile",
+        "later"
+      ],
+      "illustration": [
+        "for example",
+        "for instance",
+        "such as",
+        "like",
+        "namely"
+      ]
+    }
+  }
+}

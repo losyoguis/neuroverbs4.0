@@ -1,0 +1,765 @@
+[
+  {
+    "n": 1,
+    "v1": "Accept",
+    "v2": "Accepted",
+    "v3": "Accepted",
+    "es": "Aceptar"
+  },
+  {
+    "n": 2,
+    "v1": "Act",
+    "v2": "Acted",
+    "v3": "Acted",
+    "es": "Actuar"
+  },
+  {
+    "n": 3,
+    "v1": "Add",
+    "v2": "Added",
+    "v3": "Added",
+    "es": "Añadir / Sumar"
+  },
+  {
+    "n": 4,
+    "v1": "Admit",
+    "v2": "Admitted",
+    "v3": "Admitted",
+    "es": "Admitir"
+  },
+  {
+    "n": 5,
+    "v1": "Agree",
+    "v2": "Agreed",
+    "v3": "Agreed",
+    "es": "Estar de acuerdo"
+  },
+  {
+    "n": 6,
+    "v1": "Allow",
+    "v2": "Allowed",
+    "v3": "Allowed",
+    "es": "Permitir"
+  },
+  {
+    "n": 7,
+    "v1": "Answer",
+    "v2": "Answered",
+    "v3": "Answered",
+    "es": "Responder"
+  },
+  {
+    "n": 8,
+    "v1": "Arrive",
+    "v2": "Arrived",
+    "v3": "Arrived",
+    "es": "Llegar"
+  },
+  {
+    "n": 9,
+    "v1": "Ask",
+    "v2": "Asked",
+    "v3": "Asked",
+    "es": "Preguntar"
+  },
+  {
+    "n": 10,
+    "v1": "Believe",
+    "v2": "Believed",
+    "v3": "Believed",
+    "es": "Creer"
+  },
+  {
+    "n": 11,
+    "v1": "Belong",
+    "v2": "Belonged",
+    "v3": "Belonged",
+    "es": "Pertenecer"
+  },
+  {
+    "n": 12,
+    "v1": "Call",
+    "v2": "Called",
+    "v3": "Called",
+    "es": "Llamar"
+  },
+  {
+    "n": 13,
+    "v1": "Cancel",
+    "v2": "Cancelled",
+    "v3": "Cancelled",
+    "es": "Cancelar"
+  },
+  {
+    "n": 14,
+    "v1": "Change",
+    "v2": "Changed",
+    "v3": "Changed",
+    "es": "Cambiar"
+  },
+  {
+    "n": 15,
+    "v1": "Clean",
+    "v2": "Cleaned",
+    "v3": "Cleaned",
+    "es": "Limpiar"
+  },
+  {
+    "n": 16,
+    "v1": "Close",
+    "v2": "Closed",
+    "v3": "Closed",
+    "es": "Cerrar"
+  },
+  {
+    "n": 17,
+    "v1": "Complain",
+    "v2": "Complained",
+    "v3": "Complained",
+    "es": "Quejarse"
+  },
+  {
+    "n": 18,
+    "v1": "Complete",
+    "v2": "Completed",
+    "v3": "Completed",
+    "es": "Completar"
+  },
+  {
+    "n": 19,
+    "v1": "Cook",
+    "v2": "Cooked",
+    "v3": "Cooked",
+    "es": "Cocinar"
+  },
+  {
+    "n": 20,
+    "v1": "Copy",
+    "v2": "Copied",
+    "v3": "Copied",
+    "es": "Copiar"
+  },
+  {
+    "n": 21,
+    "v1": "Count",
+    "v2": "Counted",
+    "v3": "Counted",
+    "es": "Contar"
+  },
+  {
+    "n": 22,
+    "v1": "Cry",
+    "v2": "Cried",
+    "v3": "Cried",
+    "es": "Llorar"
+  },
+  {
+    "n": 23,
+    "v1": "Dance",
+    "v2": "Danced",
+    "v3": "Danced",
+    "es": "Bailar"
+  },
+  {
+    "n": 24,
+    "v1": "Decide",
+    "v2": "Decided",
+    "v3": "Decided",
+    "es": "Decidir"
+  },
+  {
+    "n": 25,
+    "v1": "Describe",
+    "v2": "Described",
+    "v3": "Described",
+    "es": "Describir"
+  },
+  {
+    "n": 26,
+    "v1": "Destroy",
+    "v2": "Destroyed",
+    "v3": "Destroyed",
+    "es": "Destruir"
+  },
+  {
+    "n": 27,
+    "v1": "Die",
+    "v2": "Died",
+    "v3": "Died",
+    "es": "Morir"
+  },
+  {
+    "n": 28,
+    "v1": "Drop",
+    "v2": "Dropped",
+    "v3": "Dropped",
+    "es": "Dejar caer 13 14"
+  },
+  {
+    "n": 29,
+    "v1": "Dry",
+    "v2": "Dried",
+    "v3": "Dried",
+    "es": "Secar"
+  },
+  {
+    "n": 30,
+    "v1": "Enjoy",
+    "v2": "Enjoyed",
+    "v3": "Enjoyed",
+    "es": "Disfrutar"
+  },
+  {
+    "n": 31,
+    "v1": "Escape",
+    "v2": "Escaped",
+    "v3": "Escaped",
+    "es": "Escapar"
+  },
+  {
+    "n": 32,
+    "v1": "Explain",
+    "v2": "Explained",
+    "v3": "Explained",
+    "es": "Explicar"
+  },
+  {
+    "n": 33,
+    "v1": "Fail",
+    "v2": "Failed",
+    "v3": "Failed",
+    "es": "Fallar"
+  },
+  {
+    "n": 34,
+    "v1": "Fill",
+    "v2": "Filled",
+    "v3": "Filled",
+    "es": "Llenar"
+  },
+  {
+    "n": 35,
+    "v1": "Finish",
+    "v2": "Finished",
+    "v3": "Finished",
+    "es": "Terminar"
+  },
+  {
+    "n": 36,
+    "v1": "Fix",
+    "v2": "Fixed",
+    "v3": "Fixed",
+    "es": "Reparar / Arreglar"
+  },
+  {
+    "n": 37,
+    "v1": "Follow",
+    "v2": "Followed",
+    "v3": "Followed",
+    "es": "Seguir"
+  },
+  {
+    "n": 38,
+    "v1": "Guess",
+    "v2": "Guessed",
+    "v3": "Guessed",
+    "es": "Adivinar"
+  },
+  {
+    "n": 39,
+    "v1": "Happen",
+    "v2": "Happened",
+    "v3": "Happened",
+    "es": "Suceder"
+  },
+  {
+    "n": 40,
+    "v1": "Hate",
+    "v2": "Hated",
+    "v3": "Hated",
+    "es": "Odiar"
+  },
+  {
+    "n": 41,
+    "v1": "Help",
+    "v2": "Helped",
+    "v3": "Helped",
+    "es": "Ayudar"
+  },
+  {
+    "n": 42,
+    "v1": "Hope",
+    "v2": "Hoped",
+    "v3": "Hoped",
+    "es": "Esperar (deseo)"
+  },
+  {
+    "n": 43,
+    "v1": "Identify",
+    "v2": "Identified",
+    "v3": "Identified",
+    "es": "Identificar"
+  },
+  {
+    "n": 44,
+    "v1": "Ignore",
+    "v2": "Ignored",
+    "v3": "Ignored",
+    "es": "Ignorar"
+  },
+  {
+    "n": 45,
+    "v1": "Imagine",
+    "v2": "Imagined",
+    "v3": "Imagined",
+    "es": "Imaginar"
+  },
+  {
+    "n": 46,
+    "v1": "Improve",
+    "v2": "Improved",
+    "v3": "Improved",
+    "es": "Mejorar"
+  },
+  {
+    "n": 47,
+    "v1": "Increase",
+    "v2": "Increased",
+    "v3": "Increased",
+    "es": "Aumentar"
+  },
+  {
+    "n": 48,
+    "v1": "Invent",
+    "v2": "Invented",
+    "v3": "Invented",
+    "es": "Inventar"
+  },
+  {
+    "n": 49,
+    "v1": "Invite",
+    "v2": "Invited",
+    "v3": "Invited",
+    "es": "Invitar"
+  },
+  {
+    "n": 50,
+    "v1": "Join",
+    "v2": "Joined",
+    "v3": "Joined",
+    "es": "Unirse"
+  },
+  {
+    "n": 51,
+    "v1": "Jump",
+    "v2": "Jumped",
+    "v3": "Jumped",
+    "es": "Saltar"
+  },
+  {
+    "n": 52,
+    "v1": "Kill",
+    "v2": "Killed",
+    "v3": "Killed",
+    "es": "Matar"
+  },
+  {
+    "n": 53,
+    "v1": "Kiss",
+    "v2": "Kissed",
+    "v3": "Kissed",
+    "es": "Besar"
+  },
+  {
+    "n": 54,
+    "v1": "Laugh",
+    "v2": "Laughed",
+    "v3": "Laughed",
+    "es": "Reír"
+  },
+  {
+    "n": 55,
+    "v1": "Learn",
+    "v2": "Learned",
+    "v3": "Learned",
+    "es": "Aprender"
+  },
+  {
+    "n": 56,
+    "v1": "Like",
+    "v2": "Liked",
+    "v3": "Liked",
+    "es": "Gustar"
+  },
+  {
+    "n": 57,
+    "v1": "Listen",
+    "v2": "Listened",
+    "v3": "Listened",
+    "es": "Escuchar"
+  },
+  {
+    "n": 58,
+    "v1": "Live",
+    "v2": "Lived",
+    "v3": "Lived",
+    "es": "Vivir"
+  },
+  {
+    "n": 59,
+    "v1": "Look",
+    "v2": "Looked",
+    "v3": "Looked",
+    "es": "Mirar"
+  },
+  {
+    "n": 60,
+    "v1": "Love",
+    "v2": "Loved",
+    "v3": "Loved",
+    "es": "Amar"
+  },
+  {
+    "n": 61,
+    "v1": "Manage",
+    "v2": "Managed",
+    "v3": "Managed",
+    "es": "Administrar / Lograr 14 15"
+  },
+  {
+    "n": 62,
+    "v1": "Mark",
+    "v2": "Marked",
+    "v3": "Marked",
+    "es": "Marcar"
+  },
+  {
+    "n": 63,
+    "v1": "Marry",
+    "v2": "Married",
+    "v3": "Married",
+    "es": "Casarse"
+  },
+  {
+    "n": 64,
+    "v1": "Match",
+    "v2": "Matched",
+    "v3": "Matched",
+    "es": "Emparejar / Coincidir"
+  },
+  {
+    "n": 65,
+    "v1": "Measure",
+    "v2": "Measured",
+    "v3": "Measured",
+    "es": "Medir"
+  },
+  {
+    "n": 66,
+    "v1": "Mention",
+    "v2": "Mentioned",
+    "v3": "Mentioned",
+    "es": "Mencionar"
+  },
+  {
+    "n": 67,
+    "v1": "Miss",
+    "v2": "Missed",
+    "v3": "Missed",
+    "es": "Extrañar / Perder"
+  },
+  {
+    "n": 68,
+    "v1": "Move",
+    "v2": "Moved",
+    "v3": "Moved",
+    "es": "Mover / Mudarse"
+  },
+  {
+    "n": 69,
+    "v1": "Need",
+    "v2": "Needed",
+    "v3": "Needed",
+    "es": "Necesitar"
+  },
+  {
+    "n": 70,
+    "v1": "Notice",
+    "v2": "Noticed",
+    "v3": "Noticed",
+    "es": "Notar"
+  },
+  {
+    "n": 71,
+    "v1": "Offer",
+    "v2": "Offered",
+    "v3": "Offered",
+    "es": "Ofrecer"
+  },
+  {
+    "n": 72,
+    "v1": "Open",
+    "v2": "Opened",
+    "v3": "Opened",
+    "es": "Abrir"
+  },
+  {
+    "n": 73,
+    "v1": "Order",
+    "v2": "Ordered",
+    "v3": "Ordered",
+    "es": "Ordenar / Pedir"
+  },
+  {
+    "n": 74,
+    "v1": "Paint",
+    "v2": "Painted",
+    "v3": "Painted",
+    "es": "Pintar"
+  },
+  {
+    "n": 75,
+    "v1": "Pass",
+    "v2": "Passed",
+    "v3": "Passed",
+    "es": "Pasar / Aprobar"
+  },
+  {
+    "n": 76,
+    "v1": "Plan",
+    "v2": "Planned",
+    "v3": "Planned",
+    "es": "Planear"
+  },
+  {
+    "n": 77,
+    "v1": "Play",
+    "v2": "Played",
+    "v3": "Played",
+    "es": "Jugar / Tocar"
+  },
+  {
+    "n": 78,
+    "v1": "Practice",
+    "v2": "Practiced",
+    "v3": "Practiced",
+    "es": "Practicar"
+  },
+  {
+    "n": 79,
+    "v1": "Prefer",
+    "v2": "Prefered",
+    "v3": "Prefered",
+    "es": "Preferir"
+  },
+  {
+    "n": 80,
+    "v1": "Prepare",
+    "v2": "Prepared",
+    "v3": "Prepared",
+    "es": "Preparar"
+  },
+  {
+    "n": 81,
+    "v1": "Promise",
+    "v2": "Promised",
+    "v3": "Promised",
+    "es": "Prometer"
+  },
+  {
+    "n": 82,
+    "v1": "Pull",
+    "v2": "Pulled",
+    "v3": "Pulled",
+    "es": "Halar / Tirar"
+  },
+  {
+    "n": 83,
+    "v1": "Push",
+    "v2": "Pushed",
+    "v3": "Pushed",
+    "es": "Empujar"
+  },
+  {
+    "n": 84,
+    "v1": "Rain",
+    "v2": "Rained",
+    "v3": "Rained",
+    "es": "Llover"
+  },
+  {
+    "n": 85,
+    "v1": "Receive",
+    "v2": "Received",
+    "v3": "Received",
+    "es": "Recibir"
+  },
+  {
+    "n": 86,
+    "v1": "Remember",
+    "v2": "Remembered",
+    "v3": "Remembere",
+    "es": "d Recordar"
+  },
+  {
+    "n": 87,
+    "v1": "Repeat",
+    "v2": "Repeated",
+    "v3": "Repeated",
+    "es": "Repetir"
+  },
+  {
+    "n": 88,
+    "v1": "Return",
+    "v2": "Returned",
+    "v3": "Returned",
+    "es": "Regresar / Devolver"
+  },
+  {
+    "n": 89,
+    "v1": "Save",
+    "v2": "Saved",
+    "v3": "Saved",
+    "es": "Salvar / Guardar"
+  },
+  {
+    "n": 90,
+    "v1": "Search",
+    "v2": "Searched",
+    "v3": "Searched",
+    "es": "Buscar"
+  },
+  {
+    "n": 91,
+    "v1": "Sign",
+    "v2": "Signed",
+    "v3": "Signed",
+    "es": "Firmar"
+  },
+  {
+    "n": 92,
+    "v1": "Smile",
+    "v2": "Smiled",
+    "v3": "Smiled",
+    "es": "Sonreír"
+  },
+  {
+    "n": 93,
+    "v1": "Start",
+    "v2": "Started",
+    "v3": "Started",
+    "es": "Comenzar"
+  },
+  {
+    "n": 94,
+    "v1": "Stop",
+    "v2": "Stopped",
+    "v3": "Stopped",
+    "es": "Detener / Parar 15 16"
+  },
+  {
+    "n": 95,
+    "v1": "Study",
+    "v2": "Studied",
+    "v3": "Studied",
+    "es": "Estudiar"
+  },
+  {
+    "n": 96,
+    "v1": "Talk",
+    "v2": "Talked",
+    "v3": "Talked",
+    "es": "Hablar"
+  },
+  {
+    "n": 97,
+    "v1": "Touch",
+    "v2": "Touched",
+    "v3": "Touched",
+    "es": "Tocar"
+  },
+  {
+    "n": 98,
+    "v1": "Travel",
+    "v2": "Traveled",
+    "v3": "Traveled",
+    "es": "Viajar"
+  },
+  {
+    "n": 99,
+    "v1": "Try",
+    "v2": "Tried",
+    "v3": "Tried",
+    "es": "Intentar / Probar"
+  },
+  {
+    "n": 100,
+    "v1": "Use",
+    "v2": "Used",
+    "v3": "Used",
+    "es": "Usar"
+  },
+  {
+    "n": 101,
+    "v1": "Visit",
+    "v2": "Visited",
+    "v3": "Visited",
+    "es": "Visitar"
+  },
+  {
+    "n": 102,
+    "v1": "Wait",
+    "v2": "Waited",
+    "v3": "Waited",
+    "es": "Esperar (tiempo)"
+  },
+  {
+    "n": 103,
+    "v1": "Walk",
+    "v2": "Walked",
+    "v3": "Walked",
+    "es": "Caminar"
+  },
+  {
+    "n": 104,
+    "v1": "Want",
+    "v2": "Wanted",
+    "v3": "Wanted",
+    "es": "Querer"
+  },
+  {
+    "n": 105,
+    "v1": "Wash",
+    "v2": "Washed",
+    "v3": "Washed",
+    "es": "Lavar"
+  },
+  {
+    "n": 106,
+    "v1": "Watch",
+    "v2": "Watched",
+    "v3": "Watched",
+    "es": "Mirar / Observar"
+  },
+  {
+    "n": 107,
+    "v1": "Wish",
+    "v2": "Wished",
+    "v3": "Wished",
+    "es": "Desear"
+  },
+  {
+    "n": 108,
+    "v1": "Work",
+    "v2": "Worked",
+    "v3": "Worked",
+    "es": "Trabajar"
+  },
+  {
+    "n": 109,
+    "v1": "Worry",
+    "v2": "Worried",
+    "v3": "Worried",
+    "es": "Preocuparse"
+  }
+]
