@@ -1,0 +1,17 @@
+name = "neuroverbs-auth"
+main = "worker.js"
+compatibility_date = "2026-02-07"
+
+# D1
+[[d1_databases]]
+binding = "DB"
+database_name = "neuroverbs-auth"
+database_id = "REEMPLAZA_ESTE_ID"
+
+[vars]
+CORS_ORIGIN = "https://losyoguis.github.io"
+APP_SCRIPT_EXEC_URL = "https://script.google.com/macros/s/AKfycbwFYYMybfaF7ac9yxP7shnIZZaiKxgnO6BvHNaXfcOk-oQ2jSUUGnrBWyinXuhko20/exec"
+
+# Secrets (wrangler secret put JWT_SECRET)
+# Secrets (wrangler secret put APP_SCRIPT_LOCAL_KEY)
+# Secrets (wrangler secret put BOOTSTRAP_TOKEN)
