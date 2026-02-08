@@ -91,8 +91,8 @@ Una sola vez:
 Body:
 ```json
 {
-  "username": "admin",
-  "name": "Admin",
+  "username": "spellingyoguisbe",
+  "name": "Spelling Yoguis Bee",
   "email": "admin@neuroverbs",
   "password": "TuClaveSegura",
   "bootstrapToken": "EL_BOOTSTRAP_TOKEN"
@@ -100,3 +100,5 @@ Body:
 ```
 
 Luego ya puedes entrar a `admin.html`.
+
+> También puedes crear el admin desde la misma página `admin.html`, en la sección **“🧰 Crear Admin Inicial”**.

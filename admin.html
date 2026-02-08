@@ -41,12 +41,50 @@
       </div>
     </div>
 
+    <!-- ✅ Primera vez: crear admin inicial (solo una vez) -->
+    <div class="card" style="margin-top:14px;">
+      <details style="cursor:pointer;">
+        <summary style="font-size:18px;font-weight:950;">🧰 Crear Admin Inicial (solo una vez)</summary>
+        <div class="muted" style="margin-top:8px;">Si aún no existe ningún admin en la base de datos, crea el primer administrador aquí.</div>
+        <div class="row" style="margin-top:12px;">
+          <div>
+            <label class="muted">Usuario admin</label>
+            <input id="bootUsername" autocomplete="username" value="spellingyoguisbe" />
+          </div>
+          <div>
+            <label class="muted">Nombre</label>
+            <input id="bootName" placeholder="Spelling Yoguis Bee" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div>
+            <label class="muted">Correo (opcional)</label>
+            <input id="bootEmail" placeholder="admin@neuroverbs" />
+          </div>
+          <div>
+            <label class="muted">Contraseña (mínimo 8)</label>
+            <input id="bootPass" type="password" autocomplete="new-password" placeholder="Tu clave segura" />
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <div>
+            <label class="muted">Bootstrap Token</label>
+            <input id="bootToken" type="password" placeholder="(wrangler secret put BOOTSTRAP_TOKEN)" />
+          </div>
+          <div style="display:flex;align-items:flex-end;">
+            <button id="btnBootstrap" class="lbBtn" type="button" style="width:100%;">Crear admin</button>
+          </div>
+        </div>
+        <div id="bootMsg" style="margin-top:10px;"></div>
+      </details>
+    </div>
+
     <div id="adminLogin" class="card" style="margin-top:14px;display:none;">
       <div style="font-size:18px;font-weight:950;margin-bottom:8px;">Iniciar sesión (Admin)</div>
       <div class="row">
         <div>
           <label class="muted">Usuario o correo</label>
-          <input id="loginUser" autocomplete="username" placeholder="admin" />
+          <input id="loginUser" autocomplete="username" placeholder="admin" value="spellingyoguisbe" />
         </div>
         <div>
           <label class="muted">Contraseña</label>

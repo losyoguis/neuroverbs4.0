@@ -95,7 +95,9 @@
     const url = base + path;
 
     const headers = { "Content-Type": "application/json" };
-    const t = token || getToken();
+    // token: si se pasa explícitamente "" (string vacía) NO se envía Authorization.
+    // Esto es útil para endpoints públicos como /api/bootstrap/admin.
+    const t = (token === undefined || token === null) ? getToken() : String(token);
     if (t) headers["Authorization"] = "Bearer " + t;
 
     const res = await fetch(url, {
